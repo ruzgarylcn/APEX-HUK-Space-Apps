@@ -1,0 +1,218 @@
+iso3,name,region,income
+ABW,Aruba,Latin America & Caribbean ,HIC
+AFG,Afghanistan,"Middle East, North Africa, Afghanistan & Pakistan",LIC
+AGO,Angola,Sub-Saharan Africa ,LMC
+ALB,Albania,Europe & Central Asia,UMC
+AND,Andorra,Europe & Central Asia,HIC
+ARE,United Arab Emirates,"Middle East, North Africa, Afghanistan & Pakistan",HIC
+ARG,Argentina,Latin America & Caribbean ,UMC
+ARM,Armenia,Europe & Central Asia,UMC
+ASM,American Samoa,East Asia & Pacific,HIC
+ATG,Antigua and Barbuda,Latin America & Caribbean ,HIC
+AUS,Australia,East Asia & Pacific,HIC
+AUT,Austria,Europe & Central Asia,HIC
+AZE,Azerbaijan,Europe & Central Asia,UMC
+BDI,Burundi,Sub-Saharan Africa ,LIC
+BEL,Belgium,Europe & Central Asia,HIC
+BEN,Benin,Sub-Saharan Africa ,LMC
+BFA,Burkina Faso,Sub-Saharan Africa ,LIC
+BGD,Bangladesh,South Asia,LMC
+BGR,Bulgaria,Europe & Central Asia,HIC
+BHR,Bahrain,"Middle East, North Africa, Afghanistan & Pakistan",HIC
+BHS,"Bahamas, The",Latin America & Caribbean ,HIC
+BIH,Bosnia and Herzegovina,Europe & Central Asia,UMC
+BLR,Belarus,Europe & Central Asia,UMC
+BLZ,Belize,Latin America & Caribbean ,UMC
+BMU,Bermuda,North America,HIC
+BOL,Bolivia,Latin America & Caribbean ,LMC
+BRA,Brazil,Latin America & Caribbean ,UMC
+BRB,Barbados,Latin America & Caribbean ,HIC
+BRN,Brunei Darussalam,East Asia & Pacific,HIC
+BTN,Bhutan,South Asia,LMC
+BWA,Botswana,Sub-Saharan Africa ,UMC
+CAF,Central African Republic,Sub-Saharan Africa ,LIC
+CAN,Canada,North America,HIC
+CHE,Switzerland,Europe & Central Asia,HIC
+CHI,Channel Islands,Europe & Central Asia,HIC
+CHL,Chile,Latin America & Caribbean ,HIC
+CHN,China,East Asia & Pacific,UMC
+CIV,Cote d'Ivoire,Sub-Saharan Africa ,LMC
+CMR,Cameroon,Sub-Saharan Africa ,LMC
+COD,"Congo, Dem. Rep.",Sub-Saharan Africa ,LIC
+COG,"Congo, Rep.",Sub-Saharan Africa ,LMC
+COL,Colombia,Latin America & Caribbean ,UMC
+COM,Comoros,Sub-Saharan Africa ,LMC
+CPV,Cabo Verde,Sub-Saharan Africa ,UMC
+CRI,Costa Rica,Latin America & Caribbean ,HIC
+CUB,Cuba,Latin America & Caribbean ,UMC
+CUW,Curacao,Latin America & Caribbean ,HIC
+CYM,Cayman Islands,Latin America & Caribbean ,HIC
+CYP,Cyprus,Europe & Central Asia,HIC
+CZE,Czechia,Europe & Central Asia,HIC
+DEU,Germany,Europe & Central Asia,HIC
+DJI,Djibouti,"Middle East, North Africa, Afghanistan & Pakistan",LMC
+DMA,Dominica,Latin America & Caribbean ,UMC
+DNK,Denmark,Europe & Central Asia,HIC
+DOM,Dominican Republic,Latin America & Caribbean ,UMC
+DZA,Algeria,"Middle East, North Africa, Afghanistan & Pakistan",UMC
+ECU,Ecuador,Latin America & Caribbean ,UMC
+EGY,"Egypt, Arab Rep.","Middle East, North Africa, Afghanistan & Pakistan",LMC
+ERI,Eritrea,Sub-Saharan Africa ,LIC
+ESP,Spain,Europe & Central Asia,HIC
+EST,Estonia,Europe & Central Asia,HIC
+ETH,Ethiopia,Sub-Saharan Africa ,LIC
+FIN,Finland,Europe & Central Asia,HIC
+FJI,Fiji,East Asia & Pacific,UMC
+FRA,France,Europe & Central Asia,HIC
+FRO,Faroe Islands,Europe & Central Asia,HIC
+FSM,"Micronesia, Fed. Sts.",East Asia & Pacific,UMC
+GAB,Gabon,Sub-Saharan Africa ,UMC
+GBR,United Kingdom,Europe & Central Asia,HIC
+GEO,Georgia,Europe & Central Asia,UMC
+GHA,Ghana,Sub-Saharan Africa ,LMC
+GIB,Gibraltar,Europe & Central Asia,HIC
+GIN,Guinea,Sub-Saharan Africa ,LMC
+GMB,"Gambia, The",Sub-Saharan Africa ,LIC
+GNB,Guinea-Bissau,Sub-Saharan Africa ,LIC
+GNQ,Equatorial Guinea,Sub-Saharan Africa ,UMC
+GRC,Greece,Europe & Central Asia,HIC
+GRD,Grenada,Latin America & Caribbean ,UMC
+GRL,Greenland,Europe & Central Asia,HIC
+GTM,Guatemala,Latin America & Caribbean ,UMC
+GUM,Guam,East Asia & Pacific,HIC
+GUY,Guyana,Latin America & Caribbean ,HIC
+HKG,"Hong Kong SAR, China",East Asia & Pacific,HIC
+HND,Honduras,Latin America & Caribbean ,LMC
+HRV,Croatia,Europe & Central Asia,HIC
+HTI,Haiti,Latin America & Caribbean ,LMC
+HUN,Hungary,Europe & Central Asia,HIC
+IDN,Indonesia,East Asia & Pacific,UMC
+IMN,Isle of Man,Europe & Central Asia,HIC
+IND,India,South Asia,LMC
+IRL,Ireland,Europe & Central Asia,HIC
+IRN,"Iran, Islamic Rep.","Middle East, North Africa, Afghanistan & Pakistan",UMC
+IRQ,Iraq,"Middle East, North Africa, Afghanistan & Pakistan",UMC
+ISL,Iceland,Europe & Central Asia,HIC
+ISR,Israel,"Middle East, North Africa, Afghanistan & Pakistan",HIC
+ITA,Italy,Europe & Central Asia,HIC
+JAM,Jamaica,Latin America & Caribbean ,UMC
+JOR,Jordan,"Middle East, North Africa, Afghanistan & Pakistan",UMC
+JPN,Japan,East Asia & Pacific,HIC
+KAZ,Kazakhstan,Europe & Central Asia,UMC
+KEN,Kenya,Sub-Saharan Africa ,LMC
+KGZ,Kyrgyz Republic,Europe & Central Asia,LMC
+KHM,Cambodia,East Asia & Pacific,LMC
+KIR,Kiribati,East Asia & Pacific,LMC
+KNA,St. Kitts and Nevis,Latin America & Caribbean ,HIC
+KOR,"Korea, Rep.",East Asia & Pacific,HIC
+KWT,Kuwait,"Middle East, North Africa, Afghanistan & Pakistan",HIC
+LAO,Lao PDR,East Asia & Pacific,LMC
+LBN,Lebanon,"Middle East, North Africa, Afghanistan & Pakistan",LMC
+LBR,Liberia,Sub-Saharan Africa ,LIC
+LBY,Libya,"Middle East, North Africa, Afghanistan & Pakistan",UMC
+LCA,St. Lucia,Latin America & Caribbean ,UMC
+LIE,Liechtenstein,Europe & Central Asia,HIC
+LKA,Sri Lanka,South Asia,UMC
+LSO,Lesotho,Sub-Saharan Africa ,LMC
+LTU,Lithuania,Europe & Central Asia,HIC
+LUX,Luxembourg,Europe & Central Asia,HIC
+LVA,Latvia,Europe & Central Asia,HIC
+MAC,"Macao SAR, China",East Asia & Pacific,HIC
+MAF,St. Martin (French part),Latin America & Caribbean ,HIC
+MAR,Morocco,"Middle East, North Africa, Afghanistan & Pakistan",LMC
+MCO,Monaco,Europe & Central Asia,HIC
+MDA,Moldova,Europe & Central Asia,UMC
+MDG,Madagascar,Sub-Saharan Africa ,LIC
+MDV,Maldives,South Asia,UMC
+MEX,Mexico,Latin America & Caribbean ,UMC
+MHL,Marshall Islands,East Asia & Pacific,UMC
+MKD,North Macedonia,Europe & Central Asia,UMC
+MLI,Mali,Sub-Saharan Africa ,LIC
+MLT,Malta,"Middle East, North Africa, Afghanistan & Pakistan",HIC
+MMR,Myanmar,East Asia & Pacific,LMC
+MNE,Montenegro,Europe & Central Asia,UMC
+MNG,Mongolia,East Asia & Pacific,UMC
+MNP,Northern Mariana Islands,East Asia & Pacific,HIC
+MOZ,Mozambique,Sub-Saharan Africa ,LIC
+MRT,Mauritania,Sub-Saharan Africa ,LMC
+MUS,Mauritius,Sub-Saharan Africa ,UMC
+MWI,Malawi,Sub-Saharan Africa ,LIC
+MYS,Malaysia,East Asia & Pacific,UMC
+NAM,Namibia,Sub-Saharan Africa ,LMC
+NCL,New Caledonia,East Asia & Pacific,HIC
+NER,Niger,Sub-Saharan Africa ,LIC
+NGA,Nigeria,Sub-Saharan Africa ,LMC
+NIC,Nicaragua,Latin America & Caribbean ,LMC
+NLD,Netherlands,Europe & Central Asia,HIC
+NOR,Norway,Europe & Central Asia,HIC
+NPL,Nepal,South Asia,LMC
+NRU,Naoero,East Asia & Pacific,HIC
+NZL,New Zealand,East Asia & Pacific,HIC
+OMN,Oman,"Middle East, North Africa, Afghanistan & Pakistan",HIC
+PAK,Pakistan,"Middle East, North Africa, Afghanistan & Pakistan",LMC
+PAN,Panama,Latin America & Caribbean ,HIC
+PER,Peru,Latin America & Caribbean ,UMC
+PHL,Philippines,East Asia & Pacific,UMC
+PLW,Palau,East Asia & Pacific,HIC
+PNG,Papua New Guinea,East Asia & Pacific,LMC
+POL,Poland,Europe & Central Asia,HIC
+PRI,Puerto Rico (US),Latin America & Caribbean ,HIC
+PRK,"Korea, Dem. People's Rep.",East Asia & Pacific,LIC
+PRT,Portugal,Europe & Central Asia,HIC
+PRY,Paraguay,Latin America & Caribbean ,UMC
+PSE,West Bank and Gaza,"Middle East, North Africa, Afghanistan & Pakistan",LMC
+PYF,French Polynesia,East Asia & Pacific,HIC
+QAT,Qatar,"Middle East, North Africa, Afghanistan & Pakistan",HIC
+ROU,Romania,Europe & Central Asia,HIC
+RUS,Russian Federation,Europe & Central Asia,HIC
+RWA,Rwanda,Sub-Saharan Africa ,LIC
+SAU,Saudi Arabia,"Middle East, North Africa, Afghanistan & Pakistan",HIC
+SDN,Sudan,Sub-Saharan Africa ,LIC
+SEN,Senegal,Sub-Saharan Africa ,LMC
+SGP,Singapore,East Asia & Pacific,HIC
+SLB,Solomon Islands,East Asia & Pacific,LMC
+SLE,Sierra Leone,Sub-Saharan Africa ,LIC
+SLV,El Salvador,Latin America & Caribbean ,UMC
+SMR,San Marino,Europe & Central Asia,HIC
+SOM,"Somalia, Fed. Rep.",Sub-Saharan Africa ,LIC
+SRB,Serbia,Europe & Central Asia,UMC
+SSD,South Sudan,Sub-Saharan Africa ,LIC
+STP,Sao Tome and Principe,Sub-Saharan Africa ,LMC
+SUR,Suriname,Latin America & Caribbean ,UMC
+SVK,Slovak Republic,Europe & Central Asia,HIC
+SVN,Slovenia,Europe & Central Asia,HIC
+SWE,Sweden,Europe & Central Asia,HIC
+SWZ,Eswatini,Sub-Saharan Africa ,LMC
+SXM,Sint Maarten (Dutch part),Latin America & Caribbean ,HIC
+SYC,Seychelles,Sub-Saharan Africa ,HIC
+SYR,Syrian Arab Republic,"Middle East, North Africa, Afghanistan & Pakistan",LIC
+TCA,Turks and Caicos Islands,Latin America & Caribbean ,HIC
+TCD,Chad,Sub-Saharan Africa ,LIC
+TGO,Togo,Sub-Saharan Africa ,LMC
+THA,Thailand,East Asia & Pacific,UMC
+TJK,Tajikistan,Europe & Central Asia,LMC
+TKM,Turkmenistan,Europe & Central Asia,UMC
+TLS,Timor-Leste,East Asia & Pacific,LMC
+TON,Tonga,East Asia & Pacific,UMC
+TTO,Trinidad and Tobago,Latin America & Caribbean ,HIC
+TUN,Tunisia,"Middle East, North Africa, Afghanistan & Pakistan",LMC
+TUR,Turkiye,Europe & Central Asia,UMC
+TUV,Tuvalu,East Asia & Pacific,UMC
+TZA,Tanzania,Sub-Saharan Africa ,LMC
+UGA,Uganda,Sub-Saharan Africa ,LIC
+UKR,Ukraine,Europe & Central Asia,UMC
+URY,Uruguay,Latin America & Caribbean ,HIC
+USA,United States,North America,HIC
+UZB,Uzbekistan,Europe & Central Asia,LMC
+VCT,St. Vincent and the Grenadines,Latin America & Caribbean ,UMC
+VEN,"Venezuela, RB",Latin America & Caribbean ,LMC
+VGB,British Virgin Islands,Latin America & Caribbean ,HIC
+VIR,Virgin Islands (U.S.),Latin America & Caribbean ,HIC
+VNM,Viet Nam,East Asia & Pacific,UMC
+VUT,Vanuatu,East Asia & Pacific,LMC
+WSM,Samoa,East Asia & Pacific,UMC
+XKX,Kosovo,Europe & Central Asia,UMC
+YEM,"Yemen, Rep.","Middle East, North Africa, Afghanistan & Pakistan",LIC
+ZAF,South Africa,Sub-Saharan Africa ,UMC
+ZMB,Zambia,Sub-Saharan Africa ,LMC
+ZWE,Zimbabwe,Sub-Saharan Africa ,LMC

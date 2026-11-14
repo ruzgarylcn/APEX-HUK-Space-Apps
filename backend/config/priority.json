@@ -1,0 +1,16 @@
+{
+  "notes": [
+    "Global South is a PRIORITY, not a filter: every country stays in the ranking.",
+    "opportunity = SI + income_bonus + novelty_bonus. SI (pure physical similarity) is always reported unchanged next to it.",
+    "Bonuses are additive points on the 0-100 SI scale, so a priority site can only overtake a site whose SI is at most `bonus` points higher. A clearly better analog in a high-income country still wins.",
+    "Bonuses apply only to candidates with SI >= min_si_for_bonus, so a weak analog is never promoted just because of where it is.",
+    "Income groups: World Bank classification (LIC/LMC/UMC/HIC), fetched by `python -m analog_atlas.cli fetch-income`."
+  ],
+  "income_bonus": {"LIC": 10, "LMC": 7, "UMC": 4, "HIC": 0, "NA": 0},
+  "income_label": {"LIC": "Low income", "LMC": "Lower-middle income", "UMC": "Upper-middle income", "HIC": "High income", "NA": "Unclassified (e.g. Antarctica)"},
+  "min_si_for_bonus": 60,
+  "novelty": {
+    "notes": "Research-attention layer (publications / field campaigns near the site). Not wired yet: every site gets 0 until the attention dataset exists.",
+    "max_bonus": 5
+  }
+}

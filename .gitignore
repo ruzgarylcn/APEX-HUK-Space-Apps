@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+backend/out/
+backend/data/grid.parquet
+# earth_features.parquet (50 km) is small and needed by the API deploy: keep it in git
+backend/data/exports/
+backend/data/ne_50m_admin_0_countries.geojson
+.venv/

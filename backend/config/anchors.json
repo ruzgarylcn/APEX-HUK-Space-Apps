@@ -1,0 +1,20 @@
+{
+  "notes": [
+    "Validation anchors: Earth sites that the PUBLISHED literature names as analogs of each Moon/Mars target.",
+    "Chosen from the cited papers only, and frozen BEFORE the first `validate` run, so the check is not circular (we did not pick sites because our engine ranks them high).",
+    "Targets without a literature anchor in the catalog are listed under `no_anchor` and excluded from the metric instead of being forced."
+  ],
+  "frozen_on": "2026-11-14",
+  "anchors": {
+    "jezero":     [{"site": "salda",    "cite": ["c079", "c080"], "basis": "Mg-carbonate (hydromagnesite) lake in ultramafic catchment; Mars 2020 team analog for Jezero marginal carbonates"}],
+    "cerberus":   [{"site": "mccartys", "cite": ["c001"], "basis": "Endogenous-growth flow textures as analog for Martian volcanic plains"},
+                   {"site": "iceland",  "cite": ["c087"], "basis": "Icelandic flood lavas (Laki) as analogs for Martian flood lavas (Athabasca / Cerberus)"}],
+    "gale":       [{"site": "maunakea", "cite": ["c009", "c010"], "basis": "Hematite-bearing ridge on Mauna Kea as analog for the Gale hematite layer"}],
+    "shackleton": [{"site": "haughton", "cite": ["c086"], "basis": "Haughton-Mars Project: polar impact-crater operations analog for the Moon and Mars"}],
+    "marius":     [{"site": "sfvf",     "cite": ["c008"], "basis": "San Francisco Volcanic Field cones used for lunar surface-exploration analog testing"}]
+  },
+  "no_anchor": {
+    "imbrium": "No catalog site has a citation naming it a mare-plain analog yet.",
+    "tharsis": "Hawaiian shields are the classic Tharsis analog, but the catalog's Mauna Kea entry is the hematite ridge, not a shield-flank site."
+  }
+}

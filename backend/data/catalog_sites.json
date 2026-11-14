@@ -1,0 +1,1160 @@
+[
+ {
+  "id": "kula",
+  "name": "Kula Volcanic Field",
+  "country": "Türkiye",
+  "lat": 38.55,
+  "lon": 28.65,
+  "bbox": [
+   28.45,
+   38.4,
+   28.9,
+   38.72
+  ],
+  "description": "Quaternary basaltic cinder cones, maars and pāhoehoe/ʻaʻā flows on a horst plateau; a UNESCO Global Geopark used for lunar-mare morphological comparison.",
+  "rocks": [
+   "basalt",
+   "scoria",
+   "tephrite"
+  ],
+  "minerals": [
+   "basalt",
+   "olivine",
+   "pyroxene",
+   "plagioclase"
+  ],
+  "climate": {
+   "temp_min": -5,
+   "temp_max": 32,
+   "precip": 550,
+   "pressure": 935
+  },
+  "terrain": {
+   "elev_mean": 650,
+   "slope_mean": 6.5,
+   "slope_std": 5.2,
+   "roughness": 0.42
+  },
+  "thermal": {
+   "inertia": 1800,
+   "albedo": 0.12
+  },
+  "analog": {
+   "relief_local": 150,
+   "crater_density": 0.15,
+   "ti_rel": 0.6,
+   "rock_abundance": 0.2,
+   "diurnal_range": 25,
+   "frost_fraction": 0.15,
+   "aridity": 0.55,
+   "ground_ice": 0,
+   "dust_activity": 0.2,
+   "vegetation_cover": 0.25,
+   "cave_index": 0.3
+  },
+  "mineralogy": {
+   "olivine": 0.18,
+   "pyroxene": 0.42,
+   "plagioclase": 0.3,
+   "evaporite": 0.0,
+   "hematite": 0.03,
+   "phyllosilicate": 0.02,
+   "carbonate": 0
+  },
+  "landform_class": "cinder_cones",
+  "rationale": "Young alkali-basalt cones and flow fields reproduce the morphology of lunar mare vents and Cerberus Palus plains at comparable relief.",
+  "limits": "Earth weathering oxidizes and hydrates mafic glass; lunar surfaces are space-weathered (nanophase Fe, agglutinates) and Mars adds UV photolysis plus perchlorates — spectral slopes will not transfer directly.",
+  "source_ids": [
+   "c001",
+   "c002",
+   "c006",
+   "c065"
+  ],
+  "iso3": "TUR"
+ },
+ {
+  "id": "mcmurdo",
+  "name": "McMurdo Dry Valleys",
+  "country": "Antarctica",
+  "lat": -77.55,
+  "lon": 162.0,
+  "bbox": [
+   161.0,
+   -77.9,
+   163.2,
+   -77.2
+  ],
+  "description": "Hyper-arid polar desert: ice-free valleys, evaporite-rich soils, permafrost and aeolian landforms; the reference Mars Phoenix / Gale analog.",
+  "rocks": [
+   "dolerite",
+   "sandstone",
+   "till"
+  ],
+  "minerals": [
+   "evaporite",
+   "sulfate",
+   "phyllosilicate",
+   "regolith_breccia"
+  ],
+  "climate": {
+   "temp_min": -45,
+   "temp_max": 8,
+   "precip": 50,
+   "pressure": 970
+  },
+  "terrain": {
+   "elev_mean": 300,
+   "slope_mean": 8.0,
+   "slope_std": 7.0,
+   "roughness": 0.5
+  },
+  "thermal": {
+   "inertia": 1200,
+   "albedo": 0.22
+  },
+  "analog": {
+   "relief_local": 1000,
+   "crater_density": 0.02,
+   "ti_rel": 0.45,
+   "rock_abundance": 0.15,
+   "diurnal_range": 15,
+   "frost_fraction": 0.9,
+   "aridity": 0.98,
+   "ground_ice": 0.9,
+   "dust_activity": 0.6,
+   "vegetation_cover": 0,
+   "cave_index": 0
+  },
+  "mineralogy": {
+   "olivine": 0.05,
+   "pyroxene": 0.15,
+   "plagioclase": 0.25,
+   "evaporite": 0.35,
+   "hematite": 0.04,
+   "phyllosilicate": 0.08,
+   "carbonate": 0.03
+  },
+  "landform_class": "polar_desert",
+  "rationale": "Evaporite mineralogy, aeolian erosion and shallow permafrost mirror Jezero/Gale sedimentary settings and lunar permanently shadowed cold traps.",
+  "limits": "Earth's atmosphere and ephemeral liquid brines cannot be sustained at Mars' ~6 hPa or in lunar vacuum; biology-driven soil processes have no counterpart there.",
+  "source_ids": [
+   "c011",
+   "c012",
+   "c015",
+   "c017",
+   "c018",
+   "c019",
+   "c029",
+   "c073"
+  ],
+  "iso3": "ATA"
+ },
+ {
+  "id": "sfvf",
+  "name": "San Francisco Volcanic Field",
+  "country": "USA · Arizona",
+  "lat": 35.5,
+  "lon": -111.6,
+  "bbox": [
+   -111.9,
+   35.2,
+   -111.3,
+   35.8
+  ],
+  "description": "~600 basaltic cinder cones incl. SP Crater and lava tubes; NASA astronaut geology training ground (Apollo-era field tests).",
+  "rocks": [
+   "basalt",
+   "cinder",
+   "scoria"
+  ],
+  "minerals": [
+   "basalt",
+   "olivine",
+   "pyroxene",
+   "plagioclase"
+  ],
+  "climate": {
+   "temp_min": -12,
+   "temp_max": 30,
+   "precip": 400,
+   "pressure": 785
+  },
+  "terrain": {
+   "elev_mean": 2100,
+   "slope_mean": 7.0,
+   "slope_std": 6.0,
+   "roughness": 0.45
+  },
+  "thermal": {
+   "inertia": 1600,
+   "albedo": 0.13
+  },
+  "analog": {
+   "relief_local": 300,
+   "crater_density": 0.12,
+   "ti_rel": 0.55,
+   "rock_abundance": 0.12,
+   "diurnal_range": 30,
+   "frost_fraction": 0.4,
+   "aridity": 0.6,
+   "ground_ice": 0.05,
+   "dust_activity": 0.3,
+   "vegetation_cover": 0.4,
+   "cave_index": 0.6
+  },
+  "mineralogy": {
+   "olivine": 0.15,
+   "pyroxene": 0.4,
+   "plagioclase": 0.35,
+   "evaporite": 0.0,
+   "hematite": 0.02,
+   "phyllosilicate": 0.03,
+   "carbonate": 0
+  },
+  "landform_class": "cinder_cones",
+  "rationale": "Cone spacing, tube-fed flows and regolith development match small lunar mare vent fields; validated by decades of analog traverses.",
+  "limits": "Vegetation and soil moisture bind the regolith; lunar regolith is dry, cohesive only by grain interlocking, and gardened by impacts.",
+  "source_ids": [
+   "c008",
+   "c003",
+   "c047",
+   "c053"
+  ],
+  "iso3": "USA"
+ },
+ {
+  "id": "mccartys",
+  "name": "McCartys Flow · Zuni-Bandera",
+  "country": "USA · New Mexico",
+  "lat": 34.8,
+  "lon": -108.0,
+  "bbox": [
+   -108.3,
+   34.55,
+   -107.7,
+   35.05
+  ],
+  "description": "~3 ka pāhoehoe/ʻaʻā flow field with inflation plateaus, tumuli and collapse pits; the type analog for Martian volcanic plains surface texture.",
+  "rocks": [
+   "basalt"
+  ],
+  "minerals": [
+   "basalt",
+   "olivine",
+   "pyroxene",
+   "plagioclase"
+  ],
+  "climate": {
+   "temp_min": -10,
+   "temp_max": 31,
+   "precip": 350,
+   "pressure": 790
+  },
+  "terrain": {
+   "elev_mean": 2050,
+   "slope_mean": 4.0,
+   "slope_std": 3.5,
+   "roughness": 0.6
+  },
+  "thermal": {
+   "inertia": 2000,
+   "albedo": 0.1
+  },
+  "analog": {
+   "relief_local": 30,
+   "crater_density": 0.08,
+   "ti_rel": 0.75,
+   "rock_abundance": 0.25,
+   "diurnal_range": 35,
+   "frost_fraction": 0.3,
+   "aridity": 0.7,
+   "ground_ice": 0.15,
+   "dust_activity": 0.3,
+   "vegetation_cover": 0.1,
+   "cave_index": 0.7
+  },
+  "mineralogy": {
+   "olivine": 0.12,
+   "pyroxene": 0.45,
+   "plagioclase": 0.38,
+   "evaporite": 0.0,
+   "hematite": 0.02,
+   "phyllosilicate": 0.01,
+   "carbonate": 0
+  },
+  "landform_class": "lava_flow",
+  "rationale": "Endogenous growth textures (inflation ridges, plateaus, pits) are the direct morphologic key for reading Cerberus Palus and martian plains from orbit.",
+  "limits": "Terrestrial flows retain primary glass and vesicle textures that Mars' dust mantling and aeolian abrasion partly overprint.",
+  "source_ids": [
+   "c001",
+   "c002",
+   "c006"
+  ],
+  "iso3": "USA"
+ },
+ {
+  "id": "maunakea",
+  "name": "Mauna Kea · Pu'u Poli'ahu",
+  "country": "USA · Hawai'i",
+  "lat": 19.82,
+  "lon": -155.47,
+  "bbox": [
+   -155.65,
+   19.7,
+   -155.3,
+   19.95
+  ],
+  "description": "Hematite-bearing oxidized ridge on a basaltic shield; the process analog for the Mount Sharp hematite ridge in Gale Crater.",
+  "rocks": [
+   "basalt",
+   "hawaiite",
+   "oxidized scoria"
+  ],
+  "minerals": [
+   "basalt",
+   "hematite",
+   "olivine",
+   "pyroxene",
+   "plagioclase"
+  ],
+  "climate": {
+   "temp_min": -4,
+   "temp_max": 16,
+   "precip": 500,
+   "pressure": 645
+  },
+  "terrain": {
+   "elev_mean": 3700,
+   "slope_mean": 9.0,
+   "slope_std": 7.0,
+   "roughness": 0.5
+  },
+  "thermal": {
+   "inertia": 1400,
+   "albedo": 0.16
+  },
+  "analog": {
+   "relief_local": 300,
+   "crater_density": 0.1,
+   "ti_rel": 0.5,
+   "rock_abundance": 0.15,
+   "diurnal_range": 25,
+   "frost_fraction": 0.55,
+   "aridity": 0.6,
+   "ground_ice": 0.3,
+   "dust_activity": 0.3,
+   "vegetation_cover": 0.02,
+   "cave_index": 0.3
+  },
+  "mineralogy": {
+   "olivine": 0.1,
+   "pyroxene": 0.3,
+   "plagioclase": 0.3,
+   "evaporite": 0.0,
+   "hematite": 0.22,
+   "phyllosilicate": 0.05,
+   "carbonate": 0
+  },
+  "landform_class": "volcanic_shield",
+  "rationale": "Crystalline hematite formed by oxidizing alteration of basalt reproduces the spectral signature Curiosity measured on Mount Sharp's hematite ridge.",
+  "limits": "Hawai'i's alteration runs through liquid water and a thick atmosphere; Gale's hematite may record briny, low-water-activity diagenesis under a thin CO₂ sky.",
+  "source_ids": [
+   "c009",
+   "c010",
+   "c035",
+   "c072"
+  ],
+  "iso3": "USA"
+ },
+ {
+  "id": "atacama",
+  "name": "Atacama Desert",
+  "country": "Chile",
+  "lat": -23.5,
+  "lon": -69.0,
+  "bbox": [
+   -69.5,
+   -24.0,
+   -68.5,
+   -23.0
+  ],
+  "description": "Hyper-arid core with nitrate/sulfate/perchlorate soils and closed-basin brines; the Mars life-detection drilling analog (ARADS).",
+  "rocks": [
+   "ignimbrite",
+   "alluvium",
+   "salt crust"
+  ],
+  "minerals": [
+   "evaporite",
+   "sulfate",
+   "perchlorate",
+   "phyllosilicate"
+  ],
+  "climate": {
+   "temp_min": 2,
+   "temp_max": 30,
+   "precip": 2,
+   "pressure": 875
+  },
+  "terrain": {
+   "elev_mean": 1200,
+   "slope_mean": 3.0,
+   "slope_std": 2.5,
+   "roughness": 0.25
+  },
+  "thermal": {
+   "inertia": 1500,
+   "albedo": 0.28
+  },
+  "analog": {
+   "relief_local": 150,
+   "crater_density": 0.02,
+   "ti_rel": 0.5,
+   "rock_abundance": 0.05,
+   "diurnal_range": 45,
+   "frost_fraction": 0.02,
+   "aridity": 0.99,
+   "ground_ice": 0,
+   "dust_activity": 0.5,
+   "vegetation_cover": 0,
+   "cave_index": 0.05
+  },
+  "mineralogy": {
+   "olivine": 0.03,
+   "pyroxene": 0.08,
+   "plagioclase": 0.12,
+   "evaporite": 0.45,
+   "hematite": 0.06,
+   "phyllosilicate": 0.1,
+   "carbonate": 0.02
+  },
+  "landform_class": "evaporite_basin",
+  "rationale": "Perchlorate-bearing, near-sterile soils and deliquescent brines replicate Phoenix/Wet Chemistry findings and test Mars drilling + biosignature protocols.",
+  "limits": "Even the driest Atacama soils see fog and rare rain; Mars' surface water activity and UV flux are far more extreme, so habitability limits do not map 1:1.",
+  "source_ids": [
+   "c032",
+   "c074",
+   "c075",
+   "c076",
+   "c077",
+   "c078"
+  ],
+  "iso3": "CHL"
+ },
+ {
+  "id": "iceland",
+  "name": "Laki · Reykjanes",
+  "country": "Iceland",
+  "lat": 64.05,
+  "lon": -17.3,
+  "bbox": [
+   -17.9,
+   63.75,
+   -16.7,
+   64.3
+  ],
+  "description": "1783–84 fissure flood-basalt province with pillow lavas, hyaloclastite and sulfate-veined hydrothermal dikes on a rift setting.",
+  "rocks": [
+   "tholeiitic basalt",
+   "hyaloclastite",
+   "pillow lava"
+  ],
+  "minerals": [
+   "basalt",
+   "olivine",
+   "pyroxene",
+   "plagioclase",
+   "sulfate"
+  ],
+  "climate": {
+   "temp_min": -8,
+   "temp_max": 14,
+   "precip": 1200,
+   "pressure": 960
+  },
+  "terrain": {
+   "elev_mean": 450,
+   "slope_mean": 5.0,
+   "slope_std": 4.0,
+   "roughness": 0.55
+  },
+  "thermal": {
+   "inertia": 1700,
+   "albedo": 0.11
+  },
+  "analog": {
+   "relief_local": 200,
+   "crater_density": 0.06,
+   "ti_rel": 0.65,
+   "rock_abundance": 0.25,
+   "diurnal_range": 10,
+   "frost_fraction": 0.5,
+   "aridity": 0.1,
+   "ground_ice": 0.3,
+   "dust_activity": 0.6,
+   "vegetation_cover": 0.3,
+   "cave_index": 0.6
+  },
+  "mineralogy": {
+   "olivine": 0.2,
+   "pyroxene": 0.4,
+   "plagioclase": 0.35,
+   "evaporite": 0.0,
+   "hematite": 0.02,
+   "phyllosilicate": 0.08,
+   "carbonate": 0.01
+  },
+  "landform_class": "flood_basalt",
+  "rationale": "Fissure-fed sheet flows and subglacial pillows reproduce the emplacement style of lunar maria and martian flood-lava provinces.",
+  "limits": "Iceland's lavas quench under ice and water and weather rapidly; airless-body flows cool by radiation and retain glass for billions of years.",
+  "source_ids": [
+   "c002",
+   "c003",
+   "c006",
+   "c033",
+   "c087"
+  ],
+  "iso3": "ISL"
+ },
+ {
+  "id": "deccan",
+  "name": "Deccan Traps",
+  "country": "India",
+  "lat": 18.5,
+  "lon": 73.8,
+  "bbox": [
+   73.3,
+   18.1,
+   74.3,
+   18.9
+  ],
+  "description": "~66 Ma continental flood-basalt province, kilometre-thick stacked sheet flows with intertrappean sediments; the large-scale mare/plains volume analog.",
+  "rocks": [
+   "tholeiitic basalt",
+   "red bole"
+  ],
+  "minerals": [
+   "basalt",
+   "pyroxene",
+   "plagioclase",
+   "olivine"
+  ],
+  "climate": {
+   "temp_min": 12,
+   "temp_max": 38,
+   "precip": 700,
+   "pressure": 940
+  },
+  "terrain": {
+   "elev_mean": 650,
+   "slope_mean": 4.0,
+   "slope_std": 3.0,
+   "roughness": 0.35
+  },
+  "thermal": {
+   "inertia": 1900,
+   "albedo": 0.13
+  },
+  "analog": {
+   "relief_local": 300,
+   "crater_density": 0.01,
+   "ti_rel": 0.7,
+   "rock_abundance": 0.08,
+   "diurnal_range": 18,
+   "frost_fraction": 0,
+   "aridity": 0.4,
+   "ground_ice": 0,
+   "dust_activity": 0.2,
+   "vegetation_cover": 0.45,
+   "cave_index": 0.05
+  },
+  "mineralogy": {
+   "olivine": 0.12,
+   "pyroxene": 0.45,
+   "plagioclase": 0.38,
+   "evaporite": 0.0,
+   "hematite": 0.03,
+   "phyllosilicate": 0.1,
+   "carbonate": 0.02
+  },
+  "landform_class": "flood_basalt",
+  "rationale": "Stacked, low-viscosity sheet flows at province scale match the stratigraphy inferred for lunar mare fill and Cerberus Palus.",
+  "limits": "Monsoon weathering produces thick saprolite and red boles absent on airless bodies; trap topography is also dissected by fluvial incision.",
+  "source_ids": [
+   "c002",
+   "c003",
+   "c006",
+   "c065"
+  ],
+  "iso3": "IND"
+ },
+ {
+  "id": "etna",
+  "name": "Etna flanks",
+  "country": "Italy",
+  "lat": 37.75,
+  "lon": 14.99,
+  "bbox": [
+   14.8,
+   37.6,
+   15.2,
+   37.9
+  ],
+  "description": "Active stratovolcano flank: pyroclastic blankets, weathered basalt and fumarolic sulfate alteration; the alteration-rate endmember.",
+  "rocks": [
+   "trachybasalt",
+   "tephra",
+   "scoria"
+  ],
+  "minerals": [
+   "basalt",
+   "pyroxene",
+   "plagioclase",
+   "olivine",
+   "phyllosilicate",
+   "sulfate"
+  ],
+  "climate": {
+   "temp_min": -2,
+   "temp_max": 28,
+   "precip": 800,
+   "pressure": 810
+  },
+  "terrain": {
+   "elev_mean": 1800,
+   "slope_mean": 12.0,
+   "slope_std": 9.0,
+   "roughness": 0.6
+  },
+  "thermal": {
+   "inertia": 1500,
+   "albedo": 0.14
+  },
+  "analog": {
+   "relief_local": 600,
+   "crater_density": 0.1,
+   "ti_rel": 0.5,
+   "rock_abundance": 0.2,
+   "diurnal_range": 20,
+   "frost_fraction": 0.3,
+   "aridity": 0.3,
+   "ground_ice": 0.05,
+   "dust_activity": 0.3,
+   "vegetation_cover": 0.2,
+   "cave_index": 0.7
+  },
+  "mineralogy": {
+   "olivine": 0.12,
+   "pyroxene": 0.38,
+   "plagioclase": 0.38,
+   "evaporite": 0.0,
+   "hematite": 0.04,
+   "phyllosilicate": 0.06,
+   "carbonate": 0.01
+  },
+  "landform_class": "volcanic_shield",
+  "rationale": "Steep pyroclastic slopes and rapid palagonitization bracket the upper end of terrain roughness and alteration speed for volcanic analogs.",
+  "limits": "Persistent explosive resurfacing and humid alteration are far faster than any current Mars process; use it as an endmember, not a state match.",
+  "source_ids": [
+   "c003",
+   "c033",
+   "c034",
+   "c035"
+  ],
+  "iso3": "ITA"
+ },
+ {
+  "id": "donjuan",
+  "name": "Don Juan Pond",
+  "country": "Antarctica",
+  "lat": -77.5667,
+  "lon": 161.1833,
+  "bbox": [
+   161.05,
+   -77.63,
+   161.32,
+   -77.5
+  ],
+  "description": "Shallow CaCl₂-dominated brine pan, liquid to ~−50 °C; the leading terrestrial analog for martian recurring slope lineae brines.",
+  "rocks": [
+   "dolerite bedrock",
+   "salt crust"
+  ],
+  "minerals": [
+   "evaporite",
+   "sulfate",
+   "phyllosilicate"
+  ],
+  "climate": {
+   "temp_min": -50,
+   "temp_max": -5,
+   "precip": 30,
+   "pressure": 980
+  },
+  "terrain": {
+   "elev_mean": 110,
+   "slope_mean": 2.0,
+   "slope_std": 1.5,
+   "roughness": 0.15
+  },
+  "thermal": {
+   "inertia": 2600,
+   "albedo": 0.1
+  },
+  "analog": {
+   "relief_local": 400,
+   "crater_density": 0.01,
+   "ti_rel": 0.9,
+   "rock_abundance": 0.02,
+   "diurnal_range": 12,
+   "frost_fraction": 0.97,
+   "aridity": 0.98,
+   "ground_ice": 0.6,
+   "dust_activity": 0.5,
+   "vegetation_cover": 0,
+   "cave_index": 0
+  },
+  "mineralogy": {
+   "olivine": 0.02,
+   "pyroxene": 0.05,
+   "plagioclase": 0.1,
+   "evaporite": 0.65,
+   "hematite": 0.02,
+   "phyllosilicate": 0.05,
+   "carbonate": 0.02
+  },
+  "landform_class": "brine_pan",
+  "rationale": "Deliquescent CaCl₂ brine stays liquid at Mars-relevant temperatures and leaves the same dark, low-albedo wetted streaks proposed for RSL.",
+  "limits": "RSL may be dry granular flows; even if briny, Mars' pressure/UV regime and perchlorate chemistry differ from this Antarctic pan.",
+  "source_ids": [
+   "c031",
+   "c032",
+   "c015",
+   "c036"
+  ],
+  "iso3": "ATA"
+ },
+ {
+  "id": "riotinto",
+  "name": "Río Tinto basin",
+  "country": "Spain",
+  "lat": 37.7,
+  "lon": -6.55,
+  "bbox": [
+   -6.75,
+   37.55,
+   -6.35,
+   37.85
+  ],
+  "description": "Acidic (pH ~2), Fe- and sulfate-rich drainage precipitating jarosite, goethite and hematite; the Meridiani Planum mineralogical analog.",
+  "rocks": [
+   "volcanic-sedimentary",
+   "ironstone"
+  ],
+  "minerals": [
+   "hematite",
+   "sulfate",
+   "phyllosilicate",
+   "evaporite"
+  ],
+  "climate": {
+   "temp_min": 4,
+   "temp_max": 36,
+   "precip": 550,
+   "pressure": 975
+  },
+  "terrain": {
+   "elev_mean": 350,
+   "slope_mean": 6.0,
+   "slope_std": 5.0,
+   "roughness": 0.4
+  },
+  "thermal": {
+   "inertia": 1800,
+   "albedo": 0.18
+  },
+  "analog": {
+   "relief_local": 200,
+   "crater_density": 0.02,
+   "ti_rel": 0.6,
+   "rock_abundance": 0.1,
+   "diurnal_range": 25,
+   "frost_fraction": 0.02,
+   "aridity": 0.5,
+   "ground_ice": 0,
+   "dust_activity": 0.1,
+   "vegetation_cover": 0.2,
+   "cave_index": 0.3
+  },
+  "mineralogy": {
+   "olivine": 0.02,
+   "pyroxene": 0.05,
+   "plagioclase": 0.08,
+   "evaporite": 0.18,
+   "hematite": 0.45,
+   "phyllosilicate": 0.15,
+   "carbonate": 0
+  },
+  "landform_class": "acidic_drainage",
+  "rationale": "Acid-sulfate weathering of Fe-bearing rock yields the jarosite→hematite assemblage Opportunity found at Meridiani, with comparable crystallinity pathways.",
+  "limits": "Río Tinto's acidity is microbially amplified and water-rich; Meridiani's alteration likely involved scarce, evaporating brines.",
+  "source_ids": [
+   "c035",
+   "c033",
+   "c072",
+   "c034"
+  ],
+  "iso3": "ESP"
+ },
+ {
+  "id": "uyuni",
+  "name": "Salar de Uyuni",
+  "country": "Bolivia",
+  "lat": -20.2,
+  "lon": -67.5,
+  "bbox": [
+   -67.9,
+   -20.5,
+   -67.1,
+   -19.9
+  ],
+  "description": "~10,000 km² halite/gypsum crust at 3,656 m with polygonal salt ridges and seasonal brine films; the bright evaporite plain analog.",
+  "rocks": [
+   "halite",
+   "gypsum",
+   "salt crust"
+  ],
+  "minerals": [
+   "evaporite",
+   "sulfate",
+   "phyllosilicate"
+  ],
+  "climate": {
+   "temp_min": -10,
+   "temp_max": 22,
+   "precip": 150,
+   "pressure": 645
+  },
+  "terrain": {
+   "elev_mean": 3656,
+   "slope_mean": 0.8,
+   "slope_std": 0.6,
+   "roughness": 0.08
+  },
+  "thermal": {
+   "inertia": 2200,
+   "albedo": 0.55
+  },
+  "analog": {
+   "relief_local": 5,
+   "crater_density": 0,
+   "ti_rel": 0.8,
+   "rock_abundance": 0,
+   "diurnal_range": 40,
+   "frost_fraction": 0.45,
+   "aridity": 0.9,
+   "ground_ice": 0.05,
+   "dust_activity": 0.4,
+   "vegetation_cover": 0,
+   "cave_index": 0
+  },
+  "mineralogy": {
+   "olivine": 0.01,
+   "pyroxene": 0.02,
+   "plagioclase": 0.05,
+   "evaporite": 0.75,
+   "hematite": 0.01,
+   "phyllosilicate": 0.05,
+   "carbonate": 0.05
+  },
+  "landform_class": "evaporite_basin",
+  "rationale": "Metre-scale flatness, high albedo and sulfate crusts reproduce the photometric and thermal behavior of martian sulfate plains (e.g. Meridiani, Juventae).",
+  "limits": "Uyuni's crust is actively reworked by seasonal flooding and biology; Mars' sulfate deposits are cemented, ancient and radiation-processed.",
+  "source_ids": [
+   "c036",
+   "c031",
+   "c033"
+  ],
+  "iso3": "BOL"
+ },
+ {
+  "id": "salda",
+  "name": "Salda Gölü (Lake Salda)",
+  "country": "Türkiye",
+  "lat": 37.55,
+  "lon": 29.68,
+  "bbox": [
+   29.6,
+   37.5,
+   29.78,
+   37.6
+  ],
+  "description": "Alkaline, Mg-rich lake in an ophiolite (serpentinized peridotite) catchment with hydromagnesite microbialites, white carbonate shorelines and deltaic sediments; studied by the Mars 2020 team as a Jezero analog.",
+  "rocks": [
+   "serpentinite",
+   "peridotite",
+   "hydromagnesite"
+  ],
+  "minerals": [
+   "olivine",
+   "phyllosilicate",
+   "evaporite"
+  ],
+  "climate": {
+   "temp_min": -8,
+   "temp_max": 31,
+   "precip": 400,
+   "pressure": 885
+  },
+  "terrain": {
+   "elev_mean": 1140,
+   "slope_mean": 5.0,
+   "slope_std": 5.0,
+   "roughness": 0.35
+  },
+  "thermal": {
+   "inertia": 1800,
+   "albedo": 0.25
+  },
+  "analog": {
+   "relief_local": 400,
+   "crater_density": 0.02,
+   "ti_rel": 0.6,
+   "rock_abundance": 0.1,
+   "diurnal_range": 25,
+   "frost_fraction": 0.25,
+   "aridity": 0.6,
+   "ground_ice": 0,
+   "dust_activity": 0.25,
+   "vegetation_cover": 0.25,
+   "cave_index": 0.05
+  },
+  "mineralogy": {
+   "olivine": 0.12,
+   "pyroxene": 0.12,
+   "plagioclase": 0.05,
+   "evaporite": 0.05,
+   "hematite": 0.02,
+   "phyllosilicate": 0.1,
+   "carbonate": 0.45
+  },
+  "landform_class": "fluvial_delta",
+  "rationale": "Mg-carbonates (hydromagnesite) precipitating at the shore of a lake fed by an ultramafic catchment mirror the olivine–carbonate association and the marginal carbonates mapped along Jezero's delta and rim.",
+  "limits": "Salda's carbonates form with abundant liquid water, microbial mats and a thick atmosphere; Jezero's carbonates are ~3.5 Ga old, altered and dust-mantled, and a biogenic origin is unproven.",
+  "source_ids": [
+   "c079",
+   "c080"
+  ],
+  "iso3": "TUR"
+ },
+ {
+  "id": "lonar",
+  "name": "Lonar Crater",
+  "country": "India",
+  "lat": 19.976,
+  "lon": 76.508,
+  "bbox": [
+   76.47,
+   19.94,
+   76.55,
+   20.01
+  ],
+  "description": "~1.8 km, ~50 ka simple impact crater excavated entirely in Deccan flood basalt, with a preserved ejecta blanket and a saline-alkaline crater lake; one of very few fresh basaltic impact craters on Earth.",
+  "rocks": [
+   "basalt",
+   "impact breccia"
+  ],
+  "minerals": [
+   "basalt",
+   "pyroxene",
+   "plagioclase",
+   "olivine",
+   "regolith_breccia"
+  ],
+  "climate": {
+   "temp_min": 12,
+   "temp_max": 40,
+   "precip": 750,
+   "pressure": 950
+  },
+  "terrain": {
+   "elev_mean": 560,
+   "slope_mean": 6.0,
+   "slope_std": 7.0,
+   "roughness": 0.45
+  },
+  "thermal": {
+   "inertia": 1700,
+   "albedo": 0.14
+  },
+  "analog": {
+   "relief_local": 150,
+   "crater_density": 0.6,
+   "ti_rel": 0.65,
+   "rock_abundance": 0.1,
+   "diurnal_range": 20,
+   "frost_fraction": 0,
+   "aridity": 0.45,
+   "ground_ice": 0,
+   "dust_activity": 0.25,
+   "vegetation_cover": 0.35,
+   "cave_index": 0.02
+  },
+  "mineralogy": {
+   "olivine": 0.08,
+   "pyroxene": 0.42,
+   "plagioclase": 0.38,
+   "evaporite": 0.02,
+   "hematite": 0.04,
+   "phyllosilicate": 0.08,
+   "carbonate": 0.03
+  },
+  "landform_class": "impact_crater",
+  "rationale": "An impact into basalt reproduces the target lithology of the lunar maria and Martian volcanic plains, so its shock features, ejecta and crater form are direct comparisons for small craters on both bodies.",
+  "limits": "Monsoon weathering, vegetation and the crater lake have altered the ejecta; lunar craters formed without water and Martian ones are far older and dust-mantled.",
+  "source_ids": [
+   "c081",
+   "c082"
+  ],
+  "iso3": "IND"
+ },
+ {
+  "id": "dallol",
+  "name": "Dallol · Danakil Depression",
+  "country": "Ethiopia",
+  "lat": 14.24,
+  "lon": 40.3,
+  "bbox": [
+   40.25,
+   14.2,
+   40.35,
+   14.28
+  ],
+  "description": "Hydrothermal dome in the Danakil salt plain ~120 m below sea level: hyperacidic (pH < 1), hypersaline, iron-rich hot springs with salt chimneys and colourful Fe-oxide and sulfate deposits.",
+  "rocks": [
+   "halite",
+   "sylvite",
+   "iron-oxide crust"
+  ],
+  "minerals": [
+   "evaporite",
+   "sulfate",
+   "hematite"
+  ],
+  "climate": {
+   "temp_min": 25,
+   "temp_max": 48,
+   "precip": 100,
+   "pressure": 1028
+  },
+  "terrain": {
+   "elev_mean": -120,
+   "slope_mean": 1.5,
+   "slope_std": 1.5,
+   "roughness": 0.15
+  },
+  "thermal": {
+   "inertia": 2000,
+   "albedo": 0.45
+  },
+  "analog": {
+   "relief_local": 60,
+   "crater_density": 0.1,
+   "ti_rel": 0.75,
+   "rock_abundance": 0.02,
+   "diurnal_range": 30,
+   "frost_fraction": 0,
+   "aridity": 0.97,
+   "ground_ice": 0,
+   "dust_activity": 0.5,
+   "vegetation_cover": 0,
+   "cave_index": 0.02
+  },
+  "mineralogy": {
+   "olivine": 0.01,
+   "pyroxene": 0.03,
+   "plagioclase": 0.05,
+   "evaporite": 0.7,
+   "hematite": 0.1,
+   "phyllosilicate": 0.03,
+   "carbonate": 0.02
+  },
+  "landform_class": "evaporite_basin",
+  "rationale": "Acid-saline brines, sulfates and Fe-oxides forming together make Dallol a process analog for acid-sulfate settings such as Meridiani Planum and a test bed for the limits of life on Mars.",
+  "limits": "Dallol's extremes are driven by active magmatic heat and liquid water at ~1 bar and >40 °C; the Martian surface is cold, low-pressure and hydrothermally inactive today.",
+  "source_ids": [
+   "c083",
+   "c084"
+  ],
+  "iso3": "ETH"
+ },
+ {
+  "id": "haughton",
+  "name": "Haughton Crater · Devon Island",
+  "country": "Canada",
+  "lat": 75.38,
+  "lon": -89.68,
+  "bbox": [
+   -89.95,
+   75.3,
+   -89.4,
+   75.46
+  ],
+  "description": "~23 km, ~31 Ma complex impact structure in Paleozoic carbonates on Devon Island, in a polar desert with continuous permafrost; home of the NASA Haughton-Mars Project.",
+  "rocks": [
+   "dolomite",
+   "limestone",
+   "impact melt breccia"
+  ],
+  "minerals": [
+   "evaporite",
+   "regolith_breccia"
+  ],
+  "climate": {
+   "temp_min": -45,
+   "temp_max": 10,
+   "precip": 150,
+   "pressure": 1010
+  },
+  "terrain": {
+   "elev_mean": 200,
+   "slope_mean": 5.0,
+   "slope_std": 5.0,
+   "roughness": 0.4
+  },
+  "thermal": {
+   "inertia": 1500,
+   "albedo": 0.25
+  },
+  "analog": {
+   "relief_local": 300,
+   "crater_density": 0.8,
+   "ti_rel": 0.5,
+   "rock_abundance": 0.15,
+   "diurnal_range": 12,
+   "frost_fraction": 0.85,
+   "aridity": 0.9,
+   "ground_ice": 0.9,
+   "dust_activity": 0.4,
+   "vegetation_cover": 0.03,
+   "cave_index": 0
+  },
+  "mineralogy": {
+   "olivine": 0,
+   "pyroxene": 0.02,
+   "plagioclase": 0.05,
+   "evaporite": 0.08,
+   "hematite": 0.02,
+   "phyllosilicate": 0.05,
+   "carbonate": 0.6
+  },
+  "landform_class": "impact_crater",
+  "rationale": "A well-preserved impact structure in a cold, dry permafrost setting, used for 25+ years as an operations and science analog for both Mars and the Moon, including rover and EVA trials.",
+  "limits": "Carbonate target rock and Earth's polar climate differ from the anorthositic lunar highlands and the vacuum at the lunar pole; there are no permanently shadowed cold traps.",
+  "source_ids": [
+   "c085",
+   "c086"
+  ],
+  "iso3": "CAN"
+ }
+]

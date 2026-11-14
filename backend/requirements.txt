@@ -1,0 +1,12 @@
+# core (scoring, CLI demo)
+numpy>=1.26
+pandas>=2.1
+pyarrow>=14
+requests>=2.31
+# API
+fastapi>=0.110
+uvicorn>=0.29
+# grid -> country assignment
+shapely>=2.0
+# Earth extraction (Google Earth Engine, needs a GEE-enabled Cloud project)
+earthengine-api>=0.1.390

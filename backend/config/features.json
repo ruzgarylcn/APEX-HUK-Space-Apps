@@ -1,0 +1,591 @@
+{
+ "version": 2,
+ "notes": "Single source of truth for the v2 feature set. Mirrors FEATURES/FAMILIES/PROFILES in p2.html. Every numeric feature is normalized against a FIXED physical range, never against the current catalog or grid.",
+ "families": [
+  {
+   "id": "topography",
+   "label": "Topography"
+  },
+  {
+   "id": "surface",
+   "label": "Surface"
+  },
+  {
+   "id": "environment",
+   "label": "Thermal & light"
+  },
+  {
+   "id": "water",
+   "label": "Water & ice"
+  },
+  {
+   "id": "mineralogy",
+   "label": "Mineralogy"
+  },
+  {
+   "id": "processes",
+   "label": "Processes & bio"
+  },
+  {
+   "id": "subsurface",
+   "label": "Subsurface"
+  },
+  {
+   "id": "landform",
+   "label": "Landform"
+  }
+ ],
+ "profiles": {
+  "landing": {
+   "label": "Landing Safety",
+   "families": {
+    "topography": 0.45,
+    "surface": 0.25,
+    "environment": 0.1,
+    "water": 0.0,
+    "mineralogy": 0.05,
+    "processes": 0.1,
+    "subsurface": 0.0,
+    "landform": 0.05
+   }
+  },
+  "resource": {
+   "label": "Resource Extraction",
+   "families": {
+    "topography": 0.1,
+    "surface": 0.05,
+    "environment": 0.15,
+    "water": 0.35,
+    "mineralogy": 0.25,
+    "processes": 0.0,
+    "subsurface": 0.05,
+    "landform": 0.05
+   }
+  },
+  "habitat": {
+   "label": "Habitat Construction",
+   "families": {
+    "topography": 0.3,
+    "surface": 0.15,
+    "environment": 0.15,
+    "water": 0.1,
+    "mineralogy": 0.05,
+    "processes": 0.05,
+    "subsurface": 0.15,
+    "landform": 0.05
+   }
+  },
+  "science": {
+   "label": "Science & Astrobiology",
+   "families": {
+    "topography": 0.05,
+    "surface": 0.05,
+    "environment": 0.1,
+    "water": 0.2,
+    "mineralogy": 0.3,
+    "processes": 0.1,
+    "subsurface": 0.05,
+    "landform": 0.15
+   }
+  }
+ },
+ "features": [
+  {
+   "key": "slope_mean",
+   "family": "topography",
+   "unit": "deg",
+   "range": [
+    0,
+    30
+   ],
+   "src": {
+    "earth": "NASA/NASADEM_HGT/001 (slope, 30 m -> cell mean)",
+    "moon": "LRO LOLA LDEM",
+    "mars": "MGS MOLA MEGDR / HRSC"
+   },
+   "tier": {
+    "earth": "measured",
+    "moon": "measured",
+    "mars": "measured"
+   }
+  },
+  {
+   "key": "slope_std",
+   "family": "topography",
+   "unit": "deg",
+   "range": [
+    0,
+    20
+   ],
+   "src": {
+    "earth": "NASA/NASADEM_HGT/001 (slope std)",
+    "moon": "LRO LOLA LDEM",
+    "mars": "MGS MOLA MEGDR"
+   },
+   "tier": {
+    "earth": "measured",
+    "moon": "measured",
+    "mars": "measured"
+   }
+  },
+  {
+   "key": "roughness",
+   "family": "topography",
+   "unit": "idx",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "NASADEM terrain ruggedness + Sentinel-1/RADARSAT backscatter",
+    "moon": "LOLA roughness + Mini-RF",
+    "mars": "MOLA pulse width"
+   },
+   "tier": {
+    "earth": "derived",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "relief_local",
+   "family": "topography",
+   "unit": "m",
+   "range": [
+    0,
+    3000
+   ],
+   "src": {
+    "earth": "NASADEM 5 km focal max-min",
+    "moon": "LOLA LDEM",
+    "mars": "MOLA MEGDR"
+   },
+   "tier": {
+    "earth": "measured",
+    "moon": "measured",
+    "mars": "measured"
+   }
+  },
+  {
+   "key": "crater_density",
+   "family": "topography",
+   "unit": "idx",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "Earth Impact Database + DEM closed-depression detection",
+    "moon": "Robbins crater DB",
+    "mars": "Robbins crater DB"
+   },
+   "tier": {
+    "earth": "derived",
+    "moon": "measured",
+    "mars": "measured"
+   }
+  },
+  {
+   "key": "albedo",
+   "family": "surface",
+   "unit": "frac",
+   "range": [
+    0,
+    0.6
+   ],
+   "src": {
+    "earth": "MODIS/061/MCD43A3 white-sky shortwave",
+    "moon": "LRO Diviner / LROC WAC",
+    "mars": "MGS TES albedo"
+   },
+   "tier": {
+    "earth": "measured",
+    "moon": "measured",
+    "mars": "measured"
+   }
+  },
+  {
+   "key": "ti_rel",
+   "family": "surface",
+   "unit": "pct",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "MODIS LST day-night apparent thermal inertia, percentile over Earth land",
+    "moon": "Diviner H-parameter percentile",
+    "mars": "TES/THEMIS thermal inertia percentile"
+   },
+   "tier": {
+    "earth": "derived",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "rock_abundance",
+   "family": "surface",
+   "unit": "frac",
+   "range": [
+    0,
+    0.3
+   ],
+   "src": {
+    "earth": "ASTER TIR + SAR backscatter proxy",
+    "moon": "LRO Diviner rock abundance",
+    "mars": "TES/THEMIS rock abundance"
+   },
+   "tier": {
+    "earth": "proxy",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "temp_min",
+   "family": "environment",
+   "unit": "degC",
+   "range": [
+    -240,
+    30
+   ],
+   "src": {
+    "earth": "MODIS/061/MOD11A2 + MYD11A2 night LST, 5th percentile",
+    "moon": "LRO Diviner",
+    "mars": "TES / MCS climatology"
+   },
+   "tier": {
+    "earth": "measured",
+    "moon": "measured",
+    "mars": "measured"
+   }
+  },
+  {
+   "key": "diurnal_range",
+   "family": "environment",
+   "unit": "degC",
+   "range": [
+    0,
+    300
+   ],
+   "src": {
+    "earth": "MODIS LST day - night, annual median",
+    "moon": "LRO Diviner",
+    "mars": "TES / THEMIS"
+   },
+   "tier": {
+    "earth": "measured",
+    "moon": "measured",
+    "mars": "measured"
+   }
+  },
+  {
+   "key": "frost_fraction",
+   "family": "environment",
+   "unit": "frac",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "MODIS LST time series, fraction of observations < 0 C",
+    "moon": "LRO Diviner",
+    "mars": "MCS climatology"
+   },
+   "tier": {
+    "earth": "derived",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "sun_elev_noon",
+   "family": "environment",
+   "unit": "deg",
+   "range": [
+    0,
+    90
+   ],
+   "src": {
+    "earth": "computed from latitude + obliquity",
+    "moon": "computed (LOLA illumination maps for PSRs)",
+    "mars": "computed from latitude + obliquity"
+   },
+   "tier": {
+    "earth": "derived",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "aridity",
+   "family": "water",
+   "unit": "idx",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "1 - min(1, GPM IMERG precip / MODIS MOD16 PET)",
+    "moon": "constant 1",
+    "mars": "constant 1"
+   },
+   "tier": {
+    "earth": "derived",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "ground_ice",
+   "family": "water",
+   "unit": "idx",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "ESA CCI Permafrost probability + glacier mask",
+    "moon": "LEND / LAMP / Diviner cold traps",
+    "mars": "SWIM ice consensus / Odyssey GRS"
+   },
+   "tier": {
+    "earth": "proxy",
+    "moon": "proxy",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "mineral_olivine",
+   "family": "mineralogy",
+   "unit": "frac",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "NASA/ASTER_GED/AG100_003 emissivity mafic index (EMIT where available)",
+    "moon": "Kaguya MI / M3",
+    "mars": "TES / OMEGA / CRISM"
+   },
+   "tier": {
+    "earth": "proxy",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "mineral_pyroxene",
+   "family": "mineralogy",
+   "unit": "frac",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "ASTER GED emissivity (EMIT where available)",
+    "moon": "Kaguya MI / M3",
+    "mars": "TES / OMEGA / CRISM"
+   },
+   "tier": {
+    "earth": "proxy",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "mineral_plagioclase",
+   "family": "mineralogy",
+   "unit": "frac",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "ASTER GED emissivity (EMIT where available)",
+    "moon": "Kaguya MI / M3",
+    "mars": "TES / OMEGA / CRISM"
+   },
+   "tier": {
+    "earth": "proxy",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "mineral_evaporite",
+   "family": "mineralogy",
+   "unit": "frac",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "Sentinel-2 / EMIT salt and gypsum indices",
+    "moon": "constant 0",
+    "mars": "CRISM / OMEGA sulfates and chlorides"
+   },
+   "tier": {
+    "earth": "proxy",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "mineral_hematite",
+   "family": "mineralogy",
+   "unit": "frac",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "Sentinel-2 / ASTER iron-oxide band ratio",
+    "moon": "constant ~0",
+    "mars": "TES hematite index"
+   },
+   "tier": {
+    "earth": "proxy",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "mineral_phyllosilicate",
+   "family": "mineralogy",
+   "unit": "frac",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "ASTER SWIR / EMIT clay indices",
+    "moon": "constant 0",
+    "mars": "CRISM phyllosilicates"
+   },
+   "tier": {
+    "earth": "proxy",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "mineral_carbonate",
+   "family": "mineralogy",
+   "unit": "frac",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "ASTER GED carbonate index (Ninomiya CI = e13/e14)",
+    "moon": "constant 0",
+    "mars": "CRISM / OMEGA carbonates"
+   },
+   "tier": {
+    "earth": "proxy",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "dust_activity",
+   "family": "processes",
+   "unit": "idx",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "NASA/GSFC/MERRA/aer/2 dust extinction AOD, percentile",
+    "moon": "constant 0.05 (electrostatic)",
+    "mars": "MCS / TES dust opacity"
+   },
+   "tier": {
+    "earth": "derived",
+    "moon": "proxy",
+    "mars": "measured"
+   }
+  },
+  {
+   "key": "vegetation_cover",
+   "family": "processes",
+   "unit": "frac",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "MODIS/061/MOD13A2 NDVI -> fractional cover",
+    "moon": "constant 0",
+    "mars": "constant 0"
+   },
+   "tier": {
+    "earth": "derived",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  },
+  {
+   "key": "cave_index",
+   "family": "subsurface",
+   "unit": "idx",
+   "range": [
+    0,
+    1
+   ],
+   "src": {
+    "earth": "lava-tube / cave inventories (compiled)",
+    "moon": "LROC pit catalog",
+    "mars": "MGC3 Mars cave candidate catalog"
+   },
+   "tier": {
+    "earth": "proxy",
+    "moon": "measured",
+    "mars": "measured"
+   }
+  },
+  {
+   "key": "landform_class",
+   "family": "landform",
+   "categorical": true,
+   "tier": {
+    "earth": "derived",
+    "moon": "derived",
+    "mars": "derived"
+   }
+  }
+ ],
+ "landform_affinity": {
+  "mare_plain|flood_basalt": 0.8,
+  "mare_plain|lava_flow": 0.72,
+  "flood_basalt|lava_flow": 0.85,
+  "volcanic_shield|cinder_cones": 0.62,
+  "volcanic_shield|lava_flow": 0.55,
+  "cinder_cones|lava_flow": 0.5,
+  "evaporite_basin|brine_pan": 0.82,
+  "evaporite_basin|acidic_drainage": 0.55,
+  "brine_pan|acidic_drainage": 0.5,
+  "fluvial_delta|evaporite_basin": 0.5,
+  "polar_desert|cratered_highlands": 0.38,
+  "polar_desert|evaporite_basin": 0.35,
+  "cratered_highlands|volcanic_shield": 0.3,
+  "mare_plain|cratered_highlands": 0.25,
+  "impact_crater|cratered_highlands": 0.7,
+  "impact_crater|mare_plain": 0.35,
+  "impact_crater|polar_desert": 0.25,
+  "impact_crater|fluvial_delta": 0.3
+ },
+ "gap_threshold": 0.35,
+ "obliquity_deg": {
+  "earth": 23.44,
+  "moon": 1.54,
+  "mars": 25.19
+ },
+ "tier_definitions": {
+  "measured": "read directly from an instrument product (DEM, LST, albedo, crater/pit catalogs)",
+  "derived": "computed from measured products with a documented physical formula (percentiles, aridity, sun angle, spectral unmixing)",
+  "proxy": "stand-in for a quantity with no global map yet (e.g. ASTER band-ratio minerals, permafrost from mean LST, cave potential from lithology)"
+ }
+}

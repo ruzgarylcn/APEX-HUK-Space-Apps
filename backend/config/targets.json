@@ -1,0 +1,310 @@
+[
+ {
+  "id": "imbrium",
+  "name": "Mare Imbrium",
+  "planet": "moon",
+  "bbox": [
+   -24.0,
+   27.0,
+   -7.0,
+   39.0
+  ],
+  "lat": 32.8,
+  "lon": -15.6,
+  "albedo": 0.07,
+  "temp_min": -170.0,
+  "analog": {
+   "relief_local": 150.0,
+   "crater_density": 0.45,
+   "ti_rel": 0.55,
+   "rock_abundance": 0.006,
+   "diurnal_range": 280.0,
+   "frost_fraction": 0.55,
+   "aridity": 1.0,
+   "ground_ice": 0.0,
+   "dust_activity": 0.05,
+   "vegetation_cover": 0.0,
+   "cave_index": 0.35
+  },
+  "mineralogy": {
+   "olivine": 0.12,
+   "pyroxene": 0.45,
+   "plagioclase": 0.35,
+   "evaporite": 0.0,
+   "hematite": 0.01,
+   "phyllosilicate": 0.0,
+   "carbonate": 0
+  },
+  "landform_class": "mare_plain",
+  "terrain_source": "literature estimate - replace with LOLA/MOLA extraction",
+  "terrain": {
+   "slope_mean": 2,
+   "slope_std": 1.5,
+   "roughness": 0.2
+  }
+ },
+ {
+  "id": "marius",
+  "name": "Marius Hills",
+  "planet": "moon",
+  "bbox": [
+   -59.0,
+   11.0,
+   -54.0,
+   16.0
+  ],
+  "lat": 13.4,
+  "lon": -56.5,
+  "albedo": 0.08,
+  "temp_min": -165.0,
+  "analog": {
+   "relief_local": 300.0,
+   "crater_density": 0.4,
+   "ti_rel": 0.5,
+   "rock_abundance": 0.01,
+   "diurnal_range": 275.0,
+   "frost_fraction": 0.55,
+   "aridity": 1.0,
+   "ground_ice": 0.0,
+   "dust_activity": 0.05,
+   "vegetation_cover": 0.0,
+   "cave_index": 0.8
+  },
+  "mineralogy": {
+   "olivine": 0.15,
+   "pyroxene": 0.42,
+   "plagioclase": 0.33,
+   "evaporite": 0.0,
+   "hematite": 0.01,
+   "phyllosilicate": 0.0,
+   "carbonate": 0
+  },
+  "landform_class": "volcanic_shield",
+  "terrain_source": "literature estimate - replace with LOLA/MOLA extraction",
+  "terrain": {
+   "slope_mean": 5,
+   "slope_std": 4,
+   "roughness": 0.35
+  }
+ },
+ {
+  "id": "shackleton",
+  "name": "Shackleton rim",
+  "planet": "moon",
+  "bbox": [
+   -60.0,
+   -90.0,
+   60.0,
+   -88.4
+  ],
+  "lat": -89.9,
+  "lon": 0.0,
+  "albedo": 0.12,
+  "temp_min": -235.0,
+  "analog": {
+   "relief_local": 2500.0,
+   "crater_density": 0.7,
+   "ti_rel": 0.3,
+   "rock_abundance": 0.02,
+   "diurnal_range": 100.0,
+   "frost_fraction": 1.0,
+   "aridity": 1.0,
+   "ground_ice": 0.7,
+   "dust_activity": 0.05,
+   "vegetation_cover": 0.0,
+   "cave_index": 0.05
+  },
+  "mineralogy": {
+   "olivine": 0.08,
+   "pyroxene": 0.25,
+   "plagioclase": 0.55,
+   "evaporite": 0.0,
+   "hematite": 0.005,
+   "phyllosilicate": 0.0,
+   "carbonate": 0
+  },
+  "landform_class": "cratered_highlands",
+  "terrain_source": "literature estimate - replace with LOLA/MOLA extraction",
+  "terrain": {
+   "slope_mean": 15,
+   "slope_std": 10,
+   "roughness": 0.6
+  }
+ },
+ {
+  "id": "jezero",
+  "name": "Jezero Crater",
+  "planet": "mars",
+  "bbox": [
+   77.2,
+   18.1,
+   77.95,
+   18.75
+  ],
+  "lat": 18.44,
+  "lon": 77.58,
+  "albedo": 0.2,
+  "temp_min": -110.0,
+  "analog": {
+   "relief_local": 600.0,
+   "crater_density": 0.35,
+   "ti_rel": 0.6,
+   "rock_abundance": 0.1,
+   "diurnal_range": 95.0,
+   "frost_fraction": 0.95,
+   "aridity": 1.0,
+   "ground_ice": 0.05,
+   "dust_activity": 0.6,
+   "vegetation_cover": 0.0,
+   "cave_index": 0.05
+  },
+  "mineralogy": {
+   "olivine": 0.25,
+   "pyroxene": 0.4,
+   "plagioclase": 0.15,
+   "evaporite": 0.05,
+   "hematite": 0.03,
+   "phyllosilicate": 0.12,
+   "carbonate": 0.08
+  },
+  "landform_class": "fluvial_delta",
+  "terrain_source": "literature estimate - replace with LOLA/MOLA extraction",
+  "terrain": {
+   "slope_mean": 4,
+   "slope_std": 4,
+   "roughness": 0.35
+  }
+ },
+ {
+  "id": "gale",
+  "name": "Gale Crater",
+  "planet": "mars",
+  "bbox": [
+   137.2,
+   -6.0,
+   138.4,
+   -4.8
+  ],
+  "lat": -5.4,
+  "lon": 137.8,
+  "albedo": 0.22,
+  "temp_min": -115.0,
+  "analog": {
+   "relief_local": 1000.0,
+   "crater_density": 0.3,
+   "ti_rel": 0.7,
+   "rock_abundance": 0.12,
+   "diurnal_range": 90.0,
+   "frost_fraction": 0.93,
+   "aridity": 1.0,
+   "ground_ice": 0.05,
+   "dust_activity": 0.6,
+   "vegetation_cover": 0.0,
+   "cave_index": 0.05
+  },
+  "mineralogy": {
+   "olivine": 0.12,
+   "pyroxene": 0.3,
+   "plagioclase": 0.18,
+   "evaporite": 0.1,
+   "hematite": 0.12,
+   "phyllosilicate": 0.2,
+   "carbonate": 0.01
+  },
+  "landform_class": "fluvial_delta",
+  "terrain_source": "literature estimate - replace with LOLA/MOLA extraction",
+  "terrain": {
+   "slope_mean": 8,
+   "slope_std": 7,
+   "roughness": 0.5
+  }
+ },
+ {
+  "id": "cerberus",
+  "name": "Cerberus Palus",
+  "planet": "mars",
+  "bbox": [
+   150.0,
+   2.5,
+   155.0,
+   6.5
+  ],
+  "lat": 4.5,
+  "lon": 152.5,
+  "albedo": 0.16,
+  "temp_min": -110.0,
+  "analog": {
+   "relief_local": 50.0,
+   "crater_density": 0.12,
+   "ti_rel": 0.5,
+   "rock_abundance": 0.08,
+   "diurnal_range": 90.0,
+   "frost_fraction": 0.93,
+   "aridity": 1.0,
+   "ground_ice": 0.25,
+   "dust_activity": 0.5,
+   "vegetation_cover": 0.0,
+   "cave_index": 0.3
+  },
+  "mineralogy": {
+   "olivine": 0.18,
+   "pyroxene": 0.45,
+   "plagioclase": 0.3,
+   "evaporite": 0.01,
+   "hematite": 0.02,
+   "phyllosilicate": 0.02,
+   "carbonate": 0
+  },
+  "landform_class": "lava_flow",
+  "terrain_source": "literature estimate - replace with LOLA/MOLA extraction",
+  "terrain": {
+   "slope_mean": 1,
+   "slope_std": 0.8,
+   "roughness": 0.15
+  }
+ },
+ {
+  "id": "tharsis",
+  "name": "Tharsis flanks",
+  "planet": "mars",
+  "bbox": [
+   -125.0,
+   -5.0,
+   -115.0,
+   5.0
+  ],
+  "lat": 0.0,
+  "lon": -120.0,
+  "albedo": 0.26,
+  "temp_min": -125.0,
+  "analog": {
+   "relief_local": 400.0,
+   "crater_density": 0.15,
+   "ti_rel": 0.15,
+   "rock_abundance": 0.03,
+   "diurnal_range": 100.0,
+   "frost_fraction": 0.98,
+   "aridity": 1.0,
+   "ground_ice": 0.1,
+   "dust_activity": 0.7,
+   "vegetation_cover": 0.0,
+   "cave_index": 0.9
+  },
+  "mineralogy": {
+   "olivine": 0.15,
+   "pyroxene": 0.38,
+   "plagioclase": 0.35,
+   "evaporite": 0.0,
+   "hematite": 0.03,
+   "phyllosilicate": 0.02,
+   "carbonate": 0
+  },
+  "landform_class": "volcanic_shield",
+  "terrain_source": "literature estimate - replace with LOLA/MOLA extraction",
+  "terrain": {
+   "slope_mean": 3,
+   "slope_std": 3,
+   "roughness": 0.3
+  }
+ }
+]

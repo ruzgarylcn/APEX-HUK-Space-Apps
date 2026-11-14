@@ -1,0 +1,365 @@
+{
+ "notes": [
+  "Discovery checklist: Earth regions the PUBLISHED literature names as Moon/Mars analogs, that are NOT in the 16-site catalog and have NO entry in data/campaigns.csv (no NASA/ESA/agency field campaign).",
+  "Frozen BEFORE any global-grid result exists. Do not add, remove or move candidates, change expected targets, or change the protocol after seeing grid results. New candidates may be appended later only with a new frozen_on date, reported separately.",
+  "Purpose: an independent check that the engine's 'discoveries' are meaningful. A miss is a result too and must be reported, not hidden.",
+  "All DOIs verified on Crossref on 2026-11-14."
+ ],
+ "frozen_on": "2026-11-14",
+ "protocol": {
+  "requires": "data/earth_features.parquet (global grid from the Earth Engine extraction)",
+  "metric": "For each candidate: score every land cell (coverage >= 0.5) against the expected target with pure SI (no priority bonuses). Take the best SI among cells within radius_km of the candidate. Report its percentile among all scored land cells.",
+  "primary_profile": "science",
+  "also_report_profiles": [
+   "landing",
+   "resource",
+   "habitat"
+  ],
+  "pass_percentile": 90,
+  "strong_pass_percentile": 99,
+  "chance_level": "A random location passes with probability ~10 % (top-10 % threshold); with a radius the best-of-neighbourhood can inflate this, so also report the same statistic for 100 random land points with the same radius as a baseline.",
+  "headline": "Report: N of 10 candidates pass (>= 90th percentile) under the science profile, versus the random-point baseline pass rate."
+ },
+ "candidates": [
+  {
+   "id": "emi_koussi",
+   "name": "Emi Koussi volcano · Tibesti",
+   "country": "Chad",
+   "iso3": "TCD",
+   "income": "LIC",
+   "lat": 19.79,
+   "lon": 18.55,
+   "radius_km": 50,
+   "expected_target": "tharsis",
+   "basis": "Shield volcano with nested summit calderas used as a close analog of the Martian shield volcano Elysium Mons.",
+   "expected_strong": [
+    "landform",
+    "topography",
+    "mineralogy"
+   ],
+   "expected_breaks": [
+    "environment"
+   ],
+   "sources": [
+    {
+     "cite": "NASA Earth Observatory / JSC Gateway to Astronaut Photography: Emi Koussi Volcano, Chad",
+     "url": "https://eol.jsc.nasa.gov/Collections/EarthObservatory/articles/Emi_Koussi_Volcano.htm"
+    }
+   ]
+  },
+  {
+   "id": "lut",
+   "name": "Lut Desert megaripples and yardangs",
+   "country": "Iran",
+   "iso3": "IRN",
+   "income": "UMC",
+   "lat": 30.5,
+   "lon": 58.5,
+   "radius_km": 100,
+   "expected_target": "gale",
+   "basis": "Large ripple-like aeolian bedforms matching the length scales and patterns of Martian transverse aeolian ridges; mega-yardangs compared with Aeolis yardangs.",
+   "expected_strong": [
+    "processes",
+    "water",
+    "surface"
+   ],
+   "expected_breaks": [
+    "environment",
+    "mineralogy"
+   ],
+   "sources": [
+    {
+     "cite": "Foroutan, M., & Zimbelman, J. R. (2016). Mega-ripples in Iran: A new analog for transverse aeolian ridges on Mars. Icarus.",
+     "doi": "10.1016/j.icarus.2016.03.025"
+    }
+   ]
+  },
+  {
+   "id": "wau_an_namus",
+   "name": "Wau-an-Namus volcanic field",
+   "country": "Libya",
+   "iso3": "LBY",
+   "income": "UMC",
+   "lat": 25.05,
+   "lon": 17.55,
+   "radius_km": 50,
+   "expected_target": "gale",
+   "basis": "First terrestrial site with dark (basaltic) megaripples resembling some Martian transverse aeolian ridges.",
+   "expected_strong": [
+    "processes",
+    "water",
+    "mineralogy"
+   ],
+   "expected_breaks": [
+    "environment"
+   ],
+   "sources": [
+    {
+     "cite": "Foroutan, M., et al. (2019). Megaripples at Wau-an-Namus, Libya: A new analog for similar features on Mars. Icarus.",
+     "doi": "10.1016/j.icarus.2018.10.021"
+    }
+   ]
+  },
+  {
+   "id": "kachchh_jarosite",
+   "name": "Matanumadh jarosite · Kachchh",
+   "country": "India",
+   "iso3": "IND",
+   "income": "LMC",
+   "lat": 23.53,
+   "lon": 68.95,
+   "radius_km": 50,
+   "expected_target": "gale",
+   "basis": "Jarosite with gypsum, kaolinite over Fe/Mg smectites in altered Deccan basalts — acid-sulfate alteration analog for early Mars (Gale / Meridiani).",
+   "expected_strong": [
+    "mineralogy",
+    "water"
+   ],
+   "expected_breaks": [
+    "environment",
+    "processes"
+   ],
+   "sources": [
+    {
+     "cite": "Bhattacharya, S., et al. (2016). Jarosite occurrence in the Deccan Volcanic Province of Kachchh, western India. JGR Planets.",
+     "doi": "10.1002/2015JE004949"
+    }
+   ]
+  },
+  {
+   "id": "kachchh_vents",
+   "name": "Dhinodhar and Varar volcanic vents · Kachchh",
+   "country": "India",
+   "iso3": "IND",
+   "income": "LMC",
+   "lat": 23.38,
+   "lon": 69.45,
+   "radius_km": 50,
+   "expected_target": "tharsis",
+   "basis": "Basaltic craters and cones proposed as analogs of Ceraunius and Hecates Tholus and Martian volcanic rootless constructs.",
+   "expected_strong": [
+    "landform",
+    "mineralogy"
+   ],
+   "expected_breaks": [
+    "environment"
+   ],
+   "sources": [
+    {
+     "cite": "Chavan, A., et al. (2022). Volcanic craters and cones in central Kachchh mainland, western India: potential analogues for Mars. Journal of Earth System Science.",
+     "doi": "10.1007/s12040-022-01972-4"
+    }
+   ]
+  },
+  {
+   "id": "bosumtwi",
+   "name": "Bosumtwi impact crater",
+   "country": "Ghana",
+   "iso3": "GHA",
+   "income": "LMC",
+   "lat": 6.5,
+   "lon": -1.41,
+   "radius_km": 30,
+   "expected_target": "jezero",
+   "basis": "Well-preserved 10.5 km crater holding a lake and lacustrine sediments; ejecta and morphology indicate an originally Mars-like rampart crater.",
+   "expected_strong": [
+    "topography",
+    "landform"
+   ],
+   "expected_breaks": [
+    "processes",
+    "environment",
+    "water"
+   ],
+   "sources": [
+    {
+     "cite": "Baratoux, D., et al. (2019). Bosumtwi impact structure, Ghana: Evidence for fluidized emplacement of the ejecta. Meteoritics & Planetary Science.",
+     "doi": "10.1111/maps.13253"
+    },
+    {
+     "cite": "Wulf, G., et al. (2019). Earth and Planetary Science Letters: remote sensing + landform evolution modeling of Bosumtwi as a Mars-like rampart crater.",
+     "doi": "10.1016/j.epsl.2018.11.009"
+    }
+   ]
+  },
+  {
+   "id": "gilf_kebir",
+   "name": "Gilf Kebir · Western Desert",
+   "country": "Egypt",
+   "iso3": "EGY",
+   "income": "LMC",
+   "lat": 23.3,
+   "lon": 25.9,
+   "radius_km": 100,
+   "expected_target": "gale",
+   "basis": "Core of the largest hyperarid region on Earth: dunes, wind streaks, yardangs and fluvial-aeolian erosion forms compared with Viking images of Mars.",
+   "expected_strong": [
+    "water",
+    "processes",
+    "surface"
+   ],
+   "expected_breaks": [
+    "environment",
+    "mineralogy"
+   ],
+   "sources": [
+    {
+     "cite": "El-Baz, F., et al. (1979). Eolian features in the Western Desert of Egypt and some applications to Mars. JGR.",
+     "doi": "10.1029/JB084iB14p08205"
+    }
+   ]
+  },
+  {
+   "id": "namib",
+   "name": "Central Namib (Gobabeb area)",
+   "country": "Namibia",
+   "iso3": "NAM",
+   "income": "LMC",
+   "lat": -23.56,
+   "lon": 15.04,
+   "radius_km": 100,
+   "expected_target": "gale",
+   "basis": "Hyper-arid fog desert described as one of the closest Earth analogs to the present Martian surface; lichen colonization studied with rover-style photogrammetry.",
+   "expected_strong": [
+    "water",
+    "processes"
+   ],
+   "expected_breaks": [
+    "environment",
+    "mineralogy"
+   ],
+   "sources": [
+    {
+     "cite": "Hinchliffe, G., et al. (2017). Frontiers in Microbiology. Advanced photogrammetry to assess lichen colonization in the hyper-arid Namib Desert.",
+     "doi": "10.3389/fmicb.2017.02083"
+    }
+   ]
+  },
+  {
+   "id": "sittampundi",
+   "name": "Sittampundi anorthosite complex",
+   "country": "India",
+   "iso3": "IND",
+   "income": "LMC",
+   "lat": 11.25,
+   "lon": 77.95,
+   "radius_km": 30,
+   "expected_target": "shackleton",
+   "basis": "Calcic-plagioclase anorthosite treated as lunar highland rock; source of ISRO's LSS-ISAC-1 highland regolith simulant used to test Chandrayaan-2 landing and mobility.",
+   "expected_strong": [
+    "mineralogy"
+   ],
+   "expected_breaks": [
+    "environment",
+    "water",
+    "processes"
+   ],
+   "prediction_note": "Expected to be a mineralogical match but a poor environmental match to the cold lunar pole — a likely MISS under the science profile; included deliberately as a hard case.",
+   "sources": [
+    {
+     "cite": "Anbazhagan, S., et al. (2011). Remote sensing study of Sittampundi anorthosite complex, India. J. Indian Soc. Remote Sensing.",
+     "doi": "10.1007/s12524-011-0126-y"
+    },
+    {
+     "cite": "Anbazhagan, S., et al. (2021). A lunar soil simulant (LSS-ISAC-1) for the lunar exploration programme of ISRO. Icarus.",
+     "doi": "10.1016/j.icarus.2021.114511"
+    }
+   ]
+  },
+  {
+   "id": "jingpo",
+   "name": "Jingpo Lake volcanic field",
+   "country": "China",
+   "iso3": "CHN",
+   "income": "UMC",
+   "lat": 44.05,
+   "lon": 128.4,
+   "radius_km": 50,
+   "expected_target": "marius",
+   "basis": "Holocene effusive volcanic field with pristine cones and lava landforms proposed as a primary terrestrial analog for the lunar Marius Hills.",
+   "expected_strong": [
+    "landform",
+    "topography",
+    "mineralogy"
+   ],
+   "expected_breaks": [
+    "environment",
+    "processes"
+   ],
+   "sources": [
+    {
+     "cite": "Yang, et al. (2026). Morphometric analysis of the Jingpo Lake volcanic field: a terrestrial analog for lunar Marius Hills. Remote Sensing.",
+     "doi": "10.3390/rs18030512"
+    }
+   ]
+  }
+ ],
+ "amendments": [
+  {
+   "date": "2026-11-14",
+   "candidate": "jingpo",
+   "type": "reclassified_known",
+   "reason": "Chinese-language search (after the freeze, before any grid result existed) found that Peking University opened a 'lunar-like underground space' teaching and research base in the Jingpo Lake lava tubes in 2025 (data/campaigns.csv id=jingpo_pku). The site is therefore not unstudied. It stays in the checklist (the frozen list is not edited) but is reported separately and excluded from the 'novel' pass count.",
+   "source": "https://www.yzwb.net/news/kj/202507/t20250701_230019.html"
+  }
+ ],
+ "batch_2": {
+  "date": "2026-11-14",
+  "searched": "Chinese- and Russian-language literature and agency news (CNSA/CAS/CUG/PKU, Roscosmos/IBMP/GEOKHI), plus JAXA (Japanese), KASA/KICT, MBRSC and CSA in English.",
+  "result": "No new candidate qualified. Every analog region with a published analog paper in these languages (Qaidam, Jingpo Lake, Leiqiong/Hainan) already hosts a field campaign, so it is not 'unstudied'. Candidates were not forced.",
+  "candidates": []
+ },
+ "watch_list": {
+  "note": "Plausible regions with NO analog paper found in the searched languages. Not part of the test (no literature basis), but worth inspecting if the global scan ranks them high — that would be a genuine new suggestion, not a rediscovery.",
+  "regions": [
+   {
+    "name": "Dunhuang yardang field",
+    "country": "China",
+    "iso3": "CHN",
+    "lat": 40.5,
+    "lon": 93.1,
+    "why": "Classic yardangs; Chinese papers study their stratigraphy but none frames them as a Mars analog (Qaidam yardangs are)."
+   },
+   {
+    "name": "Lop Nur salt crust",
+    "country": "China",
+    "iso3": "CHN",
+    "lat": 40.3,
+    "lon": 90.5,
+    "why": "Sulfate-bearing salt crust with measured hygroscopic behaviour; no Mars-analog framing found."
+   },
+   {
+    "name": "Wudalianchi volcanic field",
+    "country": "China",
+    "iso3": "CHN",
+    "lat": 48.72,
+    "lon": 126.12,
+    "why": "Young basaltic cones and flows; morphometric studies exist, no direct Mars/Moon comparison found."
+   },
+   {
+    "name": "Tibetan saline lakes (Zabuye, Dangxiong Co)",
+    "country": "China",
+    "iso3": "CHN",
+    "lat": 31.4,
+    "lon": 84.1,
+    "why": "Cold, high-UV borate/lithium evaporite lakes; no Mars-analog study found."
+   },
+   {
+    "name": "Gobi (southern Mongolia)",
+    "country": "Mongolia",
+    "iso3": "MNG",
+    "lat": 43.5,
+    "lon": 104.0,
+    "why": "Red iron-oxide desert with large temperature swings; a planned MARS-V tourist habitat (2029) but no analog science paper found."
+   },
+   {
+    "name": "Tolbachik volcanic massif, Kamchatka",
+    "country": "Russia",
+    "iso3": "RUS",
+    "lat": 55.83,
+    "lon": 160.33,
+    "why": "Popular sources claim Soviet Lunokhod tests here; not verifiable in primary sources, so treated as unconfirmed."
+   }
+  ]
+ }
+}
