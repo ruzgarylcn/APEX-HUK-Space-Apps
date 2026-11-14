@@ -6,3 +6,4 @@ backend/data/grid.parquet
 backend/data/exports/
 backend/data/ne_50m_admin_0_countries.geojson
 .venv/
+backend/.panel.json

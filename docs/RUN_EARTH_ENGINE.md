@@ -1,5 +1,9 @@
 # Running the Earth Engine extraction (Step B)
 
+**Easiest way:** double-click `start.bat` in the project folder (macOS/Linux: `./start.sh`). It starts the local server
+and opens the pipeline panel at http://127.0.0.1:8000/. Every step below is a button there, with live logs, a CSV
+drop zone for the Drive exports and a "next step" hint. The commands below do the same thing from a terminal.
+
 Earth Engine credentials live on a team member's machine, so this step runs there.
 All commands from `backend/` (Windows PowerShell or any shell). Python 3.10+.
 

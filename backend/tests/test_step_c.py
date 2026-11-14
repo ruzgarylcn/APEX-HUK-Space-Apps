@@ -170,7 +170,10 @@ class ExportOfflineTests(unittest.TestCase):
             with mock.patch.object(pipeline, "EARTH_FEATURES_PATH", path), \
                  mock.patch("analog_atlas.priority.load_income_groups", return_value=INCOME), \
                  mock.patch.object(cli, "OUT_DIR", Path(d) / "out"):
-                cli.cmd_export_offline(argparse.Namespace(top=3, embed=str(html)))
+                import contextlib
+                import io
+                with contextlib.redirect_stdout(io.StringIO()):
+                    cli.cmd_export_offline(argparse.Namespace(top=3, embed=str(html)))
             data = json.loads(re.search(r'id="offline-results">(.*?)</script>', html.read_text(encoding="utf-8"), re.S).group(1))
         self.assertEqual(len(data), len(targets()) * len(features_config()["profiles"]))
         self.assertTrue(all(v["source"] == "grid" and v["discoveries"] for v in data.values()))

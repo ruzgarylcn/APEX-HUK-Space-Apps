@@ -116,6 +116,10 @@ candidates lie. Every layer carries a tier badge in the app: M = measured, D = d
 
 ## Run it
 
+**Pipeline panel (no terminal needed):** double-click `start.bat` (Windows) or run `./start.sh`. It starts one local
+server on http://127.0.0.1:8000/ that serves the pipeline panel (`panel.html`: Earth Engine sign-in, smoke test, global
+export, CSV upload and merge, discovery checks, offline snapshot, all with live logs), the Atlas (`/index.html`) and the API.
+
 ```bash
 # Frontend: one self-contained file. Serve it over HTTP; opened via file:// it falls back to the 2D view.
 python -m http.server 8765        # open http://localhost:8765/index.html  (add ?api=https://your-api for live discoveries)
