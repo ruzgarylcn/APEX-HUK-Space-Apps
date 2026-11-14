@@ -91,7 +91,7 @@ not counted as novel.
 
 | Layer (Earth grid) | Source | Tier |
 |---|---|---|
-| slope, roughness, local relief | NASADEM (NASA/NASADEM_HGT/001) | measured |
+| slope (mean, σ), local relief | NASADEM (NASA/NASADEM_HGT/001) | measured |
 | minimum temperature, day–night swing, time below 0 °C | MODIS MOD11A2 LST, 2019–2023 | measured / derived |
 | albedo | MODIS MCD43A3 | measured |
 | thermal inertia (apparent, percentile over Earth land) | MODIS LST + albedo | derived |
@@ -99,13 +99,14 @@ not counted as novel.
 | dust activity (percentile) | MERRA-2 aerosol optical depth (DUEXTTAU) | derived |
 | vegetation | MODIS MOD13A2 NDVI | derived |
 | olivine / pyroxene, carbonate | ASTER GED emissivity indices (Ninomiya) | **proxy** |
-| Fe-oxide, clay | Sentinel-2 band ratios (optional layer) | **proxy** |
+| Fe-oxide, clay | Sentinel-2 band ratios — optional; **not used** in the 50 km global run (`--no-s2`) | **proxy** |
 | ground ice | permafrost from mean land-surface temperature | **proxy** |
-| crater density, rock abundance, plagioclase, evaporite, caves, landform | no global map yet; missing on the grid, skipped by the scorer | — |
-| access (bonus input only) | Oxford MAP accessibility to cities 2015 | measured |
+| roughness, crater density, rock abundance, plagioclase, evaporite, caves, landform | no calibrated global layer yet; missing on the grid, skipped by the scorer (coverage is reported) | — |
+| access (bonus input only) | Malaria Atlas Project accessibility to cities 2015 (`projects/malariaatlasproject/assets/accessibility/accessibility_to_cities/2015_v1_0`) | measured |
 | Moon / Mars imagery | NASA Trek WMTS (LRO WAC, Viking MDIM 2.1) plus a dynamic high-resolution viewport export | — |
 
-PET comes from TerraClimate, not MOD16A2, because MOD16 masks barren land and deserts, which is exactly where many
+Roughness was dropped from the grid after the smoke test: the 90 m terrain-ruggedness window collapses to 0 when the
+stack is reduced at 1 km, which would have biased every Earth cell. PET comes from TerraClimate, not MOD16A2, because MOD16 masks barren land and deserts, which is exactly where many
 candidates lie. Every layer carries a tier badge in the app: M = measured, D = derived, P = proxy.
 
 ## Limitations

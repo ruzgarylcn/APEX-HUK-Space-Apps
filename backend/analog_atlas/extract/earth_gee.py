@@ -60,7 +60,9 @@ def raw_stack(include_s2: bool = True):
     swing = lst.map(lambda i: to_c(i, "LST_Day_1km").subtract(to_c(i, "LST_Night_1km")).rename("s")) \
                .median().rename("raw_diurnal_range")
     frost = night.map(lambda i: i.lt(0)).mean().rename("raw_frost_fraction")
-    maat = day.merge(night).mean().rename("raw_mean_lst")
+    # Mean LST over day and night: both collections must share one band name before merging (else EE rejects
+    # the heterogeneous collection: "Expected a homogeneous image collection").
+    maat = day.map(lambda i: i.rename("t")).merge(night.map(lambda i: i.rename("t"))).mean().rename("raw_mean_lst")
 
     albedo = (ee.ImageCollection("MODIS/061/MCD43A3").filterDate(start, end)
               .select("Albedo_WSA_shortwave").median().multiply(0.001).rename("raw_albedo"))
@@ -81,7 +83,7 @@ def raw_stack(include_s2: bool = True):
     dust = (ee.ImageCollection("NASA/GSFC/MERRA/aer/2").filterDate("2022-01-01", "2023-01-01")
             .filter(ee.Filter.calendarRange(0, 0, "hour")).select("DUEXTTAU").mean().rename("raw_dust_aod"))
     # Travel time to the nearest city (minutes). Not a feature: input to the access bonus.
-    access = (ee.Image("Oxford/MAP/accessibility_to_cities_2015_v1_0").select("accessibility")
+    access = (ee.Image("projects/malariaatlasproject/assets/accessibility/accessibility_to_cities/2015_v1_0")  # replaces deprecated Oxford/MAP id.select("accessibility")
               .rename("raw_access_minutes"))
 
     aster = ee.Image("NASA/ASTER_GED/AG100_003")
@@ -188,7 +190,10 @@ def postprocess(raw: pd.DataFrame) -> pd.DataFrame:
 
     f["slope_mean"] = raw["raw_slope"]
     f["slope_std"] = np.sqrt((raw["raw_slope_sq"] - raw["raw_slope"] ** 2).clip(lower=0))
-    f["roughness"] = clip(raw["raw_tri"] / 30.0)                       # 30 m mean |z - local mean| -> 1
+    # Roughness is NOT taken from raw_tri: the 90 m focal window collapses to ~0 when the stack is reduced at
+    # SCALE_M = 1 km (smoke test 2026-11-14: exactly 0 at Kula and Lake Salda). A constant 0 would bias every
+    # Earth cell; missing (NaN) lets the scorer skip it and report coverage instead. Recalibrate before reusing.
+    f["roughness"] = np.nan
     f["relief_local"] = raw["raw_relief_5km"]
     f["crater_density"] = np.nan                                       # needs impact DB + depression detection
 
