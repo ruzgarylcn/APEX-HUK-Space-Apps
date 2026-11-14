@@ -23,6 +23,9 @@ if 'id="pp-drawer"' in s:
     swap(r'/\* ===== DATA PIPELINE DRAWER .*?(?=</style>)', part("CSS"))
     swap(r'<!-- ===== DATA PIPELINE DRAWER ===== -->.*?(?=<div id="tooltip")', part("MARKUP"))
     swap(r'<script>\n/\* ===== DATA PIPELINE DRAWER.*?</script>\n', part("SCRIPT"))
+    # Judge-facing status text (static hosting such as GitHub Pages has no start.bat): migrate older builds.
+    s = s.replace("(Object.keys(OFFLINE_RESULTS).length ? 'Discoveries: offline snapshot' : 'Discoveries: start.bat for live')",
+                  "(Object.keys(OFFLINE_RESULTS).length ? `Discoveries: offline snapshot (${Object.keys(OFFLINE_RESULTS).length} entries)` : 'Discoveries: not available offline')")
     html_path.write_text(s, encoding="utf-8")
     raise SystemExit(f"pipeline drawer updated in index.html ({len(s):,} bytes)")
 
@@ -58,7 +61,7 @@ const apiReady = (async () => {
     clearTimeout(t);
   }
   const chip = document.getElementById('api-chip');
-  if (chip) chip.textContent = API_ORIGIN ? 'Discoveries: live API' : (Object.keys(OFFLINE_RESULTS).length ? 'Discoveries: offline snapshot' : 'Discoveries: start.bat for live');
+  if (chip) chip.textContent = API_ORIGIN ? 'Discoveries: live API' : (Object.keys(OFFLINE_RESULTS).length ? `Discoveries: offline snapshot (${Object.keys(OFFLINE_RESULTS).length} entries)` : 'Discoveries: not available offline');
 })();""")
 rep("    if (CONFIG.API_BASE) {", "    await apiReady;\n    if (API_ORIGIN) {")
 rep("CONFIG.API_BASE.replace(/\\/$/, '') + '/find-analogs'", "API_ORIGIN.replace(/\\/$/, '') + '/find-analogs'")

@@ -130,7 +130,7 @@ python -m http.server 8765        # open http://localhost:8765/index.html  (add 
 # Backend
 cd backend
 pip install -r requirements.txt
-python -m unittest discover -s tests -v      # 29 tests
+python -m unittest discover -s tests -v      # 35 tests (server tests need fastapi + httpx)
 python -m analog_atlas.cli validate
 python -m analog_atlas.cli demo --target jezero --profile science --top 3
 python -m analog_atlas.cli find --target cerberus --profile landing
@@ -140,8 +140,31 @@ uvicorn analog_atlas.api:app --port 8000     # POST /find-analogs, POST /score
 The Earth Engine extraction, merge and offline snapshot are described in `docs/RUN_EARTH_ENGINE.md`. Running
 `export-offline --embed ../index.html` lets the demo show real discoveries even when the API is down.
 
+**Rebuilding `index.html`.** `index.html` is the deliverable. Small source files are injected into it by idempotent scripts,
+run from the repository root in this order: `python brand/apply_logo.py index.html` (logo), `python tools/add_pipeline.py`
+(the Data pipeline drawer, shown only when the local server answers), `python tools/add_polish.py` (phone layout and the
+"Loading planetary imagery…" indicator). Edit `tools/pipeline_drawer.html` / `tools/polish.html`, not `index.html`.
+
 **Deploy.** The repository root (`index.html`) is a GitHub Pages site. `backend/Dockerfile` runs the API on Hugging Face
 Spaces (Docker SDK) or Render. Point the frontend at it by setting `CONFIG.API_BASE` or passing `?api=`.
+
+## Use of AI
+
+The idea, the challenge framing, the Global South priority and the first prototype came from team APEX-HUK. AI tools
+were used as assistants; every output was reviewed and tested by the team.
+
+- **Code.** The frontend (`index.html`), the backend (`backend/analog_atlas/`), the tests and the build tools were written
+  and refactored with an AI coding assistant (Anthropic Claude). All behaviour is covered by the unit tests in
+  `backend/tests/`.
+- **Data compilation.** `backend/data/campaigns.csv` (41 analog field campaigns) was compiled with AI-assisted web search
+  in English, Chinese, Russian and Japanese. Every row has a cited source, and every URL was checked automatically (or by
+  search where a site blocks scripts). Catalog and target values are literature estimates compiled with AI assistance and
+  are marked as such in the app and in this README.
+- **References.** DOIs were verified against Crossref (`python -m analog_atlas.cli verify-dois`).
+- **Logo.** Made from the team's own collage of planetary photographs with deterministic image-processing code written
+  with AI assistance (circle fit, polar re-mapping, colour grading, shading). No generative image model was used.
+- **Slides and documentation** were drafted with AI assistance and edited by the team.
+- **Not used:** no AI-generated images, video or audio appear in the project.
 
 ## Credits
 

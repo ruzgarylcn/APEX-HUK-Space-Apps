@@ -579,6 +579,7 @@ kbd{font-family:var(--font-mono);font-size:11px;background:color-mix(in srgb,var
 .fixed-gaps i{color:var(--muted-2);font-style:normal}
 .si-plain{width:52px;height:52px;position:relative;display:grid;place-items:center}
 /* ===== DATA PIPELINE DRAWER (runs the backend pipeline in the background from inside the Atlas) ===== */
+#pp-open[hidden]{display:none!important}  /* team tool: shown only when the local server (start.bat) answers */
 .icon-btn{position:relative}
 .pp-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--warn);box-shadow:0 0 8px var(--warn);animation:pulse 1s ease-in-out infinite}
 .pp-dot[hidden],#pp-drawer [hidden]{display:none!important}
@@ -674,6 +675,27 @@ kbd{font-family:var(--font-mono);font-size:11px;background:color-mix(in srgb,var
   .pp-stage small{display:none}
   .pp-jobhead,.pp-log{padding-left:12px;padding-right:12px}
 }
+/* ===== POLISH (tools/polish.html) ===== */
+/* Phones: #app's implicit column was sized by the top bar's min-content (~835 px on a 375 px screen), so the whole
+   layout - globe, Run match, status bar - ran off the right edge. Clamp the column to the screen and let the
+   top-bar actions scroll sideways instead of widening the page. */
+@media (max-width:920px){
+  #app{grid-template-columns:minmax(0,1fr)}
+  #main{grid-template-columns:minmax(0,1fr)!important}
+  #topbar{min-width:0;overflow:hidden}
+  .top-actions{min-width:0;flex-shrink:1;overflow-x:auto;scrollbar-width:none}
+  .top-actions::-webkit-scrollbar{display:none}
+  .top-actions .icon-btn{flex:none}
+}
+/* Globe imagery loading pill (the first tiles can take a while on a slow connection) */
+.globe-loading{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:12;display:flex;align-items:center;gap:10px;
+  padding:8px 16px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--muted-2);
+  font-size:13px;white-space:nowrap;backdrop-filter:blur(12px);pointer-events:none;transition:opacity .4s var(--ease)}
+.globe-loading.done{opacity:0}
+.globe-loading i{width:12px;height:12px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:gl-spin .9s linear infinite}
+@keyframes gl-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.globe-loading i{animation:none}}
+/* ===== /POLISH ===== */
 </style>
 </head>
 <body>
@@ -751,7 +773,7 @@ kbd{font-family:var(--font-mono);font-size:11px;background:color-mix(in srgb,var
       <button class="pill" data-profile="science" aria-pressed="false" data-tip="Science & Astrobiology: mineral 0.30 · water & ice 0.20 · landform 0.15 · thermal & light 0.10 · processes & bio 0.10 · other 0.05 each"><svg aria-hidden="true"><use href="#i-star"/></svg>Science</button>
     </div>
     <div class="top-actions">
-      <button class="icon-btn" id="pp-open" aria-haspopup="dialog" aria-expanded="false" aria-controls="pp-drawer" aria-label="Open the data pipeline" data-tip="Data pipeline: run the Earth Engine extraction, merge, discovery checks and the offline snapshot in the background"><svg aria-hidden="true"><use href="#i-pipeline"/></svg><span class="pp-dot" id="pp-dot" hidden></span></button>
+      <button class="icon-btn" id="pp-open" hidden aria-haspopup="dialog" aria-expanded="false" aria-controls="pp-drawer" aria-label="Open the data pipeline" data-tip="Data pipeline: run the Earth Engine extraction, merge, discovery checks and the offline snapshot in the background"><svg aria-hidden="true"><use href="#i-pipeline"/></svg><span class="pp-dot" id="pp-dot" hidden></span></button>
       <div class="export-wrap desktop-only">
         <button class="icon-btn" id="export-btn" aria-haspopup="menu" aria-expanded="false" aria-label="Export data" data-tip="Export results as CSV / JSON, citations, or a shareable link"><svg aria-hidden="true"><use href="#i-export"/></svg></button>
         <div class="menu" id="export-menu" role="menu" aria-label="Export options">
@@ -1587,7 +1609,7 @@ const apiReady = (async () => {
     clearTimeout(t);
   }
   const chip = document.getElementById('api-chip');
-  if (chip) chip.textContent = API_ORIGIN ? 'Discoveries: live API' : (Object.keys(OFFLINE_RESULTS).length ? 'Discoveries: offline snapshot' : 'Discoveries: start.bat for live');
+  if (chip) chip.textContent = API_ORIGIN ? 'Discoveries: live API' : (Object.keys(OFFLINE_RESULTS).length ? `Discoveries: offline snapshot (${Object.keys(OFFLINE_RESULTS).length} entries)` : 'Discoveries: not available offline');
 })();
 try { OFFLINE_RESULTS = JSON.parse($('#offline-results').textContent); } catch (e) { OFFLINE_RESULTS = {}; }
 /** Great-circle distance in km. @returns {number} */
@@ -5362,6 +5384,7 @@ boot().catch((e) => { log('boot error', e); try { App.ui.toast('Initialization p
     try {
       const [st, jobs] = await Promise.all([api('/panel/status'), api('/jobs')]);
       P.online = true; P.status = st; P.jobs = jobs;
+      q('#pp-open').hidden = false;   // local server found: reveal the team-only pipeline button
       if (st.running && P.view !== st.running.id) openJob(st.running.id);
       else if (!P.view && jobs.length) openJob(jobs[0].id);
     } catch (e) { P.online = false; P.status = null; }
@@ -5455,6 +5478,28 @@ boot().catch((e) => { log('boot error', e); try { App.ui.toast('Initialization p
 
   refresh();
   setInterval(() => { if (P.open || (P.status && P.status.running)) refresh(); }, 5000);
+})();
+</script>
+<script>
+/* ===== POLISH: globe loading pill (tools/polish.html) ===== */
+(() => {
+  'use strict';
+  const host = document.getElementById('pane-left');
+  if (!host) return;
+  const pill = document.createElement('div');
+  pill.className = 'globe-loading'; pill.setAttribute('role', 'status'); pill.setAttribute('aria-live', 'polite');
+  pill.innerHTML = '<i aria-hidden="true"></i><span>Loading planetary imagery…</span>';
+  host.appendChild(pill);
+  const started = Date.now();
+  const viewer = () => (window.App && App.globe && (App.globe.viewers ? App.globe.viewers.left : App.globe.viewer)) || null;
+  const tick = () => {
+    const v = viewer(), mode = (document.getElementById('globe-mode') || {}).textContent || '';
+    const flat = /schematic|2d/i.test(mode);                 // 2-D fallback draws instantly
+    const loading = !flat && (!v || !v.scene || !v.scene.globe.tilesLoaded);
+    const timedOut = Date.now() - started > 60000 && !v;     // no globe at all after a minute: stop showing it
+    pill.classList.toggle('done', !loading || timedOut);
+  };
+  setInterval(tick, 400); tick();
 })();
 </script>
 </body>

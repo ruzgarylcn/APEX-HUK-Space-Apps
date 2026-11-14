@@ -2,10 +2,11 @@
     <symbol id="i-pipeline" viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="19" cy="12" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="5" cy="18" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7.3 6.8l9.4 4.2M7.3 17.2l9.4-4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
 <!--/ICON-->
 <!--BUTTON-->
-      <button class="icon-btn" id="pp-open" aria-haspopup="dialog" aria-expanded="false" aria-controls="pp-drawer" aria-label="Open the data pipeline" data-tip="Data pipeline: run the Earth Engine extraction, merge, discovery checks and the offline snapshot in the background"><svg aria-hidden="true"><use href="#i-pipeline"/></svg><span class="pp-dot" id="pp-dot" hidden></span></button>
+      <button class="icon-btn" id="pp-open" hidden aria-haspopup="dialog" aria-expanded="false" aria-controls="pp-drawer" aria-label="Open the data pipeline" data-tip="Data pipeline: run the Earth Engine extraction, merge, discovery checks and the offline snapshot in the background"><svg aria-hidden="true"><use href="#i-pipeline"/></svg><span class="pp-dot" id="pp-dot" hidden></span></button>
 <!--/BUTTON-->
 <!--CSS-->
 /* ===== DATA PIPELINE DRAWER (runs the backend pipeline in the background from inside the Atlas) ===== */
+#pp-open[hidden]{display:none!important}  /* team tool: shown only when the local server (start.bat) answers */
 .icon-btn{position:relative}
 .pp-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--warn);box-shadow:0 0 8px var(--warn);animation:pulse 1s ease-in-out infinite}
 .pp-dot[hidden],#pp-drawer [hidden]{display:none!important}
@@ -319,6 +320,7 @@
     try {
       const [st, jobs] = await Promise.all([api('/panel/status'), api('/jobs')]);
       P.online = true; P.status = st; P.jobs = jobs;
+      q('#pp-open').hidden = false;   // local server found: reveal the team-only pipeline button
       if (st.running && P.view !== st.running.id) openJob(st.running.id);
       else if (!P.view && jobs.length) openJob(jobs[0].id);
     } catch (e) { P.online = false; P.status = null; }
