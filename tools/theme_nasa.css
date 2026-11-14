@@ -1,0 +1,106 @@
+/* ===== NASA-style theme: black + white base, colour only where it carries meaning. Injected by tools/add_theme.py ===== */
+:root,:root[data-body="earth"],:root[data-body="moon"],:root[data-body="mars"]{
+  --bg-0:#000000; --bg-1:#0b0d10;
+  --accent:#ffffff; --accent-2:#ffffff;              /* neutral accent; colour comes from the data */
+  --nasa-red:#fc3d21; --nasa-blue:#0b3d91;
+  --text:#ffffff; --muted:#8a919b; --muted-2:#b7bdc6;
+  --ring:rgba(255,255,255,.25);
+  --ok:#3fb950; --warn:#e3b341; --danger:#fc3d21; --info:#4c8dff;
+  --panel:#0b0d10; --panel-2:#121519; --line:rgba(255,255,255,.10);
+  --glow-a:transparent; --glow-b:transparent;
+  --radius:3px;
+  --font-ui:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  /* eight family colours (one per similarity family), tuned to sit on black */
+  --f1:#4c8dff; --f2:#a78bfa; --f3:#f0b429; --f4:#22c3ee; --f5:#e879a8; --f6:#3fb950; --f7:#fb8c3c; --f8:#9aa8bd;
+}
+/* no glows, gradients, blur or animated lines */
+*,*::before,*::after{text-shadow:none!important}
+.vignette,.glow-ring{display:none!important}
+#center{background:#000!important}
+header,.panel,.pane-toolbar,.pane-stat,.pane-label,.toolbar,.stat-chip,.legend,.menu,.toast,.modal-card,.ob-card,.run-hint{
+  backdrop-filter:none!important;box-shadow:none!important}
+header{background:#000!important;border-bottom:1px solid var(--line)!important}
+.panel{background:var(--panel)!important}
+.brand-mark img{filter:none!important}
+.tab::after,.tab::before{animation:none!important;background:var(--text)!important;height:2px!important}
+.btn,.btn-primary,.pill,.chip,.icon-btn,.tool-btn,.switch,.card,.layer-row,.select,.text-input,.target-line,.xsec-card,
+.pane-toolbar,.pane-stat,.pane-label,.toolbar,.stat-chip,.menu,.modal-card,.ob-card,.kbd-row,.seg,.tab,.run-hint,#run-match{
+  border-radius:3px!important;box-shadow:none!important}
+.mini-bar i,.delta-bar i,.mini-bar,.delta-bar,.track{border-radius:0!important}
+/* typography: Swiss / mission-control */
+body{font-size:13.5px;letter-spacing:.005em}
+.brand-name{font-weight:800!important;letter-spacing:.18em!important}
+.brand-sub{text-transform:uppercase;letter-spacing:.2em!important;font-size:9.5px!important;color:var(--muted)!important}
+.body-icon{display:none!important}
+h2,h3,.acc-head,.section-title,.pane-label,.pill,.tab .t,.btn,.chip{letter-spacing:.06em}
+.acc-head,.pane-label,.tab .t,.pill,#run-match{text-transform:uppercase;font-size:11.5px!important;font-weight:600!important}
+.seg{background:transparent!important;border:1px solid var(--line)!important;padding:0!important;gap:0!important}
+.tab{border-radius:0!important;padding:8px 16px!important}
+.tab[aria-selected="true"]{background:#fff!important;color:#000!important}
+.tab .k{display:none!important}
+.pill{background:transparent!important;border-color:var(--line)!important;color:var(--muted-2)!important}
+.pill svg{display:none}
+.pill[aria-pressed="true"]{background:#fff!important;color:#000!important;border-color:#fff!important}
+.btn-primary,#run-match{background:var(--nasa-red)!important;color:#fff!important;border:0!important;filter:none!important}
+.btn-primary:hover,#run-match:hover{background:#ff5a42!important}
+.icon-btn,.btn{background:transparent!important;border-color:var(--line)!important}
+.icon-btn:hover,.btn:hover{border-color:#fff!important}
+.icon-btn[aria-pressed="true"],.tool-btn[aria-pressed="true"],.chip[aria-pressed="true"]{
+  background:#fff!important;color:#000!important;border-color:#fff!important}
+.card{background:var(--panel-2)!important;border:1px solid var(--line)!important}
+.card::before{background:var(--nasa-red)!important;width:2px!important;opacity:1!important}
+.card:hover{border-color:rgba(255,255,255,.35)!important}
+.layer-row,.xsec-card,.kbd-row{background:transparent!important}
+.status-dot,.status-dot.done,.status-dot.computing,.pp-dot{box-shadow:none!important}
+.statusbar,footer{background:#000!important;border-top:1px solid var(--line)!important;font-family:var(--font-mono)}
+input[type="range"]{background:linear-gradient(90deg,#fff var(--fill,50%),rgba(255,255,255,.15) var(--fill,50%))!important}
+input[type="range"]::-webkit-slider-thumb{border-color:#fff!important;box-shadow:none!important}
+*{scrollbar-color:rgba(255,255,255,.25) transparent}
+*::-webkit-scrollbar-thumb{background:rgba(255,255,255,.22)!important;background-clip:content-box!important}
+.modal-backdrop{backdrop-filter:none!important;background:rgba(0,0,0,.8)!important}
+.badge,.tag,.conf{border-radius:2px!important}
+a{color:#fff;text-decoration:underline;text-underline-offset:2px}
+.run-wrap{left:auto!important;right:16px!important;transform:none!important;align-items:flex-end!important}
+.run-hint{background:#000!important;border-color:var(--line)!important}
+
+/* ===================== COLOUR LAYER: boxes and results ===================== */
+/* family bars: each similarity family keeps one colour everywhere */
+.mini-bar .track{background:rgba(255,255,255,.08)!important}
+.mini-bars .mini-bar:nth-child(1) i{background:var(--f1)!important} .mini-bars .mini-bar:nth-child(1) span{color:var(--f1)!important}
+.mini-bars .mini-bar:nth-child(2) i{background:var(--f2)!important} .mini-bars .mini-bar:nth-child(2) span{color:var(--f2)!important}
+.mini-bars .mini-bar:nth-child(3) i{background:var(--f3)!important} .mini-bars .mini-bar:nth-child(3) span{color:var(--f3)!important}
+.mini-bars .mini-bar:nth-child(4) i{background:var(--f4)!important} .mini-bars .mini-bar:nth-child(4) span{color:var(--f4)!important}
+.mini-bars .mini-bar:nth-child(5) i{background:var(--f5)!important} .mini-bars .mini-bar:nth-child(5) span{color:var(--f5)!important}
+.mini-bars .mini-bar:nth-child(6) i{background:var(--f6)!important} .mini-bars .mini-bar:nth-child(6) span{color:var(--f6)!important}
+.mini-bars .mini-bar:nth-child(7) i{background:var(--f7)!important} .mini-bars .mini-bar:nth-child(7) span{color:var(--f7)!important}
+.mini-bars .mini-bar:nth-child(8) i{background:var(--f8)!important} .mini-bars .mini-bar:nth-child(8) span{color:var(--f8)!important}
+.delta-bar i{background:var(--f1)!important}
+/* similarity ring coloured by score band (set by a tiny script): strong / good / partial */
+.si-wrap .ring-fg{stroke:#fff}
+.si-wrap[data-band="strong"] .ring-fg{stroke:var(--ok)!important}  .si-wrap[data-band="strong"] .si-num{color:var(--ok)}
+.si-wrap[data-band="good"] .ring-fg{stroke:var(--info)!important}  .si-wrap[data-band="good"] .si-num{color:var(--info)}
+.si-wrap[data-band="partial"] .ring-fg{stroke:var(--warn)!important} .si-wrap[data-band="partial"] .si-num{color:var(--warn)}
+/* rank: #1 in NASA red, others outlined */
+.rank{background:transparent!important;border:1px solid rgba(255,255,255,.35)!important;color:#fff!important;border-radius:2px!important}
+#results-area .card:first-of-type .rank{background:var(--nasa-red)!important;border-color:var(--nasa-red)!important}
+/* diagnosis line becomes a tinted box */
+.diag{background:rgba(255,255,255,.03);border:1px solid var(--line);border-left:3px solid var(--ok);padding:7px 10px!important;border-radius:2px}
+.diag-gap{display:inline-block;margin-top:3px}
+.limit-note{background:rgba(227,179,65,.08);border:1px solid rgba(227,179,65,.30);border-left:3px solid var(--warn);padding:8px 10px;border-radius:2px}
+/* target line and the "Earth cannot reproduce" box */
+.target-line{background:rgba(76,141,255,.08)!important;border-color:rgba(76,141,255,.35)!important;border-left:3px solid var(--info)!important}
+.target-line b,.target-line strong{color:#fff}
+.fixed-gaps{background:rgba(252,61,33,.06)!important;border:1px solid rgba(252,61,33,.30)!important;border-left:3px solid var(--nasa-red)!important;border-radius:2px!important}
+/* discoveries: cyan stripe so they read apart from the literature anchors */
+.card.disc::before{background:var(--f4)!important}
+.card.disc .rank{border-color:var(--f4)!important;color:var(--f4)!important;background:transparent!important}
+/* priority chips: filled tints instead of plain outlines */
+.bdg{border-radius:2px!important;background:rgba(255,255,255,.04)}
+.bdg-gs{background:rgba(240,180,41,.12)!important;border-color:rgba(240,180,41,.55)!important;color:#f6c453!important}
+.conf-high{background:rgba(63,185,80,.14)!important}
+/* left panel: step badges and switches get a single blue cue */
+.step-badge{background:var(--nasa-blue)!important;color:#fff!important;border-color:var(--nasa-blue)!important;border-radius:2px!important}
+.switch[aria-checked="true"]{background:var(--info)!important;border-color:var(--info)!important}
+.switch[aria-checked="true"]::after{background:#fff!important}
+#results-area .card.disc .rank{background:transparent!important;border-color:var(--f4)!important;color:var(--f4)!important}

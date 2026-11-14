@@ -154,7 +154,9 @@ The Earth Engine extraction, merge and offline snapshot are described in `docs/R
 run from the repository root in this order: `python brand/apply_logo.py index.html` (logo), `python tools/add_pipeline.py`
 (the Data pipeline drawer, shown only when the local server answers), `python tools/add_polish.py` (phone layout and the
 "Loading planetary imagery…" indicator), `python tools/add_refs.py` (site-specific references from
-`tools/extra_refs.json`, kept in sync with `backend/data/catalog_sites.json`). Edit `tools/pipeline_drawer.html` / `tools/polish.html`, not `index.html`.
+`tools/extra_refs.json`, kept in sync with `backend/data/catalog_sites.json`) and, last, `python tools/add_theme.py` (the
+NASA-style visual theme from `tools/theme_nasa.css`: black and white with colour only on data: family bars, score-banded
+similarity rings, diagnosis and limit boxes). Edit `tools/pipeline_drawer.html` / `tools/polish.html` / `tools/theme_nasa.css`, not `index.html`.
 
 **Deploy.** The repository root (`index.html`) is a GitHub Pages site. `backend/Dockerfile` runs the API on Hugging Face
 Spaces (Docker SDK) or Render. Point the frontend at it by setting `CONFIG.API_BASE` or passing `?api=`.
