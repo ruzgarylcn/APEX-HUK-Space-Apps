@@ -6,11 +6,49 @@
     "Bonuses apply only to candidates with SI >= min_si_for_bonus, so a weak analog is never promoted just because of where it is.",
     "Income groups: World Bank classification (LIC/LMC/UMC/HIC), fetched by `python -m analog_atlas.cli fetch-income`."
   ],
-  "income_bonus": {"LIC": 10, "LMC": 7, "UMC": 4, "HIC": 0, "NA": 0},
-  "income_label": {"LIC": "Low income", "LMC": "Lower-middle income", "UMC": "Upper-middle income", "HIC": "High income", "NA": "Unclassified (e.g. Antarctica)"},
+  "income_bonus": {
+    "LIC": 10,
+    "LMC": 7,
+    "UMC": 4,
+    "HIC": 0,
+    "NA": 0
+  },
+  "income_label": {
+    "LIC": "Low income",
+    "LMC": "Lower-middle income",
+    "UMC": "Upper-middle income",
+    "HIC": "High income",
+    "NA": "Unclassified (e.g. Antarctica)"
+  },
   "min_si_for_bonus": 60,
   "novelty": {
-    "notes": "Research-attention layer (publications / field campaigns near the site). Not wired yet: every site gets 0 until the attention dataset exists.",
-    "max_bonus": 5
+    "notes": "Wired (2026-11-14): novelty = clip(distance to the nearest analog field campaign in data/campaigns.csv / full_novelty_km, 0, 1). known_nearby flags candidates within known_nearby_km of a campaign or a catalog site (flag only, never removed).",
+    "max_bonus": 5,
+    "full_novelty_km": 500,
+    "known_nearby_km": 50
+  },
+  "access": {
+    "notes": "Travel time to the nearest city (Oxford MAP 2015, Earth Engine band raw_access_minutes). Linear: full bonus at <= 2 h, 0 at >= 24 h. > 48 h is flagged 'hard access', never removed.",
+    "max_bonus": 3,
+    "full_bonus_minutes": 120,
+    "zero_bonus_minutes": 1440,
+    "hard_access_minutes": 2880
+  },
+  "cluster": {
+    "radius_km": 150,
+    "notes": "Greedy non-maximum suppression in opportunity order: one discovery per 150 km region."
+  },
+  "selection": {
+    "mode": "quota",
+    "quota": {
+      "top_n": 20,
+      "min_global_south": 10,
+      "global_south_groups": [
+        "LIC",
+        "LMC",
+        "UMC"
+      ]
+    },
+    "notes": "HANDOFF 6.1. 'bonus': discoveries ordered by opportunity only. 'quota': the first top_n discoveries contain at least min_global_south Global South regions (best opportunity first, SI >= min_si_for_bonus); the remaining slots go to the best pure SI. Default 'quota' is a stated assumption pending the team's decision."
   }
 }

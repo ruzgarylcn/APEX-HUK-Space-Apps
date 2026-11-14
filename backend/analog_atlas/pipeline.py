@@ -27,7 +27,7 @@ def load_catalog() -> pd.DataFrame:
 
 
 def load_candidates(source: str = "auto") -> tuple[pd.DataFrame, str]:
-    """Earth grid features if extracted, else the 12-site literature catalog."""
+    """Earth grid features if extracted, else the 16-site literature catalog."""
     if source in ("auto", "grid") and EARTH_FEATURES_PATH.exists():
         return pd.read_parquet(EARTH_FEATURES_PATH), "grid"
     if source == "grid":
@@ -157,10 +157,11 @@ def check_discoveries(grid: pd.DataFrame | None = None, profiles: list[str] | No
     return detail, summary.round(3)
 
 
-def to_records(frame: pd.DataFrame) -> list[dict]:
+def to_records(frame: pd.DataFrame, extra: list[str] | None = None) -> list[dict]:
     cols = [c for c in ["id", "cell_id", "name", "country", "iso3", "lat", "lon", "income_group",
-                        "si", "income_bonus", "novelty_bonus", "opportunity", "rank_opportunity", "rank_si",
-                        "priority_reason", "coverage", "known_analog", "explanation"] if c in frame.columns]
+                        "si", "income_bonus", "novelty_bonus", "access_bonus", "opportunity", "rank_opportunity",
+                        "rank_si", "priority_reason", "coverage", "known_analog", "explanation"] if c in frame.columns]
+    cols += [c for c in (extra or []) if c in frame.columns and c not in cols]
     cols += [f"fam_{f}" for f in family_ids() if f"fam_{f}" in frame.columns]
     return [_plain(r) for r in frame[cols].to_dict(orient="records")]
 
@@ -177,4 +178,128 @@ def _plain(v):
         return int(v)
     if isinstance(v, (np.floating, float)):
         return None if np.isnan(v) else round(float(v), 3)
+    if v is pd.NA or v is None:
+        return None
     return v
+
+
+# ============================================================================ Anchor & Discover (Step C)
+CAMPAIGNS_PATH = DATA_DIR / "campaigns.csv"
+
+
+def load_campaigns() -> pd.DataFrame:
+    return pd.read_csv(CAMPAIGNS_PATH)
+
+
+def _nearest(lat, lon, plat, plon, chunk: int = 20000):
+    """Index of and great-circle distance (km) to the nearest reference point, for every (lat, lon)."""
+    lat, lon = np.asarray(lat, float), np.asarray(lon, float)
+    idx, dist = np.empty(len(lat), dtype=int), np.empty(len(lat))
+    pa, po = np.radians(np.asarray(plat, float))[None, :], np.radians(np.asarray(plon, float))[None, :]
+    for i in range(0, len(lat), chunk):
+        la, lo = np.radians(lat[i:i + chunk, None]), np.radians(lon[i:i + chunk, None])
+        a = np.sin((pa - la) / 2) ** 2 + np.cos(la) * np.cos(pa) * np.sin((po - lo) / 2) ** 2
+        d = 2 * 6371.0 * np.arcsin(np.sqrt(np.clip(a, 0, 1)))
+        idx[i:i + chunk] = d.argmin(axis=1)
+        dist[i:i + chunk] = d[np.arange(len(d)), idx[i:i + chunk]]
+    return idx, dist
+
+
+def add_novelty(cands: pd.DataFrame, campaigns: pd.DataFrame | None = None,
+                catalog: pd.DataFrame | None = None) -> pd.DataFrame:
+    """novelty = clip(distance to the nearest analog field campaign / full_novelty_km, 0, 1).
+    known_nearby = within known_nearby_km of a campaign or a catalog site (a flag, never a filter)."""
+    from .config import priority_config
+
+    cfg = priority_config()["novelty"]
+    camp = load_campaigns() if campaigns is None else campaigns
+    cat = load_catalog() if catalog is None else catalog
+    out = cands.copy()
+    ci, cd = _nearest(out["lat"], out["lon"], camp["lat"], camp["lon"])
+    si_, sd = _nearest(out["lat"], out["lon"], cat["lat"], cat["lon"])
+    out["nearest_campaign"] = camp["name"].to_numpy()[ci]
+    out["campaign_km"] = cd
+    out["novelty"] = np.clip(cd / cfg["full_novelty_km"], 0, 1)
+    out["nearest_known_site"] = cat["name"].to_numpy()[si_]
+    out["known_site_km"] = sd
+    out["known_nearby"] = (cd <= cfg["known_nearby_km"]) | (sd <= cfg["known_nearby_km"])
+    return out
+
+
+def cluster_regions(prioritized: pd.DataFrame, radius_km: float = 150.0, max_regions: int = 200) -> pd.DataFrame:
+    """Greedy non-maximum suppression in opportunity order: keep the best cell, absorb every other
+    cell within radius_km into its region; one row per region with region_cells and region_mean_si."""
+    lat, lon = prioritized["lat"].to_numpy(float), prioritized["lon"].to_numpy(float)
+    si = prioritized["si"].to_numpy(float)
+    alive = np.ones(len(prioritized), dtype=bool)
+    keep, n_cells, mean_si = [], [], []
+    for i in range(len(prioritized)):
+        if not alive[i]:
+            continue
+        member = alive & (_haversine_km(lat[i], lon[i], lat, lon) <= radius_km)
+        keep.append(i)
+        n_cells.append(int(member.sum()))
+        mean_si.append(float(np.nanmean(si[member])))
+        alive &= ~member
+        if len(keep) >= max_regions:
+            break
+    out = prioritized.iloc[keep].copy()
+    out["region_cells"] = n_cells
+    out["region_mean_si"] = np.round(mean_si, 1)
+    return out
+
+
+def find_analogs(target_id: str | None = None, *, features: dict | None = None, profile: str = "science",
+                 custom_weights: dict | None = None, top: int = 20, source: str = "auto") -> dict:
+    """Anchor & Discover.
+    anchors: the 16-site catalog ranked by pure SI (validation view; frozen literature anchors flagged).
+    discoveries: Earth grid cells -> priority (income, novelty, access) -> 150 km regions -> bonus/quota."""
+    from .config import CONFIG_DIR, priority_config
+    from .priority import select
+
+    if target_id:
+        target, feats = get_target(target_id)
+        if features:
+            feats = {**feats, **{k: v for k, v in features.items() if v is not None}}
+    elif features:
+        target, feats = {"id": "custom", "name": "Custom region", "planet": features.get("planet", "mars")}, features
+    else:
+        raise ValueError("give target_id or features")
+    cfg = priority_config()
+    anchors_cfg = json.loads((CONFIG_DIR / "anchors.json").read_text(encoding="utf-8"))["anchors"]
+    expected = {e["site"]: e["cite"] for e in anchors_cfg.get(target["id"], [])}
+
+    catalog = load_catalog()
+    cat_scored = score(feats, catalog, profile=profile, custom_weights=custom_weights)
+    cat_p = apply_priority(add_novelty(cat_scored, catalog=catalog), novelty_col="novelty")
+    cat_p = cat_p.sort_values("si", ascending=False, kind="mergesort")
+    cat_p["explanation"] = explain(cat_scored, list(cat_p.index), feats)
+    cat_p["is_anchor"] = cat_p["id"].isin(list(expected))
+    cat_p["anchor_cite"] = [expected.get(i) for i in cat_p["id"]]
+    anchors = to_records(cat_p, extra=["is_anchor", "anchor_cite", "nearest_campaign", "campaign_km",
+                                       "known_nearby", "landform_class"])
+
+    discoveries, used, n_scored = [], "none", 0
+    if source in ("auto", "grid") and EARTH_FEATURES_PATH.exists():
+        grid = pd.read_parquet(EARTH_FEATURES_PATH).reset_index(drop=True)
+        sc = score(feats, grid, profile=profile, custom_weights=custom_weights)
+        ok = sc[sc["coverage"] >= 0.5]
+        n_scored = len(ok)
+        pool = ok.nlargest(min(len(ok), 20000), "si")          # only strong cells can reach the top regions
+        pool = apply_priority(add_novelty(pool, catalog=catalog), novelty_col="novelty")
+        regions = cluster_regions(pool, cfg["cluster"]["radius_km"])
+        chosen = select(regions, top)
+        chosen["explanation"] = explain(sc, list(chosen.index), feats)   # grid index == row position
+        valid = np.sort(ok["si"].to_numpy(float))
+        chosen["si_percentile"] = [round(100.0 * np.searchsorted(valid, v, side="right") / len(valid), 2)
+                                   for v in chosen["si"]]
+        discoveries = to_records(chosen, extra=["novelty", "nearest_campaign", "campaign_km", "known_nearby",
+                                                "nearest_known_site", "known_site_km", "access_minutes",
+                                                "hard_access", "region_cells", "region_mean_si", "slot",
+                                                "si_percentile"])
+        used = "grid"
+    return {"target": {"id": target["id"], "name": target["name"], "planet": target["planet"]},
+            "profile": profile, "selection_mode": cfg["selection"]["mode"], "anchors": anchors,
+            "discoveries": discoveries, "discovery_source": used, "cells_scored": n_scored,
+            "notes": "SI is pure physics (0-100). opportunity = SI + bounded Global South / novelty / access "
+                     "bonuses, only for SI >= 60. Proxies are labelled in config/features.json (tier)."}

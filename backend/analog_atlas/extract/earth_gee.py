@@ -1,7 +1,11 @@
 """Earth feature extraction with Google Earth Engine (NASA datasets hosted on GEE).
 
-STATUS: written against the public GEE catalog but NOT yet run (needs `pip install
-earthengine-api` and `earthengine authenticate` with a GEE-enabled Google Cloud project).
+STATUS: written against the public GEE catalog; unit-tested offline (postprocess, merge). Run it with
+`earthengine authenticate` on a GEE-enabled Google Cloud project (see docs/RUN_EARTH_ENGINE.md).
+
+Fixes over the first draft: PET from TerraClimate (MOD16A2 masks barren land and deserts, i.e. our
+candidates), Oxford MAP accessibility band (bonus input, not a feature), optional Sentinel-2,
+explicit CSV selectors (no per-row geometry), land-only exports of <= 5000 cells per task.
 
 Two stages:
   1. `raw_stack()` builds one multi-band ee.Image of RAW measurements at ~1 km.
@@ -36,7 +40,7 @@ def init(project: str | None = None):
     return ee
 
 
-def raw_stack():
+def raw_stack(include_s2: bool = True):
     """Multi-band image of raw measurements (band names are the raw_* columns)."""
     ee = _ee()
     start, end = YEARS
@@ -68,11 +72,17 @@ def raw_stack():
 
     precip = (ee.ImageCollection("NASA/GPM_L3/IMERG_MONTHLY_V07").filterDate(start, end)
               .select("precipitation").mean().multiply(24 * 365.25).rename("raw_precip_mm"))
-    pet = (ee.ImageCollection("MODIS/061/MOD16A2").filterDate(start, end)
-           .select("PET").mean().multiply(0.1 * 46).rename("raw_pet_mm"))
+    # TerraClimate PET (mm/month, scale 0.1) covers all land; MOD16A2 masks barren land and deserts.
+    n_years = int(end[:4]) - int(start[:4])
+    pet = (ee.ImageCollection("IDAHO_EPSCOR/TERRACLIMATE").filterDate(start, end)
+           .select("pet").sum().multiply(0.1 / n_years).rename("raw_pet_mm"))
 
+    # MERRA-2 aerosols are hourly; one image per day (00 UTC) keeps the annual mean cheap.
     dust = (ee.ImageCollection("NASA/GSFC/MERRA/aer/2").filterDate("2022-01-01", "2023-01-01")
-            .select("DUEXTTAU").mean().rename("raw_dust_aod"))
+            .filter(ee.Filter.calendarRange(0, 0, "hour")).select("DUEXTTAU").mean().rename("raw_dust_aod"))
+    # Travel time to the nearest city (minutes). Not a feature: input to the access bonus.
+    access = (ee.Image("Oxford/MAP/accessibility_to_cities_2015_v1_0").select("accessibility")
+              .rename("raw_access_minutes"))
 
     aster = ee.Image("NASA/ASTER_GED/AG100_003")
     e = {b: aster.select(f"emissivity_band{b}").multiply(0.001) for b in (10, 11, 12, 13, 14)}
@@ -80,13 +90,31 @@ def raw_stack():
     quartz = e[11].multiply(e[11]).divide(e[10].multiply(e[12])).rename("raw_quartz_index")
     carbonate = e[13].divide(e[14]).rename("raw_carbonate_index")     # Ninomiya CI
 
-    s2 = (ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED").filterDate("2022-01-01", "2023-01-01")
-          .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 20)).median())
-    fe_ratio = s2.select("B4").divide(s2.select("B2")).rename("raw_fe_ratio")
-    clay_ratio = s2.select("B11").divide(s2.select("B12")).rename("raw_clay_ratio")
+    bands = [dem.rename("raw_elevation"), slope, slope_sq, relief, tri, t_min, swing, frost, maat,
+             albedo, ati, ndvi, precip, pet, dust, mafic, quartz, carbonate, access]
+    if include_s2:  # heaviest layer globally; skip with --no-s2 (Fe-oxide / clay proxies stay NaN)
+        s2 = (ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED").filterDate("2022-01-01", "2023-01-01")
+              .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 20)).median())
+        bands += [s2.select("B4").divide(s2.select("B2")).rename("raw_fe_ratio"),
+                  s2.select("B11").divide(s2.select("B12")).rename("raw_clay_ratio")]
+    return ee.Image.cat(bands)
 
-    return ee.Image.cat([dem.rename("raw_elevation"), slope, slope_sq, relief, tri, t_min, swing, frost, maat,
-                         albedo, ati, ndvi, precip, pet, dust, mafic, quartz, carbonate, fe_ratio, clay_ratio])
+
+RAW_BANDS = ["raw_elevation", "raw_slope", "raw_slope_sq", "raw_relief_5km", "raw_tri", "raw_temp_min",
+             "raw_diurnal_range", "raw_frost_fraction", "raw_mean_lst", "raw_albedo", "raw_ati", "raw_ndvi",
+             "raw_precip_mm", "raw_pet_mm", "raw_dust_aod", "raw_mafic_index", "raw_quartz_index",
+             "raw_carbonate_index", "raw_access_minutes", "raw_fe_ratio", "raw_clay_ratio"]
+MAX_CELLS_PER_TASK = 5000
+
+
+def land_only(cells: pd.DataFrame) -> pd.DataFrame:
+    """Drop open-ocean cells (no country). Antarctica keeps ISO3 'ATA'."""
+    return cells[cells["iso3"].notna()].reset_index(drop=True) if "iso3" in cells.columns else cells
+
+
+def chunks(cells: pd.DataFrame, size: int = MAX_CELLS_PER_TASK):
+    for i in range(0, len(cells), size):
+        yield i // size, cells.iloc[i:i + size]
 
 
 def _cells_fc(cells: pd.DataFrame):
@@ -98,29 +126,53 @@ def _cells_fc(cells: pd.DataFrame):
     return ee.FeatureCollection(feats)
 
 
-def sample_cells(cells: pd.DataFrame, chunk: int = 500) -> pd.DataFrame:
-    """Direct (synchronous) extraction for small areas, e.g. one country or a test bbox."""
+def sample_cells(cells: pd.DataFrame, chunk: int = 50, include_s2: bool = True) -> pd.DataFrame:
+    """Direct (synchronous) extraction for small areas, e.g. one country or a test bbox.
+
+    Small chunks keep each getInfo() well under Earth Engine's interactive time limit.
+    """
     ee = _ee()
-    img = raw_stack()
+    img = raw_stack(include_s2)
     frames = []
+    cells = land_only(cells)
     for i in range(0, len(cells), chunk):
         fc = _cells_fc(cells.iloc[i:i + chunk])
         means = img.reduceRegions(collection=fc, reducer=ee.Reducer.mean(), scale=SCALE_M, tileScale=4)
         frames.append(pd.DataFrame([f["properties"] for f in means.getInfo()["features"]]))
+        print(f"  sampled {min(i + chunk, len(cells))}/{len(cells)} cells", flush=True)
     raw = pd.concat(frames, ignore_index=True).dropna(subset=["raw_elevation"])   # ocean -> no DEM -> dropped
     return cells.merge(raw, on="cell_id", how="inner")
 
 
-def export_cells(cells: pd.DataFrame, description: str, folder: str = "analog_atlas"):
-    """Asynchronous Drive export for large batches (run once per tile of the global grid)."""
+def export_cells(cells: pd.DataFrame, description: str, folder: str = "analog_atlas", include_s2: bool = True):
+    """Asynchronous Drive export for one batch of <= 5000 land cells."""
     ee = _ee()
-    img = raw_stack()
+    if len(cells) > MAX_CELLS_PER_TASK:
+        raise ValueError(f"{len(cells)} cells > {MAX_CELLS_PER_TASK} per task; split with chunks() first")
+    img = raw_stack(include_s2)
     fc = _cells_fc(cells)
     table = img.reduceRegions(collection=fc, reducer=ee.Reducer.mean(), scale=SCALE_M, tileScale=8)
-    task = ee.batch.Export.table.toDrive(collection=table, description=description,
-                                        folder=folder, fileFormat="CSV")
+    cols = [b for b in RAW_BANDS if include_s2 or b not in ("raw_fe_ratio", "raw_clay_ratio")]
+    task = ee.batch.Export.table.toDrive(collection=table, description=description, folder=folder,
+                                        fileFormat="CSV", selectors=["cell_id", *cols])  # no .geo column
     task.start()
     return task
+
+
+def merge_exports(csv_paths, grid: pd.DataFrame) -> pd.DataFrame:
+    """Drive CSV exports -> one frame with lat/lon/iso3 from the grid -> postprocess() features.
+
+    Run on the WHOLE global set at once: ti_rel and dust_activity are percentiles over Earth land.
+    """
+    parts = [pd.read_csv(p) for p in csv_paths]
+    if not parts:
+        raise FileNotFoundError("no export CSVs found")
+    raw = pd.concat(parts, ignore_index=True).drop(columns=["system:index", ".geo"], errors="ignore")
+    raw = raw.drop_duplicates("cell_id", keep="last")
+    if "raw_elevation" in raw:
+        raw = raw.dropna(subset=["raw_elevation"])          # no DEM -> ocean / no data
+    keep = [c for c in ("cell_id", "lat", "lon", "iso3") if c in grid.columns]
+    return postprocess(grid[keep].merge(raw, on="cell_id", how="inner"))
 
 
 def _pct_rank(series: pd.Series) -> pd.Series:
@@ -158,12 +210,15 @@ def postprocess(raw: pd.DataFrame) -> pd.DataFrame:
     f["mineral_pyroxene"] = 0.5 * mafic
     f["mineral_plagioclase"] = np.nan                                  # needs EMIT / unmixing
     f["mineral_evaporite"] = np.nan                                    # needs salt index
-    f["mineral_hematite"] = 0.5 * clip((raw["raw_fe_ratio"] - 1.0) / 1.5)          # PROXY
-    f["mineral_phyllosilicate"] = 0.3 * clip((raw["raw_clay_ratio"] - 1.0) / 0.4)  # PROXY
+    nan = pd.Series(np.nan, index=raw.index)                           # exports run with --no-s2 lack these
+    f["mineral_hematite"] = 0.5 * clip((raw.get("raw_fe_ratio", nan) - 1.0) / 1.5)          # PROXY
+    f["mineral_phyllosilicate"] = 0.3 * clip((raw.get("raw_clay_ratio", nan) - 1.0) / 0.4)  # PROXY
     f["mineral_carbonate"] = 0.6 * clip((raw["raw_carbonate_index"] - 1.0) / 0.03)  # PROXY (Ninomiya CI)
 
     f["dust_activity"] = _pct_rank(raw["raw_dust_aod"])
     f["vegetation_cover"] = clip((raw["raw_ndvi"] - 0.05) / 0.75)
     f["cave_index"] = np.nan                                           # needs cave / lava-tube inventory
     f["landform_class"] = None                                         # needs landform classifier
+    if "raw_access_minutes" in raw:                                    # not a feature: access-bonus input
+        f["access_minutes"] = raw["raw_access_minutes"].to_numpy(float)
     return f
