@@ -1,0 +1,14 @@
+{
+  "_comment": "Site-specific references added after the first release. Applied by tools/add_refs.py (idempotent). DOIs checked against Crossref on 2026-11-14.",
+  "citations": [
+    {"id": "c088", "category": "11_Anchor_Analogs", "title": "Geochemistry and origin of ultramafic enclaves and their basanitic host rock from Kula Volcano, Turkey", "authors": "Grützner, Tobias; Prelević, Dejan; Akal, Cüneyt", "year": 2013, "venue": "Lithos, 180–181, 58–73", "doi": "10.1016/j.lithos.2013.08.001", "sourceUrl": "https://doi.org/10.1016/j.lithos.2013.08.001", "provider": "Crossref"},
+    {"id": "c089", "category": "11_Anchor_Analogs", "title": "Surface exposure dating of Holocene basalt flows and cinder cones in the Kula volcanic field (Western Turkey) using cosmogenic 3He and 10Be", "authors": "Heineke, Caroline; Niedermann, Samuel; Hetzel, Ralf; Akal, Cüneyt", "year": 2016, "venue": "Quaternary Geochronology, 34, 81–91", "doi": "10.1016/j.quageo.2016.04.004", "sourceUrl": "https://doi.org/10.1016/j.quageo.2016.04.004", "provider": "Crossref"}
+  ],
+  "sites": {
+    "kula": {
+      "source_ids": ["c088", "c089"],
+      "rocks": ["basanite", "basalt", "scoria", "tephrite"],
+      "description": "About 80 Quaternary Na-alkaline (mostly basanitic) cinder cones with explosive craters and block lava flows on a horst plateau, some flows only ~1–3 thousand years old; a UNESCO Global Geopark used for lunar-mare morphological comparison."
+    }
+  }
+}

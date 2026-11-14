@@ -44,7 +44,10 @@ There is no absolute elevation: height above a datum means nothing across planet
 the grid, so a site's score cannot change because other sites were added; a test enforces this. The distance is a
 weighted Euclidean (RMS) distance, **not cosine**, because cosine ignores magnitude: on 0–1 data (0.1, 0.1) and
 (0.9, 0.9) would look identical. Missing features drop out of both sums, and `coverage` reports how much of the weight
-had data. Four mission profiles (landing, resource, habitat, science) set the family weights.
+had data. Four mission profiles (landing, resource, habitat, science) set the family weights. The landing profile gives
+topography the largest weight (0.45) because slope is the first hard constraint in real site selection: the Mars
+Exploration Rover sites had to have slopes below 2° over 1 km, 5° over 100 m and 15° over 5 m (Golombek et al., 2003),
+and NASA's Artemis site studies list slope and roughness first, with lighting and Earth visibility.
 
 **Anchor & Discover**
 - *Anchors*: the 16 literature sites ranked by pure SI. The anchor pairs were frozen before the first validation run
@@ -150,7 +153,8 @@ The Earth Engine extraction, merge and offline snapshot are described in `docs/R
 **Rebuilding `index.html`.** `index.html` is the deliverable. Small source files are injected into it by idempotent scripts,
 run from the repository root in this order: `python brand/apply_logo.py index.html` (logo), `python tools/add_pipeline.py`
 (the Data pipeline drawer, shown only when the local server answers), `python tools/add_polish.py` (phone layout and the
-"Loading planetary imagery…" indicator). Edit `tools/pipeline_drawer.html` / `tools/polish.html`, not `index.html`.
+"Loading planetary imagery…" indicator), `python tools/add_refs.py` (site-specific references from
+`tools/extra_refs.json`, kept in sync with `backend/data/catalog_sites.json`). Edit `tools/pipeline_drawer.html` / `tools/polish.html`, not `index.html`.
 
 **Deploy.** The repository root (`index.html`) is a GitHub Pages site. `backend/Dockerfile` runs the API on Hugging Face
 Spaces (Docker SDK) or Render. Point the frontend at it by setting `CONFIG.API_BASE` or passing `?api=`.
@@ -175,6 +179,6 @@ were used as assistants; every output was reviewed and tested by the team.
 
 ## Credits
 
-Built by team APEX-HUK for the NASA Space Apps Challenge 2026. The 87 references are listed in APA 7 inside the app (the
+Built by team APEX-HUK for the NASA Space Apps Challenge 2026. The 89 references are listed in APA 7 inside the app (the
 References button). Campaign sources are in `backend/data/campaigns.csv`. Logo provenance and AI-use notes are in
 `brand/README.md`.
