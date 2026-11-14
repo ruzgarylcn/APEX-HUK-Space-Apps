@@ -15,7 +15,7 @@ python -m unittest discover -s tests        # 29 tests must pass
 ## 1. Smoke test: Turkey box, 25 km (~190 land cells, a few minutes)
 ```bash
 python -m analog_atlas.cli build-grid --km 25 --bbox 26 36 31 39 --countries
-python -m analog_atlas.cli extract-earth --project space-apps-analog --mode sample
+python -m analog_atlas.cli extract-earth --project analog-atlas-spaeapps --mode sample
 ```
 Prints grid vs literature values for catalog sites inside the box (Kula, Lake Salda). Raw values: `data/raw_sample.csv`.
 Expected ballpark at Salda (37.55N, 29.68E): slope a few degrees, albedo 0.15-0.3, temp_min about -10..0 degC.
@@ -25,8 +25,8 @@ that box; they become Earth-wide after step 3.
 ## 2. Global coarse scan: 50 km (~63 000 land cells -> 13 export tasks of <= 5000 cells)
 ```bash
 python -m analog_atlas.cli build-grid --km 50 --countries
-python -m analog_atlas.cli extract-earth --project space-apps-analog --mode export --no-s2
-python -m analog_atlas.cli export-status --project space-apps-analog
+python -m analog_atlas.cli extract-earth --project analog-atlas-spaeapps --mode export --no-s2
+python -m analog_atlas.cli export-status --project analog-atlas-spaeapps
 ```
 Only land cells are exported (ISO3 assigned; Antarctica = ATA). `--no-s2` skips the Sentinel-2 Fe/clay ratios, the
 heaviest layer (those two proxies stay empty). Tasks write CSVs to the Drive folder `analog_atlas`.
@@ -35,7 +35,7 @@ Keep `data/grid.parquet`: merging joins on `cell_id`.
 ## 3. Merge, check, embed
 Download every `analog_atlas_50km_*.csv` from Drive into `backend/data/exports/`, then:
 ```bash
-python -m analog_atlas.cli merge-exports
+python -m analog_atlas.cli merge-exports --fill-dem-project analog-atlas-spaeapps   # also fills polar terrain (outside NASADEM) from Copernicus GLO-30
 python -m analog_atlas.cli find --target cerberus --profile landing
 python -m analog_atlas.cli check-discoveries
 python -m analog_atlas.cli export-offline --embed ../index.html
