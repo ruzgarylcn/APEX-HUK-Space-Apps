@@ -179,16 +179,35 @@ class ExportOfflineTests(unittest.TestCase):
         self.assertTrue(all(v["source"] == "grid" and v["discoveries"] for v in data.values()))
 
 
+class PolarMergeTests(unittest.TestCase):
+    def test_land_cells_without_nasadem_are_kept(self):
+        """NASADEM stops at 60N/56S: a land cell with no elevation but other data must survive the merge."""
+        grid = pd.DataFrame({"cell_id": ["a", "b", "c"], "lat": [-77.5, 30.0, 10.0], "lon": [162.0, 10.0, 20.0],
+                             "half_dlat": .2, "half_dlon": .2, "iso3": ["ATA", "LBY", "TCD"]})
+        rows = {c: [np.nan, 1.0, np.nan] for c in RAW_BANDS}
+        rows["raw_temp_min"] = [-45.0, 5.0, np.nan]          # polar cell has climate data, no DEM
+        rows["raw_elevation"] = [np.nan, 500.0, np.nan]      # cell c has no measurement at all
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / "x.csv"
+            pd.DataFrame({"cell_id": ["a", "b", "c"], **rows}).to_csv(p, index=False)
+            out = merge_exports([p], grid)
+        self.assertEqual(sorted(out["cell_id"]), ["a", "b"])
+        self.assertTrue(np.isnan(out.set_index("cell_id").loc["a", "slope_mean"]))
+
+
 class ApiTests(unittest.TestCase):
     def test_find_analogs_endpoint(self):
         try:
             from fastapi.testclient import TestClient
         except ImportError:  # pragma: no cover
             self.skipTest("fastapi/httpx not installed")
+        from analog_atlas import pipeline
         from analog_atlas.api import app
 
         c = TestClient(app)
-        r = c.post("/find-analogs", json={"target_id": "jezero", "profile": "science"})
+        # Isolate from the real data folder: once the global grid is committed it exists there.
+        with mock.patch.object(pipeline, "EARTH_FEATURES_PATH", Path(tempfile.gettempdir()) / "no_grid_here.parquet"):
+            r = c.post("/find-analogs", json={"target_id": "jezero", "profile": "science"})
         self.assertEqual(r.status_code, 200)
         body = r.json()
         self.assertIn("salda", [a["id"] for a in body["anchors"] if a["is_anchor"]])

@@ -83,8 +83,9 @@ def raw_stack(include_s2: bool = True):
     dust = (ee.ImageCollection("NASA/GSFC/MERRA/aer/2").filterDate("2022-01-01", "2023-01-01")
             .filter(ee.Filter.calendarRange(0, 0, "hour")).select("DUEXTTAU").mean().rename("raw_dust_aod"))
     # Travel time to the nearest city (minutes). Not a feature: input to the access bonus.
-    access = (ee.Image("projects/malariaatlasproject/assets/accessibility/accessibility_to_cities/2015_v1_0")  # replaces deprecated Oxford/MAP id.select("accessibility")
-              .rename("raw_access_minutes"))
+    # Malaria Atlas Project asset (replaces the deprecated Oxford/MAP/accessibility_to_cities_2015_v1_0 id).
+    access = (ee.Image("projects/malariaatlasproject/assets/accessibility/accessibility_to_cities/2015_v1_0")
+              .select("accessibility").rename("raw_access_minutes"))
 
     aster = ee.Image("NASA/ASTER_GED/AG100_003")
     e = {b: aster.select(f"emissivity_band{b}").multiply(0.001) for b in (10, 11, 12, 13, 14)}
@@ -161,7 +162,7 @@ def export_cells(cells: pd.DataFrame, description: str, folder: str = "analog_at
     return task
 
 
-def merge_exports(csv_paths, grid: pd.DataFrame) -> pd.DataFrame:
+def merge_exports(csv_paths, grid: pd.DataFrame, fill_dem_project: str | None = None) -> pd.DataFrame:
     """Drive CSV exports -> one frame with lat/lon/iso3 from the grid -> postprocess() features.
 
     Run on the WHOLE global set at once: ti_rel and dust_activity are percentiles over Earth land.
@@ -171,10 +172,47 @@ def merge_exports(csv_paths, grid: pd.DataFrame) -> pd.DataFrame:
         raise FileNotFoundError("no export CSVs found")
     raw = pd.concat(parts, ignore_index=True).drop(columns=["system:index", ".geo"], errors="ignore")
     raw = raw.drop_duplicates("cell_id", keep="last")
-    if "raw_elevation" in raw:
-        raw = raw.dropna(subset=["raw_elevation"])          # no DEM -> ocean / no data
+    # Exports hold land cells only, so a missing elevation does NOT mean ocean: NASADEM stops at 60N / 56S,
+    # which would silently delete Antarctica and the Arctic (the polar analogs of the lunar south pole).
+    # Drop only cells with no measurement at all; fill_dem() can add polar terrain from Copernicus GLO-30.
+    meas = [c for c in RAW_BANDS if c in raw.columns]
+    raw = raw.dropna(subset=meas, how="all")
+    if fill_dem_project and "raw_elevation" in raw and raw["raw_elevation"].isna().any():
+        init(fill_dem_project)
+        raw = fill_dem(raw, grid)
     keep = [c for c in ("cell_id", "lat", "lon", "iso3") if c in grid.columns]
     return postprocess(grid[keep].merge(raw, on="cell_id", how="inner"))
+
+
+def fill_dem(raw: pd.DataFrame, grid: pd.DataFrame, chunk: int = 200) -> pd.DataFrame:
+    """Fill terrain bands for cells NASADEM does not cover (|lat| beyond 60N / 56S) from Copernicus GLO-30.
+
+    Synchronous sampling; only cells with a missing raw_elevation are queried. Returns raw with the gaps filled.
+    """
+    ee = _ee()
+    col = ee.ImageCollection("COPERNICUS/DEM/GLO30_2024_1").select("DEM")
+    dem = col.mosaic().setDefaultProjection(col.first().projection())
+    slope = ee.Terrain.slope(dem)
+    img = ee.Image.cat([
+        dem.rename("raw_elevation"), slope.rename("raw_slope"), slope.multiply(slope).rename("raw_slope_sq"),
+        dem.focalMax(2500, "circle", "meters").subtract(dem.focalMin(2500, "circle", "meters")).rename("raw_relief_5km"),
+    ])
+    todo = raw[raw["raw_elevation"].isna()][["cell_id"]].merge(grid, on="cell_id", how="inner")
+    print(f"filling terrain for {len(todo):,} cells outside NASADEM coverage (Copernicus GLO-30)", flush=True)
+    filled = []
+    for i in range(0, len(todo), chunk):
+        fc = _cells_fc(todo.iloc[i:i + chunk])
+        res = img.reduceRegions(collection=fc, reducer=ee.Reducer.mean(), scale=SCALE_M, tileScale=4).getInfo()
+        filled.append(pd.DataFrame([f["properties"] for f in res["features"]]))
+        print(f"  {min(i + chunk, len(todo)):,}/{len(todo):,}", flush=True)
+    if not filled:
+        return raw
+    fill = pd.concat(filled, ignore_index=True).set_index("cell_id")
+    out = raw.set_index("cell_id")
+    for c in ("raw_elevation", "raw_slope", "raw_slope_sq", "raw_relief_5km"):
+        if c in fill:
+            out[c] = out[c].fillna(fill[c])
+    return out.reset_index()
 
 
 def _pct_rank(series: pd.Series) -> pd.Series:

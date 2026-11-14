@@ -173,7 +173,7 @@ def cmd_merge_exports(args) -> None:
     paths = sorted(folder.glob("*.csv"))
     print(f"{len(paths)} CSV files in {folder}")
     grid = pd.read_parquet(DATA_DIR / "grid.parquet")
-    feats = earth_gee.merge_exports(paths, grid)
+    feats = earth_gee.merge_exports(paths, grid, fill_dem_project=args.fill_dem_project)
     feats.to_parquet(EARTH_FEATURES_PATH, index=False)
     print(f"{len(feats):,} land cells -> {EARTH_FEATURES_PATH}")
     from .config import numeric_keys
@@ -296,6 +296,7 @@ def main(argv=None) -> None:
 
     m = sub.add_parser("merge-exports"); m.set_defaults(fn=cmd_merge_exports)
     m.add_argument("--dir", default=str(DATA_DIR / "exports"))
+    m.add_argument("--fill-dem-project", help="Earth Engine project: fill polar terrain (outside NASADEM) from Copernicus GLO-30")
 
     vd = sub.add_parser("verify-dois"); vd.set_defaults(fn=cmd_verify_dois)
     vd.add_argument("--html", default=str(DATA_DIR.parent.parent / "index.html"))

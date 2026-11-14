@@ -131,7 +131,7 @@ python -m http.server 8765        # open http://localhost:8765/index.html  (add 
 # Backend
 cd backend
 pip install -r requirements.txt
-python -m unittest discover -s tests -v      # 35 tests (server tests need fastapi + httpx)
+python -m unittest discover -s tests -v      # 36 tests (server tests need fastapi + httpx)
 python -m analog_atlas.cli validate
 python -m analog_atlas.cli demo --target jezero --profile science --top 3
 python -m analog_atlas.cli find --target cerberus --profile landing
