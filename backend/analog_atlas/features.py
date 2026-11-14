@@ -1,6 +1,6 @@
 """Feature-vector assembly (v2, body-agnostic).
 
-The same 22 numeric features + landform class describe an Earth grid cell, a catalog
+The same 24 numeric features + landform class describe an Earth grid cell, a catalog
 site and a Moon/Mars target, so they can be compared directly.
 """
 from __future__ import annotations

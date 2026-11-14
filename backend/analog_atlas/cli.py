@@ -238,13 +238,12 @@ def cmd_export_offline(args) -> None:
     import re
     from pathlib import Path
 
-    from .config import profiles as _profiles
     from .pipeline import _plain, find_analogs
 
     out = {}
     stamp = datetime.date.today().isoformat()
     for t in targets():
-        for prof in _profiles():
+        for prof in features_config()["profiles"]:
             r = find_analogs(t["id"], profile=prof, top=args.top)
             out[f"{t['id']}|{prof}"] = {"discoveries": r["discoveries"], "selection_mode": r["selection_mode"],
                                         "cells_scored": r["cells_scored"], "generated": stamp, "source": r["discovery_source"]}

@@ -148,6 +148,34 @@ class FindAnalogsTests(unittest.TestCase):
             self.assertEqual(len(d_["explanation"]["strongest"]), 2)
 
 
+class ExportOfflineTests(unittest.TestCase):
+    def test_export_offline_embeds_every_preset_and_profile(self):
+        import argparse
+        import json
+        import re
+
+        from analog_atlas import cli
+        from analog_atlas.config import features_config, targets
+
+        rng = np.random.default_rng(5)
+        g = build_grid(400)
+        for f in numeric_features():
+            g[f["key"]] = rng.uniform(*f["range"], len(g))
+        g["landform_class"] = "lava_flow"
+        g["iso3"] = "LLL"
+        with tempfile.TemporaryDirectory() as d:
+            path, html = Path(d) / "earth_features.parquet", Path(d) / "index.html"
+            g.to_parquet(path, index=False)
+            html.write_text('<script type="application/json" id="offline-results">\n{}\n</script>', encoding="utf-8")
+            with mock.patch.object(pipeline, "EARTH_FEATURES_PATH", path), \
+                 mock.patch("analog_atlas.priority.load_income_groups", return_value=INCOME), \
+                 mock.patch.object(cli, "OUT_DIR", Path(d) / "out"):
+                cli.cmd_export_offline(argparse.Namespace(top=3, embed=str(html)))
+            data = json.loads(re.search(r'id="offline-results">(.*?)</script>', html.read_text(encoding="utf-8"), re.S).group(1))
+        self.assertEqual(len(data), len(targets()) * len(features_config()["profiles"]))
+        self.assertTrue(all(v["source"] == "grid" and v["discoveries"] for v in data.values()))
+
+
 class ApiTests(unittest.TestCase):
     def test_find_analogs_endpoint(self):
         try:
