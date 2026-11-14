@@ -87,6 +87,12 @@ campaign list (Chad, Iran, Libya, India ×3, Ghana, Egypt, Namibia, China). Once
 baseline. Jingpo (China) turned out to host a 2025 Peking University lava-tube base, so it is reported separately and
 not counted as novel.
 
+**Result on the global 50 km grid (58,289 land cells):** under the science profile 3 of the 10 candidates reach the
+top 10 % (Lut, Emi Koussi, Namib), against an expected 1.2 for random points (random pass rate 11.7 %). Resource: 2/10,
+habitat: 1/10, landing: 0/10. This is a modest signal, not a strong one: the grid has no calibrated mineralogy beyond
+rough ASTER proxies, so terrain, cold and dryness dominate the score. Reproduce with `python -m analog_atlas.cli
+check-discoveries`.
+
 ## Data
 
 | Layer (Earth grid) | Source | Tier |
