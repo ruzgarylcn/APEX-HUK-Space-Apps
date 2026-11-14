@@ -8,7 +8,7 @@ web
 
 ## Users
 - Primary: people using Analog Atlas to find Earth analogs of Moon and Mars regions: the competition team, NASA Space Apps 2026 judges, and planetary scientists or students exploring the results.
-- The same people also use the control panel (`panel.html`) to run the data pipeline (Earth Engine extraction, merge, discovery checks, offline snapshot) without a terminal. Confirmed by the user on 2026-11-14: the panel is user-facing and should feel like part of the same app as `index.html`.
+- The same people also run the data pipeline (Earth Engine extraction, merge, discovery checks, offline snapshot) without a terminal, from the **Data pipeline** drawer inside the Atlas. Confirmed by the user on 2026-11-14: the interface is `index.html` itself, globes included, and the extra code upgrades it rather than adding a separate page.
 
 ## Product Purpose
 Analog Atlas turns a Moon or Mars region into a planet-independent feature vector and ranks Earth by physical similarity (SI, 0–100). Every result says what is similar, where the analogy breaks, which sources back it, and what Earth cannot reproduce. Success means a jury can verify the method on known analogs (Anchor) and see credible new candidates, preferably in the Global South (Discover).

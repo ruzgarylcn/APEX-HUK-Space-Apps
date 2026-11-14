@@ -1,0 +1,417 @@
+<!--ICON-->
+    <symbol id="i-pipeline" viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="19" cy="12" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="5" cy="18" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7.3 6.8l9.4 4.2M7.3 17.2l9.4-4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<!--/ICON-->
+<!--BUTTON-->
+      <button class="icon-btn" id="pp-open" aria-haspopup="dialog" aria-expanded="false" aria-controls="pp-drawer" aria-label="Open the data pipeline" data-tip="Data pipeline: run the Earth Engine extraction, merge, discovery checks and the offline snapshot in the background"><svg aria-hidden="true"><use href="#i-pipeline"/></svg><span class="pp-dot" id="pp-dot" hidden></span></button>
+<!--/BUTTON-->
+<!--CSS-->
+/* ===== DATA PIPELINE DRAWER (runs the backend pipeline in the background from inside the Atlas) ===== */
+.icon-btn{position:relative}
+.pp-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--warn);box-shadow:0 0 8px var(--warn);animation:pulse 1s ease-in-out infinite}
+.pp-dot[hidden],#pp-drawer [hidden]{display:none!important}
+#pp-drawer{position:fixed;top:var(--topbar-h);right:0;bottom:var(--status-h);width:min(980px,100vw);z-index:70;
+  display:grid;grid-template-columns:330px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);
+  background:var(--panel);backdrop-filter:blur(18px);border-left:1px solid var(--line);
+  box-shadow:-24px 0 60px rgba(0,0,0,.45);transform:translateX(102%);visibility:hidden;
+  transition:transform .32s cubic-bezier(.16,1,.3,1),visibility 0s linear .32s}
+#pp-drawer.open{transform:none;visibility:visible;transition:transform .32s cubic-bezier(.16,1,.3,1),visibility 0s}
+.pp-head{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.pp-head h2{font-size:15px;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.pp-head h2 svg{width:17px;height:17px;color:var(--accent)}
+.pp-head .chip{margin-left:auto}
+.pp-side{border-right:1px solid var(--line);overflow-y:auto;min-height:0;padding:14px 14px 22px;display:flex;flex-direction:column;gap:12px}
+.pp-side>*{flex-shrink:0}
+.pp-main{display:flex;flex-direction:column;min-height:0;min-width:0}
+.pp-track{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:16px 18px 12px;border-bottom:1px solid var(--line);list-style:none}
+.pp-stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:0;padding:0 4px}
+.pp-stage::before{content:"";position:absolute;top:13px;left:calc(-50% + 16px);right:calc(50% + 16px);height:2px;border-radius:2px;background:var(--line)}
+.pp-stage:first-child::before{display:none}
+.pp-stage.is-done::before,.pp-stage.is-live::before,.pp-stage.is-run::before{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.pp-node{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line);background:var(--bg-0);color:var(--muted);position:relative;z-index:1}
+.pp-node svg{width:13px;height:13px}
+.pp-stage.is-done .pp-node{background:linear-gradient(135deg,var(--accent),var(--accent-2));border-color:transparent;color:var(--bg-0)}
+.pp-stage.is-live .pp-node{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
+.pp-stage.is-run .pp-node{border-color:var(--warn);color:var(--warn);animation:pulse 1.2s ease-in-out infinite}
+.pp-stage b{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.pp-stage small{font-size:11px;color:var(--muted-2);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.pp-stage:not(.is-done):not(.is-live):not(.is-run) b{color:var(--muted-2)}
+.pp-jobhead{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line);min-height:54px}
+.pp-jobtitle{display:flex;flex-direction:column;min-width:0;gap:2px}
+.pp-jobtitle b{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-jobtitle span{font-size:11.5px;color:var(--muted-2);font-variant-numeric:tabular-nums}
+.pp-jobactions{margin-left:auto;display:flex;gap:8px;flex:none}
+.pp-state{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid var(--line);color:var(--muted-2);white-space:nowrap}
+.pp-state i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.pp-state.running{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,transparent)}
+.pp-state.running i{animation:pulse 1s ease-in-out infinite}
+.pp-state.done{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,transparent)}
+.pp-state.failed{color:var(--danger);border-color:color-mix(in srgb,var(--danger) 45%,transparent)}
+.pp-log{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;padding:12px 18px 20px;font:12px/1.6 var(--font-mono);
+  white-space:pre-wrap;word-break:break-word;font-variant-numeric:tabular-nums;background:color-mix(in srgb,var(--bg-0) 55%,transparent)}
+.pp-log .ln{display:block;padding:0 6px;border-radius:4px}
+.pp-log .cmd{color:var(--accent);font-weight:700;margin-top:6px}
+.pp-log .err{color:var(--danger);background:color-mix(in srgb,var(--danger) 8%,transparent)}
+.pp-log .ok{color:var(--ok)}
+.pp-log .note{color:var(--warn)}
+.pp-log .dim{color:var(--muted-2)}
+.pp-empty{margin:auto;max-width:420px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;padding:30px 18px;color:var(--muted-2);font-family:var(--font-ui);white-space:normal}
+.pp-empty h3{font-size:16px;color:var(--text);font-weight:700}
+.pp-empty p{font-size:13px;line-height:1.55}
+.pp-banner{margin:14px 18px 0;padding:12px 14px;border-radius:12px;border:1px solid color-mix(in srgb,var(--warn) 45%,transparent);
+  background:color-mix(in srgb,var(--warn) 8%,transparent);font-size:12.5px;line-height:1.55}
+.pp-banner code{font-family:var(--font-mono);font-size:11.5px;background:color-mix(in srgb,var(--bg-0) 60%,transparent);padding:1px 5px;border-radius:5px}
+.pp-next{border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);border-radius:var(--radius);padding:11px 12px;
+  background:color-mix(in srgb,var(--accent) 7%,var(--panel-2));display:flex;flex-direction:column;gap:6px}
+.pp-next h3{font-size:13px;font-weight:700}
+.pp-next p{font-size:12.5px;color:var(--muted-2);line-height:1.5}
+.pp-row{display:flex;flex-wrap:wrap;gap:8px}
+.pp-inline{display:flex;gap:8px}
+.pp-inline .text-input{flex:1;min-width:0;padding:8px 10px;border-radius:10px}
+.pp-check{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;color:var(--muted-2);cursor:pointer;line-height:1.4}
+.pp-check input{accent-color:var(--accent);width:15px;height:15px;margin-top:1px;flex:none}
+.pp-drop{border:1.5px dashed var(--line);border-radius:12px;padding:14px 12px;text-align:center;font-size:12.5px;color:var(--muted-2);
+  display:flex;flex-direction:column;gap:5px;align-items:center;cursor:pointer;background:color-mix(in srgb,var(--bg-0) 35%,transparent)}
+.pp-drop svg{width:20px;height:20px;color:var(--accent)}
+.pp-drop b{color:var(--text)}
+.pp-drop:hover,.pp-drop.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.pp-msg{font-size:12px;min-height:1em;color:var(--muted-2)}
+.pp-msg.bad{color:var(--danger)}.pp-msg.good{color:var(--ok)}
+.pp-facts{display:flex;flex-direction:column}
+.pp-fact{display:grid;grid-template-columns:14px 1fr auto;gap:10px;align-items:center;padding:8px 2px;border-bottom:1px solid var(--line);font-size:12.5px}
+.pp-fact:last-child{border-bottom:none}
+.pp-fact i{width:8px;height:8px;border-radius:50%;background:var(--muted);justify-self:center}
+.pp-fact.ok i{background:var(--ok);box-shadow:0 0 8px color-mix(in srgb,var(--ok) 60%,transparent)}
+.pp-fact.warn i{background:var(--warn)}
+.pp-fact span{color:var(--muted-2)}
+.pp-fact b{font-weight:700;font-variant-numeric:tabular-nums;text-align:right;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pp-jobs{display:flex;flex-direction:column;gap:6px}
+.pp-job{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg-0) 35%,transparent);text-align:left;width:100%}
+.pp-job:hover{border-color:color-mix(in srgb,var(--accent) 50%,var(--line))}
+.pp-job[aria-current="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,transparent)}
+.pp-job b{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-job .pp-when{font-size:11px;color:var(--muted-2);grid-column:1/-1;font-variant-numeric:tabular-nums}
+.pp-note{font-size:12px;color:var(--muted-2);padding:2px}
+.chip .status-dot.fail{background:var(--danger);box-shadow:0 0 8px var(--danger)}
+.chip .status-dot.idle{background:var(--muted);box-shadow:none}
+@media (max-width:920px){
+  #pp-drawer{grid-template-columns:1fr;grid-template-rows:auto auto auto;overflow-y:auto;width:100vw}
+  .pp-main{order:1;min-height:70dvh}
+  .pp-side{order:2;border-right:none;border-top:1px solid var(--line);overflow:visible}
+  .pp-track{padding:12px 8px 10px}
+  .pp-stage small{display:none}
+  .pp-jobhead,.pp-log{padding-left:12px;padding-right:12px}
+}
+<!--/CSS-->
+<!--MARKUP-->
+<!-- ===== DATA PIPELINE DRAWER ===== -->
+<section id="pp-drawer" role="dialog" aria-modal="false" aria-labelledby="pp-title" aria-hidden="true">
+  <header class="pp-head">
+    <h2 id="pp-title"><svg aria-hidden="true"><use href="#i-pipeline"/></svg> Data pipeline</h2>
+    <span class="chip"><span class="status-dot idle" id="pp-server-dot"></span><span id="pp-server-text">Looking for the local server…</span></span>
+    <button class="icon-btn" id="pp-close" aria-label="Close the data pipeline"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
+  </header>
+  <div class="pp-side">
+    <div class="pp-next"><h3 id="pp-next-title">Looking for the local server…</h3><p id="pp-next-text">The pipeline runs on this computer.</p></div>
+
+    <section class="acc" data-open="true">
+      <button class="acc-head" aria-expanded="true"><span class="step-badge">1</span> Set up <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      <div class="acc-body"><div><div class="acc-content">
+        <p class="hint">Earth data comes from Google Earth Engine. Use the <b>Project ID</b> from the Google Cloud console, not the project name.</p>
+        <div>
+          <label class="field-label" for="pp-project"><svg aria-hidden="true"><use href="#i-pin"/></svg> Earth Engine project ID</label>
+          <form class="pp-inline" id="pp-project-form">
+            <input class="text-input" id="pp-project" autocomplete="off" spellcheck="false" placeholder="e.g. analog-atlas-spaeapps" />
+            <button class="btn btn-sm" type="submit">Save</button>
+          </form>
+          <p class="pp-msg" id="pp-project-msg" aria-live="polite"></p>
+        </div>
+        <div class="pp-row">
+          <button class="btn btn-sm" data-pp-run="tests"><svg width="14" height="14" aria-hidden="true"><use href="#i-check"/></svg> Run tests</button>
+          <button class="btn btn-sm btn-ghost" data-pp-run="auth"><svg width="14" height="14" aria-hidden="true"><use href="#i-sync"/></svg> Sign in to Earth Engine</button>
+        </div>
+      </div></div></div>
+    </section>
+
+    <section class="acc" data-open="true">
+      <button class="acc-head" aria-expanded="true"><span class="step-badge">2</span> Smoke test <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      <div class="acc-body"><div><div class="acc-content">
+        <p class="hint">Samples about 190 land cells around western Türkiye and prints grid values next to the literature values for Kula and Lake Salda. A few minutes.</p>
+        <button class="btn btn-primary btn-block" data-pp-run="smoke"><svg width="15" height="15" aria-hidden="true"><use href="#i-play"/></svg> Run smoke test</button>
+      </div></div></div>
+    </section>
+
+    <section class="acc" data-open="false">
+      <button class="acc-head" aria-expanded="false"><span class="step-badge">3</span> Global export <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      <div class="acc-body"><div><div class="acc-content">
+        <p class="hint">Builds the 50 km land grid (about 63 000 cells) and starts 13 Earth Engine tasks that write CSVs to the Drive folder <b>analog_atlas</b>. They keep running on Google's side.</p>
+        <label class="pp-check"><input type="checkbox" id="pp-no-s2" checked /> Skip Sentinel-2 (much faster; the Fe-oxide and clay proxies stay empty)</label>
+        <div class="pp-row">
+          <button class="btn btn-primary" data-pp-run="export"><svg width="15" height="15" aria-hidden="true"><use href="#i-export"/></svg> Start export</button>
+          <button class="btn btn-sm btn-ghost" data-pp-run="export_status">Check task status</button>
+        </div>
+      </div></div></div>
+    </section>
+
+    <section class="acc" data-open="false">
+      <button class="acc-head" aria-expanded="false"><span class="step-badge">4</span> Merge <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      <div class="acc-body"><div><div class="acc-content">
+        <p class="hint">When every task is COMPLETED, download the <b>analog_atlas_50km_*.csv</b> files from Drive and add them here.</p>
+        <label class="pp-drop" id="pp-drop" tabindex="0">
+          <svg aria-hidden="true"><use href="#i-csv"/></svg>
+          <span><b>Choose CSV files</b> or drop them here</span>
+          <span id="pp-drop-count">No files yet</span>
+          <input type="file" id="pp-files" accept=".csv" multiple hidden />
+        </label>
+        <p class="pp-msg" id="pp-upload-msg" aria-live="polite"></p>
+        <button class="btn btn-primary btn-block" data-pp-run="merge"><svg width="15" height="15" aria-hidden="true"><use href="#i-layers"/></svg> Merge into the Earth grid</button>
+      </div></div></div>
+    </section>
+
+    <section class="acc" data-open="false">
+      <button class="acc-head" aria-expanded="false"><span class="step-badge">5</span> Discover &amp; check <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      <div class="acc-body"><div><div class="acc-content">
+        <div><label class="field-label" for="pp-target"><svg aria-hidden="true"><use href="#i-target"/></svg> Target</label><select class="select" id="pp-target"></select></div>
+        <div><label class="field-label" for="pp-profile"><svg aria-hidden="true"><use href="#i-rocket"/></svg> Mission profile</label><select class="select" id="pp-profile"></select></div>
+        <button class="btn btn-primary btn-block" data-pp-run="find"><svg width="15" height="15" aria-hidden="true"><use href="#i-search"/></svg> Find anchors &amp; discoveries</button>
+        <div class="pp-row">
+          <button class="btn btn-sm" data-pp-run="validate">Validate anchors</button>
+          <button class="btn btn-sm" data-pp-run="check">Discovery checklist</button>
+          <button class="btn btn-sm btn-ghost" data-pp-run="dois">Verify DOIs</button>
+        </div>
+      </div></div></div>
+    </section>
+
+    <section class="acc" data-open="false">
+      <button class="acc-head" aria-expanded="false"><span class="step-badge">6</span> Publish <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      <div class="acc-body"><div><div class="acc-content">
+        <p class="hint">Writes the discoveries for every preset and profile into this page's file, so the Atlas still shows them with no server running. Reload the page afterwards.</p>
+        <button class="btn btn-primary btn-block" data-pp-run="offline"><svg width="15" height="15" aria-hidden="true"><use href="#i-book"/></svg> Embed offline snapshot</button>
+      </div></div></div>
+    </section>
+
+    <div class="panel-title"><svg aria-hidden="true"><use href="#i-info"/></svg> Project status</div>
+    <div class="pp-facts" id="pp-facts"><p class="pp-note">Waiting for the local server.</p></div>
+    <div class="panel-title"><svg aria-hidden="true"><use href="#i-sync"/></svg> Recent runs</div>
+    <div class="pp-jobs" id="pp-jobs"><p class="pp-note">No runs yet in this session.</p></div>
+  </div>
+  <div class="pp-main">
+    <ol class="pp-track" id="pp-track" aria-label="Pipeline progress"></ol>
+    <div class="pp-banner" id="pp-banner" hidden>
+      <b>The local server is not running, so the pipeline cannot start from here.</b> Double-click <code>start.bat</code> in the
+      project folder (macOS/Linux: <code>./start.sh</code>). It opens this Atlas at <code>http://127.0.0.1:8000/</code> with the
+      pipeline and live discoveries switched on. Everything else in the Atlas keeps working without it.
+    </div>
+    <div class="pp-jobhead" id="pp-jobhead" hidden>
+      <div class="pp-jobtitle"><b id="pp-job-label">—</b><span id="pp-job-meta">—</span></div>
+      <span class="pp-state" id="pp-job-state"><i></i><span>—</span></span>
+      <div class="pp-jobactions">
+        <button class="btn btn-sm btn-ghost" id="pp-copy"><svg width="13" height="13" aria-hidden="true"><use href="#i-copy"/></svg> Copy log</button>
+        <button class="btn btn-sm" id="pp-cancel" hidden><svg width="13" height="13" aria-hidden="true"><use href="#i-close"/></svg> Cancel</button>
+      </div>
+    </div>
+    <div class="pp-log" id="pp-log" role="log" aria-live="polite" tabindex="0">
+      <div class="pp-empty"><h3>Run a step to see its output here</h3>
+        <p>Start with <b>Run tests</b>, then the <b>smoke test</b>. Each step runs in the background and streams its log live, so you can close this drawer and keep using the globe.</p></div>
+    </div>
+  </div>
+</section>
+<!--/MARKUP-->
+<!--SCRIPT-->
+<script>
+/* ===== DATA PIPELINE DRAWER: talks to backend/analog_atlas/server.py (start.bat) ===== */
+(() => {
+  'use strict';
+  const BASE = location.protocol.startsWith('http') ? '' : 'http://127.0.0.1:8000';
+  const q = (s) => document.querySelector(s), qa = (s) => [...document.querySelectorAll(s)];
+  const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const nf = new Intl.NumberFormat('en-US');
+  const P = { online: null, status: null, jobs: [], view: null, next: 0, timer: 0, lines: [], open: false, lastFocus: null };
+  const drawer = q('#pp-drawer');
+
+  async function api(path, opts = {}) {
+    const r = await fetch(BASE + path, { headers: { 'Content-Type': 'application/json' }, ...opts });
+    let body = null; try { body = await r.json(); } catch (e) { body = null; }
+    if (!r.ok) throw new Error((body && body.detail) || `HTTP ${r.status}`);
+    return body;
+  }
+  function note(text, kind) {
+    const wrap = q('#toast-wrap'); if (!wrap) return;
+    const t = document.createElement('div'); t.className = 'toast ' + (kind || ''); t.textContent = text;
+    wrap.append(t); setTimeout(() => t.remove(), 6000);
+  }
+
+  // ----- open / close (non-modal: the globe stays usable)
+  function setOpen(open) {
+    P.open = open;
+    drawer.classList.toggle('open', open);
+    drawer.setAttribute('aria-hidden', String(!open));
+    q('#pp-open').setAttribute('aria-expanded', String(open));
+    if (open) { P.lastFocus = document.activeElement; q('#pp-close').focus(); refresh(); }
+    else if (P.lastFocus && P.lastFocus.focus) P.lastFocus.focus();
+  }
+  q('#pp-open').addEventListener('click', () => setOpen(!P.open));
+  q('#pp-close').addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && P.open) setOpen(false); });
+  drawer.querySelectorAll('.acc-head').forEach((h) => h.addEventListener('click', () => {
+    const acc = h.closest('.acc'), open = acc.dataset.open !== 'true';
+    acc.dataset.open = String(open); h.setAttribute('aria-expanded', String(open));
+  }));
+
+  // ----- progress track and status
+  const STAGES = [['smoke', 'Smoke test', 'i-play'], ['export', 'Export', 'i-export'], ['merge', 'Earth grid', 'i-layers'], ['discover', 'Discover', 'i-search'], ['publish', 'Snapshot', 'i-book']];
+  const RUNS = { smoke: 'smoke', export: 'export', export_status: 'export', merge: 'merge', find: 'discover', check: 'discover', offline: 'publish' };
+  function renderTrack() {
+    const st = P.status, ok = (a) => P.jobs.some((j) => j.action === a && j.state === 'done'), grid = !!(st && st.earth_cells > 0);
+    const done = { smoke: ok('smoke') || grid, export: ok('export') || !!(st && st.export_csvs) || grid, merge: grid,
+      discover: grid && (ok('find') || ok('check')), publish: !!(st && st.offline_entries > 0) };
+    const detail = { smoke: done.smoke ? 'passed' : 'not run',
+      export: st ? (st.export_csvs ? `${st.export_csvs} CSV files` : done.export ? 'tasks started' : 'not started') : '—',
+      merge: grid ? `${nf.format(st.earth_cells)} cells` : 'no grid yet', discover: done.discover ? 'checked' : 'waits for grid',
+      publish: st ? `${st.offline_entries}/${st.offline_expected} entries` : '—' };
+    const running = st && st.running ? RUNS[st.running.action] : null;
+    const first = STAGES.find(([id]) => !done[id]);
+    q('#pp-track').innerHTML = STAGES.map(([id, label, icon]) => {
+      const cls = running === id ? 'is-run' : done[id] ? 'is-done' : first && first[0] === id ? 'is-live' : '';
+      return `<li class="pp-stage ${cls}"><span class="pp-node"><svg aria-hidden="true"><use href="#${done[id] && running !== id ? 'i-check' : icon}"/></svg></span>
+        <b>${label}</b><small>${esc(detail[id])}</small><span class="sr-only">${cls === 'is-run' ? 'running' : done[id] ? 'done' : 'not done'}</span></li>`;
+    }).join('');
+  }
+  function nextStep() {
+    const st = P.status;
+    if (P.online === false) return ['Start the local server', 'Double-click start.bat in the project folder, then reopen this drawer.'];
+    if (!st) return ['Looking for the local server…', 'The pipeline runs on this computer.'];
+    if (!st.project) return ['Save your Earth Engine project ID', 'Step 1: paste the Project ID from the Google Cloud console and press Save.'];
+    const smoked = P.jobs.some((j) => j.action === 'smoke' && j.state === 'done');
+    if (!smoked && !st.earth_cells && !st.export_csvs) return ['Run the smoke test', 'Step 2 checks that Earth Engine answers and the values look sane before the long global run.'];
+    if (!st.export_csvs && !st.earth_cells) return ['Start the global export', 'Step 3 queues 13 Earth Engine tasks; check their status now and then.'];
+    if (!st.earth_cells) return ['Add the CSV files and merge', `Step 4: ${st.export_csvs} CSV file${st.export_csvs === 1 ? '' : 's'} added so far. Merge once all 13 are here.`];
+    if (st.offline_entries < st.offline_expected) return ['Check the discoveries, then publish', 'Run a match on the globe to see live discoveries; step 6 embeds them for offline demos.'];
+    return ['Everything is in place', 'The Earth grid is loaded and the offline snapshot is complete.'];
+  }
+  function renderStatus() {
+    const st = P.status, [t, p] = nextStep();
+    q('#pp-next-title').textContent = t; q('#pp-next-text').textContent = p;
+    q('#pp-banner').hidden = P.online !== false;
+    q('#pp-server-dot').className = 'status-dot ' + (P.online ? '' : P.online === false ? 'fail' : 'idle');
+    q('#pp-server-text').textContent = P.online ? 'Local server connected' : P.online === false ? 'Local server not running' : 'Looking for the local server…';
+    const busy = !!(st && st.running);
+    qa('[data-pp-run]').forEach((b) => { b.disabled = busy || !P.online; });
+    q('#pp-dot').hidden = !busy;
+    if (!st) return;
+    const fact = (ok, label, value) => `<div class="pp-fact ${ok === true ? 'ok' : ok === 'warn' ? 'warn' : ''}"><i></i><span>${label}</span><b title="${esc(value)}">${esc(value)}</b></div>`;
+    q('#pp-facts').innerHTML = [
+      fact(!!st.project, 'Earth Engine project', st.project || 'not set'),
+      fact(st.grid_cells > 0, 'Grid', st.grid_cells > 0 ? `${nf.format(st.grid_cells)} cells` : 'not built'),
+      fact(st.export_csvs > 0 ? (st.earth_cells > 0 ? true : 'warn') : false, 'Export CSVs', String(st.export_csvs)),
+      fact(st.earth_cells > 0, 'Earth grid features', st.earth_cells > 0 ? `${nf.format(st.earth_cells)} cells` : 'none yet'),
+      fact(st.offline_entries >= st.offline_expected ? true : st.offline_entries > 0 ? 'warn' : false, 'Offline snapshot', `${st.offline_entries} / ${st.offline_expected}`),
+    ].join('');
+    if (!q('#pp-project').value && st.project) q('#pp-project').value = st.project;
+    if (!q('#pp-target').options.length) {
+      q('#pp-target').innerHTML = st.targets.map((x) => `<option value="${esc(x.id)}">${esc(x.name)} · ${esc(x.planet)}</option>`).join('');
+      q('#pp-target').value = 'cerberus';
+      q('#pp-profile').innerHTML = Object.entries(st.profiles).map(([k, v]) => `<option value="${esc(k)}">${esc(v)}</option>`).join('');
+      q('#pp-profile').value = 'landing';
+    }
+    q('#pp-drop-count').textContent = st.export_csvs ? `${st.export_csvs} CSV file${st.export_csvs === 1 ? '' : 's'} in data/exports` : 'No files yet';
+  }
+  async function refresh() {
+    try {
+      const [st, jobs] = await Promise.all([api('/panel/status'), api('/jobs')]);
+      P.online = true; P.status = st; P.jobs = jobs;
+      if (st.running && P.view !== st.running.id) openJob(st.running.id);
+      else if (!P.view && jobs.length) openJob(jobs[0].id);
+    } catch (e) { P.online = false; P.status = null; }
+    renderStatus(); renderTrack(); renderJobs();
+  }
+
+  // ----- jobs + live log
+  const STATE_TEXT = { running: 'Running', done: 'Finished', failed: 'Failed', cancelled: 'Cancelled' };
+  const dur = (j) => { const s = Math.round((j.ended || Date.now() / 1000) - j.started); return s < 60 ? `${s} s` : `${Math.floor(s / 60)} min ${s % 60} s`; };
+  const ago = (t) => { const s = Math.max(0, Date.now() / 1000 - t); return s < 60 ? `${Math.round(s)} s ago` : s < 3600 ? `${Math.round(s / 60)} min ago` : `${Math.round(s / 3600)} h ago`; };
+  function renderJobs() {
+    q('#pp-jobs').innerHTML = P.jobs.length ? P.jobs.slice(0, 10).map((j) => `
+      <button class="pp-job" data-pp-job="${j.id}" aria-current="${j.id === P.view}"><b>${esc(j.label)}</b>
+        <span class="pp-state ${j.state}"><i></i>${STATE_TEXT[j.state]}</span><span class="pp-when">${ago(j.started)} · ${dur(j)}</span></button>`).join('')
+      : '<p class="pp-note">No runs yet in this session.</p>';
+  }
+  function kind(l) {
+    if (/^\$ /.test(l)) return 'cmd';
+    if (/Traceback|Error|error:|Exception|FAILED|Exited with code|Could not run/.test(l)) return 'err';
+    if (/^OK\b|\bOK$|^wrote |-> |saved\.|^Ran \d+ tests|started |COMPLETED|embedded into/.test(l)) return 'ok';
+    if (/^Note:|^WARNING|READY|RUNNING/.test(l)) return 'note';
+    if (/^\s*sampled \d+\/\d+/.test(l)) return 'dim';
+    return '';
+  }
+  function append(lines) {
+    const box = q('#pp-log'), stick = box.scrollHeight - box.scrollTop - box.clientHeight < 40, f = document.createDocumentFragment();
+    for (const l of lines) { const s = document.createElement('span'); s.className = 'ln ' + kind(l); s.textContent = l || ' '; f.append(s); }
+    box.append(f); P.lines.push(...lines);
+    if (stick) box.scrollTop = box.scrollHeight;
+  }
+  function head(j) {
+    q('#pp-jobhead').hidden = false;
+    q('#pp-job-label').textContent = j.label;
+    q('#pp-job-meta').textContent = `Started ${new Date(j.started * 1000).toLocaleTimeString()} · ${dur(j)}${j.returncode != null ? ` · exit code ${j.returncode}` : ''}`;
+    q('#pp-job-state').className = 'pp-state ' + j.state;
+    q('#pp-job-state span').textContent = STATE_TEXT[j.state];
+    q('#pp-cancel').hidden = j.state !== 'running';
+  }
+  async function poll() {
+    clearTimeout(P.timer);
+    const id = P.view; if (!id) return;
+    try {
+      const r = await api(`/jobs/${id}?since=${P.next}`);
+      if (id !== P.view) return;
+      if (r.log.length) append(r.log);
+      P.next = r.next; head(r);
+      if (r.state === 'running') { P.timer = setTimeout(poll, P.open ? 700 : 2500); return; }
+      if (r.action === 'offline' && r.state === 'done') note('Offline snapshot embedded. Reload the page to use it.', 'ok');
+      refresh();
+    } catch (e) { P.timer = setTimeout(poll, 3000); }
+  }
+  function openJob(id) { P.view = id; P.next = 0; P.lines = []; q('#pp-log').innerHTML = ''; renderJobs(); poll(); }
+  async function run(action) {
+    const params = { project: q('#pp-project').value.trim(), no_s2: q('#pp-no-s2').checked, target: q('#pp-target').value, profile: q('#pp-profile').value };
+    try { const j = await api('/jobs', { method: 'POST', body: JSON.stringify({ action, params }) }); P.jobs.unshift(j); openJob(j.id); refresh(); }
+    catch (e) { note(e.message, 'warn'); }
+  }
+  drawer.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-pp-run]'); if (b) { run(b.dataset.ppRun); return; }
+    const j = e.target.closest('[data-pp-job]'); if (j) openJob(j.dataset.ppJob);
+  });
+  q('#pp-cancel').addEventListener('click', async () => { try { await api(`/jobs/${P.view}/cancel`, { method: 'POST' }); } catch (e) { note(e.message, 'warn'); } });
+  q('#pp-copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(P.lines.join('\n')); note('Log copied to the clipboard.', 'ok'); }
+    catch (e) { note('Could not copy. Select the log text and copy it by hand.', 'warn'); }
+  });
+  q('#pp-project-form').addEventListener('submit', async (e) => {
+    e.preventDefault(); const m = q('#pp-project-msg');
+    try { const r = await api('/panel/config', { method: 'POST', body: JSON.stringify({ project: q('#pp-project').value.trim() }) });
+      m.className = 'pp-msg good'; m.textContent = `Saved: ${r.project}`; refresh(); }
+    catch (err) { m.className = 'pp-msg bad'; m.textContent = err.message; }
+  });
+  async function upload(files) {
+    const list = [...files].filter((f) => /\.csv$/i.test(f.name)), m = q('#pp-upload-msg');
+    if (!list.length) { m.className = 'pp-msg bad'; m.textContent = 'Only .csv files can be added.'; return; }
+    let n = 0;
+    for (const f of list) {
+      m.className = 'pp-msg'; m.textContent = `Uploading ${f.name} (${n + 1}/${list.length})…`;
+      try { const r = await fetch(`${BASE}/exports/upload?name=${encodeURIComponent(f.name)}`, { method: 'POST', body: f });
+        if (!r.ok) throw new Error((await r.json()).detail); n++; }
+      catch (e) { m.className = 'pp-msg bad'; m.textContent = `${f.name}: ${e.message}`; refresh(); return; }
+    }
+    m.className = 'pp-msg good'; m.textContent = `${n} file${n === 1 ? '' : 's'} added.`; refresh();
+  }
+  const drop = q('#pp-drop');
+  drop.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); q('#pp-files').click(); } });
+  q('#pp-files').addEventListener('change', (e) => upload(e.target.files));
+  ['dragenter', 'dragover'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', (e) => upload(e.dataTransfer.files));
+
+  refresh();
+  setInterval(() => { if (P.open || (P.status && P.status.running)) refresh(); }, 5000);
+})();
+</script>
+<!--/SCRIPT-->

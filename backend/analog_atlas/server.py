@@ -1,9 +1,9 @@
-"""Local control server: the Analog Atlas API + the pipeline panel + the app, on one port.
+"""Local server: the Analog Atlas app + its API + the background pipeline runner, on one port.
 
     python -m uvicorn analog_atlas.server:app --host 127.0.0.1 --port 8000      (or double-click start.bat)
 
-GET  /                     panel.html (pipeline control panel)
-GET  /index.html           the Analog Atlas app (open it with ?api=<this origin> for live discoveries)
+GET  /  (/index.html)      the Analog Atlas app. On this origin it finds the API by itself (live discoveries)
+                           and its "Data pipeline" drawer drives the routes below.
 GET  /panel/status         data files, grid size, offline snapshot, saved Earth Engine project
 POST /panel/config         {"project": "<gcp project id>"}
 POST /jobs                 {"action": "<whitelisted action>", "params": {...}}   one job at a time
@@ -199,13 +199,7 @@ class PanelConfig(BaseModel):
 
 
 @app.get("/", include_in_schema=False)
-@app.get("/panel.html", include_in_schema=False)
-def panel_page():
-    return FileResponse(ROOT_DIR / "panel.html", media_type="text/html")
-
-
 @app.get("/index.html", include_in_schema=False)
-@app.get("/app", include_in_schema=False)
 def atlas_page():
     return FileResponse(ROOT_DIR / "index.html", media_type="text/html")
 

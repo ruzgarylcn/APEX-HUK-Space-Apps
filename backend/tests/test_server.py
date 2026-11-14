@@ -77,9 +77,12 @@ class ServerTests(unittest.TestCase):
         self.assertTrue((server.EXPORTS_DIR / "analog_atlas_50km_000.csv").exists())
         self.assertEqual(self.c.get("/panel/status").json()["export_csvs"], 1)
 
-    def test_pages_and_api_share_one_origin(self):
-        self.assertIn("Pipeline steps", self.c.get("/").text)
-        self.assertIn("ANALOG ATLAS", self.c.get("/index.html").text)
+    def test_atlas_with_pipeline_drawer_and_api_share_one_origin(self):
+        page = self.c.get("/").text
+        self.assertIn("ANALOG ATLAS", page)
+        self.assertIn('id="pp-drawer"', page)                       # pipeline drawer inside the Atlas
+        self.assertIn("API_ORIGIN", page)                            # finds this API by itself
+        self.assertEqual(page, self.c.get("/index.html").text)
         self.assertTrue(self.c.get("/health").json()["ok"])
         self.assertEqual(self.c.post("/find-analogs", json={"target_id": "jezero"}).status_code, 200)
 
