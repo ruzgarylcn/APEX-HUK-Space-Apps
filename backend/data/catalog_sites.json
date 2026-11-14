@@ -215,9 +215,7 @@
   "limits": "Vegetation and soil moisture bind the regolith; lunar regolith is dry, cohesive only by grain interlocking, and gardened by impacts.",
   "source_ids": [
    "c008",
-   "c003",
-   "c047",
-   "c053"
+   "c090"
   ],
   "iso3": "USA"
  },
@@ -580,10 +578,8 @@
   "rationale": "Stacked, low-viscosity sheet flows at province scale match the stratigraphy inferred for lunar mare fill and Cerberus Palus.",
   "limits": "Monsoon weathering produces thick saprolite and red boles absent on airless bodies; trap topography is also dissected by fluvial incision.",
   "source_ids": [
-   "c002",
-   "c003",
-   "c006",
-   "c065"
+   "c091",
+   "c092"
   ],
   "iso3": "IND"
  },
@@ -655,10 +651,8 @@
   "rationale": "Steep pyroclastic slopes and rapid palagonitization bracket the upper end of terrain roughness and alteration speed for volcanic analogs.",
   "limits": "Persistent explosive resurfacing and humid alteration are far faster than any current Mars process; use it as an endmember, not a state match.",
   "source_ids": [
-   "c003",
-   "c033",
-   "c034",
-   "c035"
+   "c093",
+   "c094"
   ],
   "iso3": "ITA"
  },
@@ -798,10 +792,8 @@
   "rationale": "Acid-sulfate weathering of Fe-bearing rock yields the jarosite→hematite assemblage Opportunity found at Meridiani, with comparable crystallinity pathways.",
   "limits": "Río Tinto's acidity is microbially amplified and water-rich; Meridiani's alteration likely involved scarce, evaporating brines.",
   "source_ids": [
-   "c035",
-   "c033",
-   "c072",
-   "c034"
+   "c095",
+   "c096"
   ],
   "iso3": "ESP"
  },
@@ -870,9 +862,8 @@
   "rationale": "Metre-scale flatness, high albedo and sulfate crusts reproduce the photometric and thermal behavior of martian sulfate plains (e.g. Meridiani, Juventae).",
   "limits": "Uyuni's crust is actively reworked by seasonal flooding and biology; Mars' sulfate deposits are cemented, ancient and radiation-processed.",
   "source_ids": [
-   "c036",
-   "c031",
-   "c033"
+   "c097",
+   "c098"
   ],
   "iso3": "BOL"
  },

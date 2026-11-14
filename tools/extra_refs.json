@@ -1,14 +1,171 @@
 {
-  "_comment": "Site-specific references added after the first release. Applied by tools/add_refs.py (idempotent). DOIs checked against Crossref on 2026-11-14.",
+  "_comment": "Site-specific references added after the first release. Applied by tools/add_refs.py (idempotent). DOIs and titles checked against Crossref on 2026-11-14.",
   "citations": [
-    {"id": "c088", "category": "11_Anchor_Analogs", "title": "Geochemistry and origin of ultramafic enclaves and their basanitic host rock from Kula Volcano, Turkey", "authors": "Grützner, Tobias; Prelević, Dejan; Akal, Cüneyt", "year": 2013, "venue": "Lithos, 180–181, 58–73", "doi": "10.1016/j.lithos.2013.08.001", "sourceUrl": "https://doi.org/10.1016/j.lithos.2013.08.001", "provider": "Crossref"},
-    {"id": "c089", "category": "11_Anchor_Analogs", "title": "Surface exposure dating of Holocene basalt flows and cinder cones in the Kula volcanic field (Western Turkey) using cosmogenic 3He and 10Be", "authors": "Heineke, Caroline; Niedermann, Samuel; Hetzel, Ralf; Akal, Cüneyt", "year": 2016, "venue": "Quaternary Geochronology, 34, 81–91", "doi": "10.1016/j.quageo.2016.04.004", "sourceUrl": "https://doi.org/10.1016/j.quageo.2016.04.004", "provider": "Crossref"}
+    {
+      "id": "c088",
+      "category": "11_Anchor_Analogs",
+      "title": "Geochemistry and origin of ultramafic enclaves and their basanitic host rock from Kula Volcano, Turkey",
+      "authors": "Grützner, Tobias; Prelević, Dejan; Akal, Cüneyt",
+      "year": 2013,
+      "venue": "Lithos, 180–181, 58–73",
+      "doi": "10.1016/j.lithos.2013.08.001",
+      "sourceUrl": "https://doi.org/10.1016/j.lithos.2013.08.001",
+      "provider": "Crossref"
+    },
+    {
+      "id": "c089",
+      "category": "11_Anchor_Analogs",
+      "title": "Surface exposure dating of Holocene basalt flows and cinder cones in the Kula volcanic field (Western Turkey) using cosmogenic 3He and 10Be",
+      "authors": "Heineke, Caroline; Niedermann, Samuel; Hetzel, Ralf; Akal, Cüneyt",
+      "year": 2016,
+      "venue": "Quaternary Geochronology, 34, 81–91",
+      "doi": "10.1016/j.quageo.2016.04.004",
+      "sourceUrl": "https://doi.org/10.1016/j.quageo.2016.04.004",
+      "provider": "Crossref"
+    },
+    {
+      "id": "c090",
+      "category": "11_Anchor_Analogs",
+      "title": "NASA Desert RATS 2010: Preliminary results for science operations conducted in the San Francisco Volcanic Field, Arizona",
+      "authors": "Gruener, J.E.; Lofgren, G.E.; Bluethmann, W.J.; Abercromby, A.F.",
+      "year": 2013,
+      "venue": "Acta Astronautica, 90, 406–415",
+      "doi": "10.1016/j.actaastro.2011.12.006",
+      "sourceUrl": "https://doi.org/10.1016/j.actaastro.2011.12.006",
+      "provider": "Crossref"
+    },
+    {
+      "id": "c091",
+      "category": "11_Anchor_Analogs",
+      "title": "Correlation of the Deccan and Rajahmundry Trap lavas: Are these the longest and largest lava flows on Earth?",
+      "authors": "Self, S.; Jay, A.E.; Widdowson, M.; Keszthelyi, L.P.",
+      "year": 2008,
+      "venue": "Journal of Volcanology and Geothermal Research, 172, 3–19",
+      "doi": "10.1016/j.jvolgeores.2006.11.012",
+      "sourceUrl": "https://doi.org/10.1016/j.jvolgeores.2006.11.012",
+      "provider": "Crossref"
+    },
+    {
+      "id": "c092",
+      "category": "11_Anchor_Analogs",
+      "title": "Morphology and emplacement of flows from the Deccan Volcanic Province, India",
+      "authors": "Bondre, Ninad R.; Duraiswami, Raymond A.; Dole, Gauri",
+      "year": 2004,
+      "venue": "Bulletin of Volcanology, 66, 29–45",
+      "doi": "10.1007/s00445-003-0294-x",
+      "sourceUrl": "https://doi.org/10.1007/s00445-003-0294-x",
+      "provider": "Crossref"
+    },
+    {
+      "id": "c093",
+      "category": "11_Anchor_Analogs",
+      "title": "Dynamics of magmas at Mount Etna",
+      "authors": "Corsaro, Rosa Anna; Pompilio, Massimo",
+      "year": 2004,
+      "venue": "In Mt. Etna: Volcano Laboratory, Geophysical Monograph 143 (AGU), 91–110",
+      "doi": "10.1029/143gm07",
+      "sourceUrl": "https://doi.org/10.1029/143gm07",
+      "provider": "Crossref"
+    },
+    {
+      "id": "c094",
+      "category": "11_Anchor_Analogs",
+      "title": "Site Identification and Sample Analysis with ExoMars Mission mock-up instruments on a Martian analogue site on Mt. Etna",
+      "authors": "de Palma, Gaia; Ehreiser, Anouk; Lakomiec, Patrycja; Schlarmann, Leander",
+      "year": 2021,
+      "venue": "Europlanet Science Congress 2021, EPSC2021-760",
+      "doi": "10.5194/epsc2021-760",
+      "sourceUrl": "https://doi.org/10.5194/epsc2021-760",
+      "provider": "Crossref"
+    },
+    {
+      "id": "c095",
+      "category": "11_Anchor_Analogs",
+      "title": "The Río Tinto Basin, Spain: Mineralogy, sedimentary geobiology, and implications for interpretation of outcrop rocks at Meridiani Planum, Mars",
+      "authors": "Fernández-Remolar, David C.; Morris, Richard V.; Gruener, John E.; Amils, Ricardo; Knoll, Andrew H.",
+      "year": 2005,
+      "venue": "Earth and Planetary Science Letters, 240, 149–167",
+      "doi": "10.1016/j.epsl.2005.09.043",
+      "sourceUrl": "https://doi.org/10.1016/j.epsl.2005.09.043",
+      "provider": "Crossref"
+    },
+    {
+      "id": "c096",
+      "category": "11_Anchor_Analogs",
+      "title": "Extreme environments as Mars terrestrial analogs: The Rio Tinto case",
+      "authors": "Amils, Ricardo; González-Toril, Elena; Fernández-Remolar, David; Gómez, Felipe; Aguilera, Ángeles; Rodríguez, Nuria; Malki, Mustafá; García-Moyano, Antonio; Fairén, Alberto G.; de la Fuente, Vicenta; Luis Sanz, José",
+      "year": 2007,
+      "venue": "Planetary and Space Science, 55, 370–381",
+      "doi": "10.1016/j.pss.2006.02.006",
+      "sourceUrl": "https://doi.org/10.1016/j.pss.2006.02.006",
+      "provider": "Crossref"
+    },
+    {
+      "id": "c097",
+      "category": "11_Anchor_Analogs",
+      "title": "Quaternary geochemical evolution of the salars of Uyuni and Coipasa, Central Altiplano, Bolivia",
+      "authors": "Risacher, François; Fritz, Bertrand",
+      "year": 1991,
+      "venue": "Chemical Geology, 90, 211–231",
+      "doi": "10.1016/0009-2541(91)90101-v",
+      "sourceUrl": "https://doi.org/10.1016/0009-2541(91)90101-v",
+      "provider": "Crossref"
+    },
+    {
+      "id": "c098",
+      "category": "11_Anchor_Analogs",
+      "title": "Characterization of the salar de uyuni for in-orbit satellite calibration",
+      "authors": "Camargo Lamparelli, R.A.; Ponzoni, F.J.; Zullo, J.; Queiroz Pellegrino, G.; Arnaud, Y.",
+      "year": 2003,
+      "venue": "IEEE Transactions on Geoscience and Remote Sensing, 41, 1461–1468",
+      "doi": "10.1109/tgrs.2003.810713",
+      "sourceUrl": "https://doi.org/10.1109/tgrs.2003.810713",
+      "provider": "Crossref"
+    }
   ],
   "sites": {
     "kula": {
-      "source_ids": ["c088", "c089"],
-      "rocks": ["basanite", "basalt", "scoria", "tephrite"],
+      "source_ids": [
+        "c088",
+        "c089"
+      ],
+      "rocks": [
+        "basanite",
+        "basalt",
+        "scoria",
+        "tephrite"
+      ],
       "description": "About 80 Quaternary Na-alkaline (mostly basanitic) cinder cones with explosive craters and block lava flows on a horst plateau, some flows only ~1–3 thousand years old; a UNESCO Global Geopark used for lunar-mare morphological comparison."
+    },
+    "sfvf": {
+      "source_ids": [
+        "c008",
+        "c090"
+      ]
+    },
+    "deccan": {
+      "source_ids": [
+        "c091",
+        "c092"
+      ]
+    },
+    "etna": {
+      "source_ids": [
+        "c093",
+        "c094"
+      ]
+    },
+    "riotinto": {
+      "source_ids": [
+        "c095",
+        "c096"
+      ]
+    },
+    "uyuni": {
+      "source_ids": [
+        "c097",
+        "c098"
+      ]
     }
   }
 }

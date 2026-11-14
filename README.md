@@ -179,6 +179,6 @@ were used as assistants; every output was reviewed and tested by the team.
 
 ## Credits
 
-Built by team APEX-HUK for the NASA Space Apps Challenge 2026. The 89 references are listed in APA 7 inside the app (the
+Built by team APEX-HUK for the NASA Space Apps Challenge 2026. The 98 references are listed in APA 7 inside the app (the
 References button). Campaign sources are in `backend/data/campaigns.csv`. Logo provenance and AI-use notes are in
 `brand/README.md`.
