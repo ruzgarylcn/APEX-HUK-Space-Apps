@@ -285,7 +285,7 @@ def find_analogs(target_id: str | None = None, *, features: dict | None = None, 
         sc = score(feats, grid, profile=profile, custom_weights=custom_weights)
         ok = sc[sc["coverage"] >= 0.5]
         n_scored = len(ok)
-        pool = ok.nlargest(min(len(ok), 20000), "si")          # only strong cells can reach the top regions
+        pool = ok[ok["si"].notna()].sort_values("si", ascending=False, kind="mergesort").head(20000)   # only strong cells can reach the top regions (sort, not nlargest: nlargest trips over the numpy arrays score() keeps in .attrs)
         pool = apply_priority(add_novelty(pool, catalog=catalog), novelty_col="novelty")
         regions = cluster_regions(pool, cfg["cluster"]["radius_km"])
         chosen = select(regions, top)
