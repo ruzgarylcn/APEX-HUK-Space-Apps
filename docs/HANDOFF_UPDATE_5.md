@@ -1,0 +1,39 @@
+# Handoff update #5: merge of the full package with the work done from "update 3"
+
+Date: 2026-11-14. Base: `AnalogAtlas_FULL.zip` exactly as received (git commit `7d899f7`). Following START_HERE §2,
+the engine, configs and data of the package were kept untouched; only genuinely new work was ported on top.
+
+## Verified on the package before any change
+16/16 tests; `validate` hit@5 = 1.0 landing / resource / habitat, 0.8 science; Jezero + science -> Lake Salda #1.
+These numbers are unchanged after the merge.
+
+## Backend additions (commit `2d5cec1`)
+| Area | Change |
+|---|---|
+| `extract/earth_gee.py` | PET from TerraClimate (MOD16A2 masks barren land and deserts, i.e. our candidates). Oxford MAP accessibility band -> `access_minutes` (bonus input, not a feature). Optional Sentinel-2 (`--no-s2`). CSV `selectors` (no per-row geometry). Land-only exports, <= 5000 cells per task. `merge_exports()`. Robust to missing S2 columns. |
+| `cli.py` | `extract-earth --no-s2/--tag` (chunked, land only, sanity table after sampling), `export-status`, `merge-exports`, `find`, `export-offline [--embed]`, `verify-dois` (reads `#citation-db` from `index.html`). |
+| `priority.py` / `priority.json` | Access bonus (<= +3, linear 2 h -> 24 h, SI >= 60), `hard_access` flag (> 48 h, never removed), `select()` with `bonus` or `quota` mode (HANDOFF 6.1). Novelty wired. Existing keys and rules unchanged. |
+| `pipeline.py` | `add_novelty()` from `data/campaigns.csv` (novelty = clip(km / 500), <= +5) and `known_nearby` (50 km to a campaign or catalog site), `cluster_regions()` (150 km NMS), `find_analogs()` (anchors + discoveries with reasons, percentile, region size). |
+| `api.py` | `POST /find-analogs`; `/health` reports whether the grid is loaded. |
+| tests | 13 new tests (29 total): clustering, novelty, access bounds, "bonuses cannot overturn a clearly better analog", quota, merge-exports, find_analogs on a synthetic grid, export-offline, API. |
+| `Dockerfile` | API container for Hugging Face Spaces (Docker) or Render. |
+
+## Frontend (commit `3f23f52`)
+`index.html` is now the single deliverable; `p2.html` moved to `archive/`.
+- Engine, cards, compare, tiers, fixed gaps, 16 sites, 87 references: **from p2.html, unchanged**.
+- Globe: the Cesium LOD block (NASA Trek WMTS tiles, dynamic high-resolution viewport export, memory management,
+  fade), its CONFIG keys and the embedded region textures were taken **verbatim** from the LOD-upgraded `index.html`.
+- Added: SI next to opportunity with Global South / novelty / literature-anchor badges (same rules as the backend);
+  "New discoveries" section from `POST /find-analogs` with a 4 s timeout -> embedded offline snapshot -> honest note;
+  Locate + globe markers; all 16 catalog sites listed; feature-count text fixed (24 numeric + landform).
+- New logo applied with `brand/apply_logo.py`.
+- `tools/merge_frontend.py` rebuilds `index.html` from `archive/p2.html` + the LOD file.
+
+## Open decisions (assumptions until the team answers)
+- HANDOFF 6.1: `priority.json -> selection.mode = "quota"` (10 of the top 20 discoveries reserved for Global South
+  regions, the other 10 by pure SI). Set `"bonus"` for plain opportunity order.
+- API host: Hugging Face Spaces (Docker). Frontend: GitHub Pages (repo root).
+
+## Known limitation kept as is
+For presets the browser takes slope / roughness from the seeded relief model, so browser SIs differ from the backend
+by up to ~0.2 points; rankings are identical. This was already the case in the package.

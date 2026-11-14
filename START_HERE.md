@@ -1,5 +1,9 @@
 # START HERE — complete project package (paste this whole file to Claude first)
 
+> **Update #5 (2026-11-14):** the deliverable frontend is now **`index.html`** (p2 engine + Cesium LOD globe + new
+> logo + Anchor & Discover). `p2.html` is in `archive/`; the logo is already applied. Backend: 29 tests.
+> What changed and why: `docs/HANDOFF_UPDATE_5.md`. Earth Engine steps: `docs/RUN_EARTH_ENGINE.md`.
+
 This zip is the **complete, current project**. It replaces every earlier zip (the handoff zip and updates #2, #3 and #4).
 The team member who received only "update 3" was missing most of the project. This package fixes that.
 
