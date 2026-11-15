@@ -150,6 +150,12 @@ uvicorn analog_atlas.api:app --port 8000     # POST /find-analogs, POST /score
 The Earth Engine extraction, merge and offline snapshot are described in `docs/RUN_EARTH_ENGINE.md`. Running
 `export-offline --embed ../index.html` lets the demo show real discoveries even when the API is down.
 
+**Custom regions without a server.** Points, rectangles and polygons drawn by hand have no snapshot, so when the API is
+not reachable (GitHub Pages) the Atlas downloads `data/earth_grid.bin` once (~4 MB, the same 58,289-cell grid) and runs
+the discovery step of `find_analogs` in the browser: score, coverage >= 0.5, priority bonuses, 150 km regions, quota.
+On the preset targets it returns the same regions, slots and percentiles as the backend (differences only in the
+second decimal). Rebuild the file after a new extraction with `python tools/export_grid.py`.
+
 **Rebuilding `index.html`.** `index.html` is the deliverable. Small source files are injected into it by idempotent scripts,
 run from the repository root in this order: `python brand/apply_logo.py index.html` (logo), `python tools/add_pipeline.py`
 (the Data pipeline drawer, shown only when the local server answers), `python tools/add_polish.py` (phone layout and the

@@ -1407,6 +1407,7 @@ const CONFIG = Object.freeze({
   // Backend API (FastAPI). Empty = local engine only; override with ?api=https://host
   API_BASE: new URLSearchParams(location.search).get('api') || '',
   API_TIMEOUT_MS: 4000,                // spec: give up on the API after 4 s and stay local
+  GRID_URL: 'data/earth_grid.bin',     // static Earth grid (tools/export_grid.py): discoveries for custom regions without the API
   FAVORITES_MAX: 10,                   // spec B: bookmark cap
   PROGRESS_MIN_MS: 460,                // spec C: minimum dwell so the staged bar is perceptible
   CARD_STAGGER_MS: 60,                 // spec G: per-card entrance delay
@@ -4492,7 +4493,7 @@ App.ui = {
   /** Hint under Run match. @returns {void} */
   updateRunHint() {
     const has = !!App.state.regions[App.state.body];
-    $('#run-hint').textContent = has ? 'R · 16 anchors locally + Earth-grid discoveries via the API' : 'Select a region to begin';
+    $('#run-hint').textContent = has ? 'R · 16 anchors + Earth-grid discoveries (API, or the static grid in your browser)' : 'Select a region to begin';
   },
   /** Engine status indicator. @param {'ready'|'computing'|'done'} s @returns {void} */
   setEngineStatus(s) {
@@ -4838,13 +4839,120 @@ App.ui = {
   },
 };
 
-// ===== DISCOVERIES (Anchor & Discover: backend API, 4 s timeout, offline snapshot fallback) =====
+// ===== LOCAL EARTH GRID (static data/earth_grid.bin; same pipeline as backend find_analogs, no API needed) =====
+// Lets custom points / areas / polygons get New discoveries on static hosting. Loaded lazily, once.
+App.grid = {
+  data: null, loading: null,
+  /** Fetch and parse data/earth_grid.bin (tools/export_grid.py). @returns {Promise<object>} */
+  load() {
+    if (this.data) return Promise.resolve(this.data);
+    if (!this.loading) this.loading = (async () => {
+      const r = await fetch(CONFIG.GRID_URL);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const buf = await r.arrayBuffer();
+      const hl = new DataView(buf).getUint32(0, true);
+      const h = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 4, hl)));
+      const T = { '<f4': Float32Array, '<u2': Uint16Array, '|u1': Uint8Array };
+      const a = {};
+      let off = 4 + hl;
+      for (const [name, dt, size] of h.arrays) { const C = T[dt]; a[name] = new C(buf, off, size); off += size * C.BYTES_PER_ELEMENT; }
+      // the grid is normalized with the backend ranges: refuse to score if the page's ranges differ
+      h.keys.forEach((k, i) => { const f = FEATURE_BY_KEY[k]; if (!f || f.range[0] !== h.ranges[i][0] || f.range[1] !== h.ranges[i][1]) throw new Error('feature range mismatch: ' + k); });
+      return (this.data = { h, a });
+    })().catch((e) => { this.loading = null; throw e; });
+    return this.loading;
+  },
+  /**
+   * Discoveries for any target feature vector (mirror of pipeline.find_analogs, discovery part).
+   * @param {object} target feature dict @param {object} weights per-feature weights @param {number} top
+   * @returns {{discoveries: Array<object>, cells_scored: number, selection_mode: string}}
+   */
+  find(target, weights, top = 12) {
+    const { h, a } = this.data, n = h.n, K = h.keys.length, cfg = PRIORITY.cfg;
+    const keys = h.keys, w = keys.map((k) => weights[k] || 0), wLand = weights.landform_class || 0;
+    const totalW = w.reduce((s, x) => s + x, 0) + wLand;
+    const tv = keys.map((k) => normFeature(k, target[k]));
+    const tl = target.landform_class || null;
+    const aff = h.landforms.map((c) => (!tl ? NaN : c === tl ? 1 : (LANDFORM_AFFINITY[tl + '|' + c] ?? LANDFORM_AFFINITY[c + '|' + tl] ?? 0)));
+    const F = a.features, si = new Float32Array(n).fill(NaN);
+    for (let i = 0, o = 0; i < n; i++, o += K) {
+      let num = 0, den = 0;
+      for (let k = 0; k < K; k++) { const q = F[o + k]; if (q === 65535 || tv[k] !== tv[k]) continue; const d = tv[k] - q / 65534; num += w[k] * d * d; den += w[k]; }
+      const li = a.landform[i];
+      if (li !== 255 && tl) { const x = 1 - aff[li]; num += wLand * x * x; den += wLand; }
+      if (den > 0 && den / totalW >= 0.5) si[i] = clamp(100 * (1 - Math.sqrt(num / den)), 0, 100);
+    }
+    const ok = [];
+    for (let i = 0; i < n; i++) if (!Number.isNaN(si[i])) ok.push(i);
+    const sortedSi = Float64Array.from(ok, (i) => si[i]).sort();
+    ok.sort((x, y) => si[y] - si[x] || x - y);                       // stable SI order, like the backend
+    const nov = cfg.novelty, acc = cfg.access;
+    const pool = ok.slice(0, 20000).map((i) => {
+      const iso3 = a.iso[i] === 255 ? null : h.iso3[a.iso[i]], group = (iso3 && h.income[iso3]) || 'NA';
+      const s = si[i], eligible = s >= cfg.min_si, am = a.access_minutes[i], ck = a.campaign_km[i];
+      const incomeBonus = eligible ? (cfg.income_bonus[group] || 0) : 0;
+      const novelty = clamp(ck / nov.full_novelty_km, 0, 1), noveltyBonus = eligible ? novelty * nov.max_bonus : 0;
+      const accessBonus = eligible && Number.isFinite(am) ? acc.max_bonus * clamp((acc.zero_bonus_minutes - am) / (acc.zero_bonus_minutes - acc.full_bonus_minutes), 0, 1) : 0;
+      return { i, iso3, lat: a.lat[i], lon: a.lon[i], income_group: group, si: s, income_bonus: incomeBonus, novelty_bonus: noveltyBonus,
+        access_bonus: accessBonus, opportunity: s + incomeBonus + noveltyBonus + accessBonus, novelty,
+        nearest_campaign: h.campaigns[a.campaign[i]], campaign_km: ck, nearest_known_site: h.known_sites[a.known_site[i]], known_site_km: a.known_site_km[i],
+        known_nearby: ck <= nov.known_nearby_km || a.known_site_km[i] <= nov.known_nearby_km,
+        access_minutes: Number.isFinite(am) ? am : null, hard_access: am > acc.hard_access_minutes };
+    }).sort((x, y) => y.opportunity - x.opportunity || y.si - x.si);
+    // 150 km regions: greedy non-maximum suppression in opportunity order
+    const R = cfg.cluster.radius_km, dLat = R / 111.19 + 0.01, alive = new Uint8Array(pool.length).fill(1), regions = [];
+    for (let p = 0; p < pool.length && regions.length < 200; p++) {
+      if (!alive[p]) continue;
+      const c = pool[p]; let cnt = 0, sum = 0;
+      for (let q = p; q < pool.length; q++) {
+        if (!alive[q] || Math.abs(pool[q].lat - c.lat) > dLat || haversineKm(c.lat, c.lon, pool[q].lat, pool[q].lon) > R) continue;
+        alive[q] = 0; cnt++; sum += pool[q].si;
+      }
+      regions.push({ ...c, region_cells: cnt, region_mean_si: Math.round(sum / cnt * 10) / 10 });
+    }
+    // selection (priority.select): quota of Global South regions, the rest by pure SI
+    const sel = cfg.selection, byOpp = (x, y) => y.opportunity - x.opportunity || y.si - x.si;
+    let chosen;
+    if (sel.mode === 'bonus') chosen = regions.slice(0, top).map((r) => ({ ...r, slot: 'opportunity' }));
+    else {
+      const qt = sel.quota, k = Math.min(top, qt.top_n);
+      const gs = regions.filter((r) => qt.global_south_groups.includes(r.income_group) && r.si >= cfg.min_si);
+      const need = Math.min(Math.floor(qt.min_global_south * k / qt.top_n), gs.length);
+      const quota = gs.slice(0, need), taken = new Set(quota);
+      const rest = regions.filter((r) => !taken.has(r)).sort((x, y) => y.si - x.si);
+      chosen = [...quota.map((r) => ({ ...r, slot: 'global_south_quota' })), ...rest.slice(0, k - need).map((r) => ({ ...r, slot: 'pure_si' }))].sort(byOpp);
+      if (top > k) { const used = new Set(chosen.map((r) => r.i)); chosen.push(...regions.filter((r) => !used.has(r.i)).slice(0, top - k).map((r) => ({ ...r, slot: 'opportunity' }))); }
+    }
+    // explanation (scoring.explain) and percentile among all scored land cells
+    const famKeys = {};
+    for (const f of FAMILIES) famKeys[f.id] = keys.map((k, j) => [k, j]).filter(([k]) => FEATURE_BY_KEY[k].family === f.id).map(([, j]) => j);
+    const upper = (v) => { let lo = 0, hi = sortedSi.length; while (lo < hi) { const m = (lo + hi) >> 1; if (sortedSi[m] <= v) lo = m + 1; else hi = m; } return lo; };
+    const discoveries = chosen.map((r) => {
+      const o = r.i * K, d = keys.map((_, j) => (F[o + j] === 65535 ? NaN : tv[j] - F[o + j] / 65534));
+      const fams = [];
+      for (const f of FAMILIES) {
+        if (f.id === 'landform') { const li = a.landform[r.i]; if (li !== 255 && tl) fams.push([f.id, aff[li] * 100]); continue; }
+        const js = famKeys[f.id].filter((j) => !Number.isNaN(d[j]));
+        if (js.length) fams.push([f.id, clamp(100 * (1 - Math.sqrt(js.reduce((s, j) => s + d[j] * d[j], 0) / js.length)), 0, 100)]);
+      }
+      fams.sort((x, y) => y[1] - x[1]);
+      const gaps = d.map((v, j) => [j, v]).filter(([, v]) => Number.isFinite(v) && Math.abs(v) >= CONFIG.GAP_THRESHOLD)
+        .sort((x, y) => Math.abs(y[1]) - Math.abs(x[1])).slice(0, 3)
+        .map(([j]) => { const k = keys[j], rg = FEATURE_BY_KEY[k].range; return { feature: k, target: target[k], candidate: rg[0] + F[o + j] / 65534 * (rg[1] - rg[0]) }; });
+      return { ...r, explanation: { strongest: fams.slice(0, 2).map(([family, score]) => ({ family, score: Math.round(score * 10) / 10 })), breaks_on: gaps },
+        si_percentile: Math.round(10000 * upper(r.si) / sortedSi.length) / 100 };
+    });
+    return { discoveries, cells_scored: ok.length, selection_mode: sel.mode };
+  },
+};
+// ===== DISCOVERIES (Anchor & Discover: backend API, 4 s timeout, offline snapshot, then the local Earth grid) =====
 App.discover = {
   state: { status: 'idle', source: null, items: [], note: '' },
   seq: 0,
   /** Ask the API for Earth-grid discoveries; fall back to the embedded snapshot; never block the local engine. @param {object} region @returns {Promise<void>} */
   async fetch(region) {
     const my = ++this.seq;
+    if (!region) return;
     const presetId = App.state.selections[region.planet]?.presetId || null;
     const profile = App.state.customWeights ? 'custom' : App.state.profile;
     if (region.planet === 'earth') { this.set({ status: 'n/a', items: [], note: 'Discoveries search Earth for a Moon or Mars target. Pick a Moon or Mars region.' }); return; }
@@ -4870,16 +4978,28 @@ App.discover = {
     }
     if (my !== this.seq) return;
     const off = presetId && OFFLINE_RESULTS[`${presetId}|${profile}`];
-    if (off) this.set({ status: 'done', source: 'offline', items: off.discoveries || [], mode: off.selection_mode,
-      note: `Offline snapshot (${off.generated || 'build'}, ${fmt(off.cells_scored)} cells). The live API is not reachable.` });
-    else this.set({ status: 'none', items: [], note: presetId ? 'The API is not reachable and there is no offline snapshot for this preset and profile yet.'
-      : 'Custom regions need the live API (the Earth grid lives on the server).' });
+    if (off) { this.set({ status: 'done', source: 'offline', items: off.discoveries || [], mode: off.selection_mode,
+      note: `Offline snapshot (${off.generated || 'build'}, ${fmt(off.cells_scored)} cells). The live API is not reachable.` }); return; }
+    // custom point / area / polygon (or custom weights): score the static Earth grid right here
+    try {
+      await App.grid.load();
+      if (my !== this.seq) return;
+      const j = App.grid.find(regionFeatures(region), App.engine.featureWeights(), 12);
+      this.set({ status: 'done', source: 'local', items: j.discoveries, mode: j.selection_mode,
+        note: `${fmt(j.cells_scored)} Earth grid cells scored in your browser (static ~50 km grid, same method as the API).` });
+    } catch (e) {
+      log('local Earth grid unavailable', e);
+      if (my !== this.seq) return;
+      this.set({ status: 'none', items: [], note: location.protocol === 'file:'
+        ? 'Open the Atlas through a web server (start.bat, or python -m http.server) to load the Earth grid for custom regions.'
+        : 'Could not load the Earth grid (data/earth_grid.bin) for this custom region.' });
+    }
   },
   set(st) { this.state = st; const el = $('#discoveries'); if (el) el.innerHTML = this.html(); },
   /** Section HTML. @returns {string} */
   html() {
     const st = this.state;
-    const src = st.source === 'api' ? 'live API' : st.source === 'offline' ? 'offline snapshot' : '';
+    const src = st.source === 'api' ? 'live API' : st.source === 'offline' ? 'offline snapshot' : st.source === 'local' ? 'Earth grid, in browser' : '';
     const head = `<h3 class="sec-h">${icon('i-globe', 13)} New discoveries <small>${src}${st.mode ? ' · selection: ' + esc(st.mode) : ''}</small></h3>`;
     if (st.status === 'loading') return head + '<p class="hint">Querying the Earth grid…</p>';
     if (!st.items || !st.items.length) return head + `<p class="hint">${esc(st.note || 'Run a match on a Moon or Mars region.')}</p>`;
