@@ -1,7 +1,7 @@
 """Upgrade index.html in place: data-pipeline drawer (runs the backend pipeline from inside the Atlas) and automatic
 detection of the local API, so discoveries go live when the Atlas is opened through start.bat. Idempotent.
 
-    python tools/add_pipeline.py            (after tools/merge_frontend.py and brand/apply_logo.py)
+    python tools/add_pipeline.py            (after brand/apply_logo.py)
 """
 import re
 from pathlib import Path

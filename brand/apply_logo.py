@@ -1,6 +1,6 @@
-"""Put the Analog Atlas logo into the single-file app (p2.html): favicon + top-bar mark.
+"""Put the Analog Atlas logo into the single-file app (index.html): favicon + top-bar mark.
 
-Usage (from the project root):  python brand/apply_logo.py p2.html
+Usage (from the project root):  python brand/apply_logo.py index.html
 Embeds small PNGs as data URIs so the app stays a single, offline-capable file.
 Safe to run twice: it replaces whatever favicon / top-bar mark is there.
 """

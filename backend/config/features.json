@@ -1,6 +1,6 @@
 {
  "version": 2,
- "notes": "Single source of truth for the v2 feature set. Mirrors FEATURES/FAMILIES/PROFILES in p2.html. Every numeric feature is normalized against a FIXED physical range, never against the current catalog or grid.",
+ "notes": "Single source of truth for the v2 feature set. Mirrors FEATURES/FAMILIES/PROFILES in index.html. Every numeric feature is normalized against a FIXED physical range, never against the current catalog or grid.",
  "families": [
   {
    "id": "topography",
