@@ -19,7 +19,9 @@ Wordmark: Bahnschrift SemiBold, tagline Bahnschrift Light with wide tracking.
 - Don't recolour, stretch, rotate or add outlines or shadows.
 - Below 24 px, use the mark alone, without the wordmark.
 
-**Provenance (for the Space Apps references and AI-use fields).**
-- **Source:** The mark is built from the team's own collage of planetary photographs. List where those Earth, Mars and Moon photos came from in the project's references.
-- **How it was made:** It was rebuilt with deterministic image processing (circle fit, polar re-mapping of each body inside its own region, colour grading, shading) written with AI assistance (Anthropic Claude). No generative image model was used, and nothing was invented in the picture. Say this in the AI-use field.
-- **NASA branding:** No NASA logo, insignia or mission identifier is used.
+**Provenance.**
+- **Source:** built from the team's own collage of planetary photographs.
+- **Method:** deterministic image processing (circle fit, polar re-mapping of each body inside its own sector, colour
+  grading, shading), written with AI assistance (Anthropic Claude). No generative image model was used and nothing was
+  invented in the picture.
+- **NASA branding:** no NASA logo, insignia or mission identifier is used.

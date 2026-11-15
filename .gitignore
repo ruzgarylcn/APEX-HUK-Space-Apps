@@ -7,3 +7,9 @@ backend/data/exports/
 backend/data/ne_50m_admin_0_countries.geojson
 .venv/
 backend/.panel.json
+.pytest_cache/
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

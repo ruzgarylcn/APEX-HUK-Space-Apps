@@ -1,8 +1,41 @@
 <p align="center"><img src="brand/analog-atlas-mark-256.png" width="112" alt="Analog Atlas logo"></p>
 
-# Analog Atlas — find the places on Earth that behave like the Moon and Mars
+<h1 align="center">Analog Atlas</h1>
 
-NASA Space Apps Challenge 2026 · *Identify Earth Locations that Analog the Permanent Moon Base Locations and Mars*
+<p align="center"><b>Where on Earth is the Moon? Where on Earth is Mars?</b><br>
+Find the places on Earth that behave like a Moon or Mars region, see why, and see where the analogy breaks.</p>
+
+<p align="center">
+  <a href="https://ruzgarylcn.github.io/APEX-HUK-Space-Apps/"><b>Live demo</b></a> ·
+  <a href="#method">Method</a> ·
+  <a href="#validation">Validation</a> ·
+  <a href="#run-it">Run it</a> ·
+  <a href="#use-of-ai">Use of AI</a>
+</p>
+
+<p align="center">
+  <a href="https://ruzgarylcn.github.io/APEX-HUK-Space-Apps/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-2ea44f"></a>
+  <img alt="NASA Space Apps 2026" src="https://img.shields.io/badge/NASA%20Space%20Apps-2026-0b3d91">
+  <img alt="Python 3.11+" src="https://img.shields.io/badge/python-3.11%2B-3776ab">
+  <img alt="Tests" src="https://img.shields.io/badge/tests-36%20passing-2ea44f">
+  <img alt="No build step" src="https://img.shields.io/badge/frontend-single%20HTML%20file-555">
+</p>
+
+<p align="center"><img src="docs/img/jezero-salda.png" width="900" alt="Analog Atlas: Jezero Crater on Mars selected; Lake Salda, Türkiye, ranks first with SI 79"></p>
+
+**NASA Space Apps Challenge 2026** · *Identify Earth Locations that Analog the Permanent Moon Base Locations and Mars* ·
+Team **APEX-HUK**
+
+| | |
+|---|---|
+| **Features** | 24 physical features in 8 families, plus a landform class |
+| **Mission profiles** | landing, resource, habitat, science |
+| **Search space** | 58,289 Earth land cells (~50 km, Google Earth Engine) + 16 documented analog sites |
+| **Validation** | 19/20 frozen literature anchors in the top 5 (random: 31 %) |
+| **Sources** | 98 references, every DOI checked on Crossref |
+| **Runs** | in any browser, offline included; the Python API is optional |
+
+## Overview
 
 Pick a region on the Moon or Mars. Analog Atlas turns it into a **planet-independent feature vector** and ranks Earth
 by **physical similarity (SI, 0–100)**. Every result says what is similar (the two strongest feature families), where the
@@ -96,6 +129,11 @@ habitat: 1/10, landing: 0/10. This is a modest signal, not a strong one: the gri
 rough ASTER proxies, so terrain, cold and dryness dominate the score. Reproduce with `python -m analog_atlas.cli
 check-discoveries`.
 
+**Discoveries.** Run on the whole grid, the same method surfaces places no analog campaign has used. For Jezero under
+the science profile, a leading discovery is in central Afghanistan (35.28° N, 67.06° E): SI 79.2, in the top 0.07 % of the
+52,541 land cells that profile can score, with no past campaign nearby. The Pamir (Tajikistan) and northern Somalia
+follow. Each discovery lists where its analogy breaks, and hard-to-reach places are flagged, never removed.
+
 ## Data
 
 | Layer (Earth grid) | Source | Tier |
@@ -126,46 +164,78 @@ candidates lie. Every layer carries a tier badge in the app: M = measured, D = d
 
 ## Run it
 
-**One click, no terminal:** double-click `start.bat` (Windows) or run `./start.sh`. It starts one local server on
-http://127.0.0.1:8000/ and opens the Atlas there. On that origin the Atlas finds its API by itself (live discoveries), and
-the **Data pipeline** button in the top bar opens a drawer over the globe that runs every backend step in the background:
-Earth Engine sign-in, smoke test, global export, CSV upload and merge, discovery checks and the offline snapshot, with a
-progress track and live logs. Opened from disk or from GitHub Pages, the Atlas works as before, using the local engine
-and the embedded snapshot.
+### In the browser (no install)
+
+Open the **[live demo](https://ruzgarylcn.github.io/APEX-HUK-Space-Apps/)**, or serve the repository root yourself:
 
 ```bash
-# Frontend: one self-contained file. Serve it over HTTP; opened via file:// it falls back to the 2D view.
-python -m http.server 8765        # open http://localhost:8765/index.html  (add ?api=https://your-api for live discoveries)
-
-# Backend
-cd backend
-pip install -r requirements.txt
-python -m unittest discover -s tests -v      # 36 tests (server tests need fastapi + httpx)
-python -m analog_atlas.cli validate
-python -m analog_atlas.cli demo --target jezero --profile science --top 3
-python -m analog_atlas.cli find --target cerberus --profile landing
-uvicorn analog_atlas.api:app --port 8000     # POST /find-analogs, POST /score
+python -m http.server 8765
 ```
 
-The Earth Engine extraction, merge and offline snapshot are described in `docs/RUN_EARTH_ENGINE.md`. Running
-`export-offline --embed ../index.html` lets the demo show real discoveries even when the API is down.
+Then open http://localhost:8765/index.html. Through `file://` the Atlas falls back to the 2D view. Without an API it
+uses the in-browser engine, the embedded discovery snapshot for the preset targets and, for hand-drawn points,
+rectangles and polygons, the static Earth grid `data/earth_grid.bin` (~4 MB, the same 58,289 cells). That grid runs the
+discovery step of `find_analogs` in the browser (score, coverage ≥ 0.5, priority bonuses, 150 km regions, quota) and
+returns the same regions, slots and percentiles as the backend on the preset targets.
 
-**Custom regions without a server.** Points, rectangles and polygons drawn by hand have no snapshot, so when the API is
-not reachable (GitHub Pages) the Atlas downloads `data/earth_grid.bin` once (~4 MB, the same 58,289-cell grid) and runs
-the discovery step of `find_analogs` in the browser: score, coverage >= 0.5, priority bonuses, 150 km regions, quota.
-On the preset targets it returns the same regions, slots and percentiles as the backend (differences only in the
-second decimal). Rebuild the file after a new extraction with `python tools/export_grid.py`.
+### Full local stack (Atlas + API + data pipeline)
 
-**Rebuilding `index.html`.** `index.html` is the deliverable. Small source files are injected into it by idempotent scripts,
-run from the repository root in this order: `python brand/apply_logo.py index.html` (logo), `python tools/add_pipeline.py`
-(the Data pipeline drawer, shown only when the local server answers), `python tools/add_polish.py` (phone layout and the
-"Loading planetary imagery…" indicator), `python tools/add_refs.py` (site-specific references from
-`tools/extra_refs.json`, kept in sync with `backend/data/catalog_sites.json`) and, last, `python tools/add_theme.py` (the
-NASA-style visual theme from `tools/theme_nasa.css`: black and white with colour only on data: family bars, score-banded
-similarity rings, diagnosis and limit boxes). Edit `tools/pipeline_drawer.html` / `tools/polish.html` / `tools/theme_nasa.css`, not `index.html`.
+Double-click `start.bat` (Windows) or run `./start.sh` (macOS / Linux). It installs the requirements, starts one server
+on http://127.0.0.1:8000/ and opens the Atlas there. On that origin the Atlas finds its API by itself, and the
+**Data pipeline** button opens a drawer that runs every backend step with live logs: Earth Engine sign-in, smoke test,
+global export, CSV upload and merge, discovery checks and the offline snapshot.
 
-**Deploy.** The repository root (`index.html`) is a GitHub Pages site. `backend/Dockerfile` runs the API on Hugging Face
-Spaces (Docker SDK) or Render. Point the frontend at it by setting `CONFIG.API_BASE` or passing `?api=`.
+### Backend from the command line
+
+```bash
+cd backend
+pip install -r requirements.txt
+python -m unittest discover -s tests -v                 # 36 tests (server tests need fastapi + httpx)
+python -m analog_atlas.cli validate                     # frozen anchors, pure SI
+python -m analog_atlas.cli find --target jezero --profile science
+uvicorn analog_atlas.api:app --port 8000                # POST /find-analogs, POST /score
+```
+
+The Earth Engine extraction, the merge and the offline snapshot are described in
+[`docs/RUN_EARTH_ENGINE.md`](docs/RUN_EARTH_ENGINE.md). The full command list is in
+[`backend/README.md`](backend/README.md).
+
+### Rebuilding the deliverables
+
+`index.html` is the deliverable: one self-contained file, no build step. Small sources are injected into it by idempotent
+scripts, run from the repository root in this order:
+
+| Step | Command | Source edited |
+|---|---|---|
+| Logo | `python brand/apply_logo.py index.html` | `brand/*.png` |
+| Data pipeline drawer | `python tools/add_pipeline.py` | `tools/pipeline_drawer.html` |
+| Phone layout, loading indicator | `python tools/add_polish.py` | `tools/polish.html` |
+| Site-specific references | `python tools/add_refs.py` | `tools/extra_refs.json` |
+| Visual theme (last) | `python tools/add_theme.py` | `tools/theme_nasa.css` |
+| Offline snapshot | `python -m analog_atlas.cli export-offline --embed ../index.html` (in `backend/`) | Earth grid |
+| Static Earth grid | `python tools/export_grid.py` | `backend/data/earth_features.parquet` |
+
+### Deploy
+
+The repository root is a GitHub Pages site. `backend/Dockerfile` runs the API on Hugging Face Spaces (Docker SDK),
+Render or any container host. Point the frontend at it with `?api=https://your-api` or `CONFIG.API_BASE`.
+
+## Repository layout
+
+```
+index.html                 the app: CesiumJS globe, Web Worker engine, references, offline snapshot (single file)
+data/earth_grid.bin        static 58,289-cell Earth grid for in-browser discoveries
+backend/
+  analog_atlas/            scoring, priority, pipeline, Earth Engine extraction, CLI, FastAPI app
+  config/                  features.json (single source of truth), priority.json, targets.json, anchors.json,
+                           discovery_checklist.json
+  data/                    catalog_sites.json, campaigns.csv, income_groups.csv, earth_features.parquet
+  tests/                   unit and API tests
+brand/                     logo files and usage rules
+docs/                      Earth Engine guide, campaign analysis, screenshots
+tools/                     idempotent injectors that build index.html, grid exporter
+start.bat, start.sh        one-click local server
+```
 
 ## Use of AI
 
@@ -185,8 +255,14 @@ were used as assistants; every output was reviewed and tested by the team.
 - **Slides and documentation** were drafted with AI assistance and edited by the team.
 - **Not used:** no AI-generated images, video or audio appear in the project.
 
+## Team
+
+**APEX-HUK**: Kerem Uğur, Sevay Yavaş, Akif Buğra Özsoy, Rüzgar Yalçın.
+
 ## Credits
 
-Built by team APEX-HUK for the NASA Space Apps Challenge 2026. The 98 references are listed in APA 7 inside the app (the
-References button). Campaign sources are in `backend/data/campaigns.csv`. Logo provenance and AI-use notes are in
-`brand/README.md`.
+Built for the NASA Space Apps Challenge 2026. The 98 references are listed in APA 7 inside the app (the References
+button). Campaign sources are in `backend/data/campaigns.csv`. Logo provenance is in `brand/README.md`.
+
+Data: NASA (NASADEM, MODIS, GPM IMERG, MERRA-2, ASTER GED, Trek LRO WAC and Viking MDIM 2.1), JAXA, ESA Copernicus,
+TerraClimate, the Malaria Atlas Project and the World Bank. Globe: CesiumJS. No NASA logo or mission insignia is used.

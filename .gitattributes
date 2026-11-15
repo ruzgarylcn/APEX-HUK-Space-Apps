@@ -1,0 +1,4 @@
+*.bin binary
+*.parquet binary
+*.png binary
+*.ico binary
